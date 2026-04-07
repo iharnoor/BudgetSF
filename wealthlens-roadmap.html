@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WealthLens — iOS App Roadmap</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #f7f4ef;
+  --ink: #1a1208;
+  --gold: #c8952a;
+  --gold-light: #f5e6c8;
+  --gold-dim: rgba(200, 149, 42, 0.15);
+  --green: #1a6b4a;
+  --green-light: #e8f5ee;
+  --red: #8b2020;
+  --surface: #ffffff;
+  --border: #e8e0d0;
+  --muted: #8a7d6b;
+  --realtime: #0f7b5b;
+  --vector: #5b3a8f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+}
+
+/* Texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.6;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 64px 28px 80px;
+}
+
+/* ── HEADER ── */
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 12px;
+  animation: rise 0.7s ease both;
+}
+
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(48px, 8vw, 88px);
+  font-weight: 900;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  animation: rise 0.7s ease 0.08s both;
+}
+
+h1 .italic { font-style: italic; color: var(--gold); }
+
+.tagline {
+  margin-top: 20px;
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.65;
+  font-weight: 300;
+  animation: rise 0.7s ease 0.16s both;
+}
+
+.kpi-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+  animation: rise 0.7s ease 0.24s both;
+}
+
+.kpi { display: flex; flex-direction: column; gap: 2px; }
+.kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 38px;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  margin: 48px 0;
+}
+
+/* ── SYSTEM DESIGN BLOCK ── */
+.system-design {
+  background: var(--ink);
+  color: #f0e8d8;
+  padding: 36px 32px;
+  margin-bottom: 48px;
+  position: relative;
+  overflow: hidden;
+  animation: rise 0.7s ease 0.32s both;
+}
+
+.system-design::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(200,149,42,0.08), transparent 60%);
+}
+
+.sd-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 24px;
+}
+
+.arch-layers {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.arch-layer-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(240,232,216,0.35);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  width: 72px;
+  flex-shrink: 0;
+  padding-right: 12px;
+  text-align: right;
+}
+
+.arch-nodes {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 10px 0;
+  border-left: 1px solid rgba(200,149,42,0.2);
+  padding-left: 16px;
+}
+
+.anode {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 12px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.anode-gold { color: #f5c842; border-color: rgba(245,200,66,0.4); background: rgba(245,200,66,0.07); }
+.anode-green { color: #4ade80; border-color: rgba(74,222,128,0.35); background: rgba(74,222,128,0.06); }
+.anode-blue { color: #7dd3fc; border-color: rgba(125,211,252,0.35); background: rgba(125,211,252,0.06); }
+.anode-purple { color: #c4b5fd; border-color: rgba(196,181,253,0.35); background: rgba(196,181,253,0.07); }
+.anode-muted { color: rgba(240,232,216,0.5); border-color: rgba(240,232,216,0.12); }
+
+.aconnect {
+  font-size: 11px;
+  color: rgba(200,149,42,0.5);
+  margin: 0 2px;
+}
+
+.arch-connector {
+  width: 1px;
+  height: 16px;
+  background: rgba(200,149,42,0.2);
+  margin-left: 88px;
+}
+
+.supa-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(62, 207, 142, 0.12);
+  border: 1px solid rgba(62, 207, 142, 0.3);
+  color: #3ecf8e;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  margin-left: 8px;
+}
+
+/* ── PHASES ── */
+.phases-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.phases-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.phase-list { display: flex; flex-direction: column; gap: 3px; }
+
+.phase {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  animation: rise 0.6s ease both;
+}
+
+.phase:hover { border-color: var(--gold); }
+.phase.open { border-color: var(--gold); box-shadow: 3px 3px 0 var(--gold-dim); }
+
+.phase-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+}
+
+.ph-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--border);
+  line-height: 1;
+  min-width: 36px;
+  transition: color 0.2s;
+}
+.phase.open .ph-num, .phase:hover .ph-num { color: var(--gold); }
+
+.ph-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border: 1px solid;
+  white-space: nowrap;
+}
+
+.tag-gold { color: var(--gold); border-color: rgba(200,149,42,0.4); background: var(--gold-dim); }
+.tag-green { color: var(--green); border-color: rgba(26,107,74,0.3); background: var(--green-light); }
+.tag-purple { color: var(--vector); border-color: rgba(91,58,143,0.3); background: rgba(91,58,143,0.07); }
+.tag-teal { color: var(--realtime); border-color: rgba(15,123,91,0.3); background: rgba(15,123,91,0.06); }
+
+.ph-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  flex: 1;
+}
+
+.ph-weeks {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.ph-arrow {
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.3s;
+}
+.phase.open .ph-arrow { transform: rotate(90deg); color: var(--gold); }
+
+.phase-body {
+  display: none;
+  padding: 0 22px 22px;
+  border-top: 1px solid var(--border);
+}
+.phase.open .phase-body { display: block; }
+
+.ph-desc {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 16px;
+  margin-bottom: 20px;
+  max-width: 680px;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+@media(max-width:580px){ .task-grid { grid-template-columns: 1fr; } }
+
+.task-card {
+  border: 1px solid var(--border);
+  padding: 14px 16px;
+  background: var(--bg);
+  display: flex;
+  gap: 12px;
+}
+
+.tc-icon { font-size: 18px; flex-shrink: 0; }
+.tc-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.tc-detail { font-size: 11px; color: var(--muted); margin-top: 3px; line-height: 1.5; font-family: 'DM Mono', monospace; }
+
+.supabase-box {
+  background: rgba(62, 207, 142, 0.05);
+  border: 1px solid rgba(62, 207, 142, 0.25);
+  padding: 14px 16px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.sb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #3ecf8e;
+  margin-bottom: 10px;
+}
+
+.sb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.sb-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid rgba(62,207,142,0.3);
+  color: #2a9d6e;
+  background: rgba(62,207,142,0.06);
+}
+
+.milestone {
+  border-left: 3px solid var(--gold);
+  padding: 10px 14px;
+  background: var(--gold-dim);
+  font-size: 12px;
+  color: var(--ink);
+  font-family: 'DM Mono', monospace;
+}
+.milestone strong { color: var(--gold); }
+
+/* ── SCHEMA SECTION ── */
+.schema-section {
+  margin-top: 48px;
+  animation: rise 0.6s ease 0.5s both;
+}
+
+.schema-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.schema-table {
+  background: var(--ink);
+  color: #f0e8d8;
+  padding: 16px 18px;
+}
+
+.st-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 12px;
+  letter-spacing: 0.05em;
+}
+
+.st-field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(240,232,216,0.6);
+  padding: 3px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.st-field:last-child { border-bottom: none; }
+.st-field .fname { color: rgba(240,232,216,0.85); }
+.st-field .ftype { color: #7dd3fc; font-size: 9px; }
+.st-field .fspecial {
+  font-size: 8px;
+  padding: 1px 5px;
+  background: rgba(245,200,66,0.15);
+  color: #f5c842;
+  border: 1px solid rgba(245,200,66,0.2);
+}
+
+/* ── LAUNCH ── */
+.launch-section {
+  margin-top: 48px;
+  animation: rise 0.6s ease 0.6s both;
+}
+
+.launch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media(max-width:580px){ .launch-grid { grid-template-columns: 1fr; } }
+
+.launch-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.launch-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+
+.lc-icon { font-size: 22px; margin-bottom: 10px; }
+.lc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.lc-sub { font-size: 11px; color: var(--muted); line-height: 1.6; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Deprecation Notice -->
+  <div style="background: #8b2020; color: #fff; padding: 18px 24px; margin-bottom: 32px; font-family: 'DM Mono', monospace; font-size: 13px; border-left: 4px solid #f5c842;">
+    ⚠️ <strong>DEPRECATED</strong> — This roadmap reflects the original Plaid-based architecture. WealthLens has pivoted to screenshot-based transaction analysis with SF-only launch. See <a href="README.md" style="color: #f5c842; text-decoration: underline;">README.md</a> for the current architecture and roadmap.
+  </div>
+
+  <!-- Header -->
+  <div class="eyebrow">iOS App Roadmap · Finance + AI</div>
+  <h1>Wealth<span class="italic">Lens</span></h1>
+  <p class="tagline">
+    Chat with your money. An AI-native iOS finance app powered by Supabase pgvector + realtime subscriptions — where you ask natural language questions about your spending and get instant, honest answers.
+  </p>
+  <div class="kpi-row">
+    <div class="kpi"><span class="kpi-val">5</span><span class="kpi-label">Phases</span></div>
+    <div class="kpi"><span class="kpi-val">10</span><span class="kpi-label">Weeks</span></div>
+    <div class="kpi"><span class="kpi-val">2</span><span class="kpi-label">Supabase superpowers</span></div>
+    <div class="kpi"><span class="kpi-val">$0</span><span class="kpi-label">Infra to start</span></div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- System Design -->
+  <div class="system-design">
+    <div class="sd-label">// System Architecture</div>
+    <div class="arch-layers">
+
+      <div class="arch-row">
+        <div class="arch-layer-label">Client</div>
+        <div class="arch-nodes">
+          <div class="anode anode-gold">iOS (SwiftUI)</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">Supabase Swift SDK</div>
+          <span class="aconnect">+</span>
+          <div class="anode anode-muted">Plaid Link SDK</div>
+        </div>
+      </div>
+
+      <div class="arch-connector"></div>
+
+      <div class="arch-row">
+        <div class="arch-layer-label">Realtime</div>
+        <div class="arch-nodes">
+          <div class="anode anode-green">Supabase Realtime</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">Postgres Changes</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">Live balance updates</div>
+          <span class="supa-badge">★ pgchanges</span>
+        </div>
+      </div>
+
+      <div class="arch-connector"></div>
+
+      <div class="arch-row">
+        <div class="arch-layer-label">AI Layer</div>
+        <div class="arch-nodes">
+          <div class="anode anode-purple">pgvector (Supabase)</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">OpenAI Embeddings</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">Semantic TX search</div>
+          <span class="supa-badge">★ vector</span>
+        </div>
+      </div>
+
+      <div class="arch-connector"></div>
+
+      <div class="arch-row">
+        <div class="arch-layer-label">Edge Fns</div>
+        <div class="arch-nodes">
+          <div class="anode anode-blue">Supabase Edge Fns</div>
+          <span class="aconnect">→</span>
+          <div class="anode anode-muted">Plaid webhook handler</div>
+          <span class="aconnect">+</span>
+          <div class="anode anode-muted">Embed transactions</div>
+        </div>
+      </div>
+
+      <div class="arch-connector"></div>
+
+      <div class="arch-row">
+        <div class="arch-layer-label">Data</div>
+        <div class="arch-nodes">
+          <div class="anode anode-blue">Postgres + RLS</div>
+          <span class="aconnect">+</span>
+          <div class="anode anode-muted">pgvector extension</div>
+          <span class="aconnect">+</span>
+          <div class="anode anode-muted">Plaid Items table</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Phases -->
+  <div class="phases-label">Build Phases</div>
+  <div class="phase-list">
+
+    <!-- Phase 1 -->
+    <div class="phase open" onclick="tog(this)" style="animation-delay:0.1s">
+      <div class="phase-top">
+        <div class="ph-num">1</div>
+        <div class="ph-tag tag-gold">Foundation</div>
+        <div class="ph-title">Auth + Plaid + Supabase Schema</div>
+        <div class="ph-weeks">Week 1–2</div>
+        <div class="ph-arrow">▶</div>
+      </div>
+      <div class="phase-body">
+        <p class="ph-desc">
+          Stand up the iOS app skeleton in SwiftUI with Supabase Auth (Sign in with Apple + email). Integrate Plaid Link so users can connect real bank accounts. Design the Postgres schema with Row Level Security locked from day one — every user only ever sees their own data.
+        </p>
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="tc-icon">🏗️</div>
+            <div>
+              <div class="tc-name">SwiftUI app skeleton</div>
+              <div class="tc-detail">TabView, NavigationStack, async/await data layer, Supabase Swift SDK</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🔐</div>
+            <div>
+              <div class="tc-name">Sign in with Apple</div>
+              <div class="tc-detail">Supabase Auth + Apple OAuth, JWT refresh, Keychain token storage</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🏦</div>
+            <div>
+              <div class="tc-name">Plaid Link integration</div>
+              <div class="tc-detail">Link token flow, exchange public_token, store access_token encrypted in Edge Fn vault</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🗄️</div>
+            <div>
+              <div class="tc-name">RLS schema</div>
+              <div class="tc-detail">users, plaid_items, accounts, transactions — every table locked with auth.uid() policies</div>
+            </div>
+          </div>
+        </div>
+        <div class="supabase-box">
+          <div class="sb-label">Supabase features used</div>
+          <div class="sb-chips">
+            <div class="sb-chip">Auth (Apple OAuth)</div>
+            <div class="sb-chip">Row Level Security</div>
+            <div class="sb-chip">Postgres schema migrations</div>
+            <div class="sb-chip">Vault (secrets)</div>
+          </div>
+        </div>
+        <div class="milestone"><strong>✓ Milestone:</strong> User signs in → connects Chase account → transactions appear in DB with RLS enforced</div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase" onclick="tog(this)" style="animation-delay:0.15s">
+      <div class="phase-top">
+        <div class="ph-num">2</div>
+        <div class="ph-tag tag-teal">Realtime</div>
+        <div class="ph-title">Live Balance Updates + Transaction Feed</div>
+        <div class="ph-weeks">Week 3</div>
+        <div class="ph-arrow">▶</div>
+      </div>
+      <div class="phase-body">
+        <p class="ph-desc">
+          Wire Supabase Realtime to the transactions table. When Plaid webhooks fire (new transaction, balance refresh), an Edge Function updates the DB and the iOS app reflects the change instantly — no polling, no pull-to-refresh. The feed feels alive.
+        </p>
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="tc-icon">⚡</div>
+            <div>
+              <div class="tc-name">Plaid webhook Edge Fn</div>
+              <div class="tc-detail">Deno function receives Plaid webhooks, validates signature, upserts transactions to Postgres</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">📡</div>
+            <div>
+              <div class="tc-name">Supabase Realtime sub</div>
+              <div class="tc-detail">Subscribe to postgres_changes on transactions table — SwiftUI @Observable auto-updates</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">📊</div>
+            <div>
+              <div class="tc-name">Transaction feed UI</div>
+              <div class="tc-detail">Merchant logo, category badge, amount, animated row insert on live update</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">💳</div>
+            <div>
+              <div class="tc-name">Balance refresh</div>
+              <div class="tc-detail">Daily Supabase cron (pg_cron) → Edge Fn → Plaid balance fetch → realtime push to iOS</div>
+            </div>
+          </div>
+        </div>
+        <div class="supabase-box">
+          <div class="sb-label">Supabase features used</div>
+          <div class="sb-chips">
+            <div class="sb-chip">Realtime (postgres_changes) ★</div>
+            <div class="sb-chip">Edge Functions (Deno)</div>
+            <div class="sb-chip">pg_cron (scheduled jobs)</div>
+          </div>
+        </div>
+        <div class="milestone"><strong>✓ Milestone:</strong> Make a purchase on linked card → transaction appears in iOS app feed within 5 seconds, no user action</div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase" onclick="tog(this)" style="animation-delay:0.2s">
+      <div class="phase-top">
+        <div class="ph-num">3</div>
+        <div class="ph-tag tag-purple">AI Search</div>
+        <div class="ph-title">pgvector Semantic Search + Chat</div>
+        <div class="ph-weeks">Week 4–5</div>
+        <div class="ph-arrow">▶</div>
+      </div>
+      <div class="phase-body">
+        <p class="ph-desc">
+          This is the killer feature. Every transaction gets embedded via OpenAI text-embedding-3-small and stored in a pgvector column. A chat interface lets users ask anything: "how much did I spend on coffee in January?", "find all Uber charges over $30", "what's my biggest spending category this quarter?" — answered by vector similarity + SQL aggregation, then narrated by Claude/GPT.
+        </p>
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="tc-icon">🧠</div>
+            <div>
+              <div class="tc-name">Embedding pipeline</div>
+              <div class="tc-detail">Edge Fn triggered on transaction insert → OpenAI embed → store vector[1536] in pgvector column</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🔍</div>
+            <div>
+              <div class="tc-name">Semantic search RPC</div>
+              <div class="tc-detail">Postgres function: embed query → cosine similarity search → return top-k transactions</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">💬</div>
+            <div>
+              <div class="tc-name">Chat UI (SwiftUI)</div>
+              <div class="tc-detail">Bubble chat, streamed LLM response, transaction card attachments in thread</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🤖</div>
+            <div>
+              <div class="tc-name">Finance agent (Edge Fn)</div>
+              <div class="tc-detail">System prompt with user's financial context → vector search results → GPT-4o narration</div>
+            </div>
+          </div>
+        </div>
+        <div class="supabase-box">
+          <div class="sb-label">Supabase features used</div>
+          <div class="sb-chips">
+            <div class="sb-chip">pgvector extension ★</div>
+            <div class="sb-chip">match_transactions() RPC</div>
+            <div class="sb-chip">Edge Fn streaming</div>
+            <div class="sb-chip">HNSW index (fast ANN)</div>
+          </div>
+        </div>
+        <div class="milestone"><strong>✓ Milestone:</strong> Type "Did I overspend on food last month?" → AI answers with exact amounts and top merchants</div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase" onclick="tog(this)" style="animation-delay:0.25s">
+      <div class="phase-top">
+        <div class="ph-num">4</div>
+        <div class="ph-tag tag-green">Intelligence</div>
+        <div class="ph-title">Budgets, Goals + Proactive Nudges</div>
+        <div class="ph-weeks">Week 6–8</div>
+        <div class="ph-arrow">▶</div>
+      </div>
+      <div class="phase-body">
+        <p class="ph-desc">
+          Turn passive tracking into active guidance. Users set budgets per category and savings goals with a target date. Supabase pg_cron runs nightly analysis — if you're 80% through your food budget by mid-month, you get a push notification. Goal progress is tracked in realtime as transactions come in.
+        </p>
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="tc-icon">🎯</div>
+            <div>
+              <div class="tc-name">Budget engine</div>
+              <div class="tc-detail">Category budgets table, monthly rollup via Postgres views, percentage tracking</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">📈</div>
+            <div>
+              <div class="tc-name">Savings goals</div>
+              <div class="tc-detail">Target amount + date → auto-calculates required monthly save rate, progress bar</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🔔</div>
+            <div>
+              <div class="tc-name">Smart push notifications</div>
+              <div class="tc-detail">pg_cron nightly job → Edge Fn → APNs via Expo push tokens → budget alerts</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">📉</div>
+            <div>
+              <div class="tc-name">Insights dashboard</div>
+              <div class="tc-detail">Monthly spend by category chart, month-over-month delta, recurring subscriptions detector</div>
+            </div>
+          </div>
+        </div>
+        <div class="supabase-box">
+          <div class="sb-label">Supabase features used</div>
+          <div class="sb-chips">
+            <div class="sb-chip">Postgres Views (rollups)</div>
+            <div class="sb-chip">pg_cron (nightly analysis)</div>
+            <div class="sb-chip">Realtime (goal progress)</div>
+            <div class="sb-chip">Edge Fn (APNs delivery)</div>
+          </div>
+        </div>
+        <div class="milestone"><strong>✓ Milestone:</strong> User hits 80% of restaurant budget → push notification fires before they overspend</div>
+      </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase" onclick="tog(this)" style="animation-delay:0.3s">
+      <div class="phase-top">
+        <div class="ph-num">5</div>
+        <div class="ph-tag tag-gold">Launch</div>
+        <div class="ph-title">TestFlight Beta + App Store + Monetization</div>
+        <div class="ph-weeks">Week 9–10</div>
+        <div class="ph-arrow">▶</div>
+      </div>
+      <div class="phase-body">
+        <p class="ph-desc">
+          Ship it. TestFlight beta to 100 users, iterate on feedback, then App Store submission. Monetize via freemium — free tier has 1 connected account + basic chat, Pro unlocks unlimited accounts, full AI chat history, and advanced analytics. Use RevenueCat for subscription management.
+        </p>
+        <div class="task-grid">
+          <div class="task-card">
+            <div class="tc-icon">🧪</div>
+            <div>
+              <div class="tc-name">TestFlight beta</div>
+              <div class="tc-detail">100 beta users, crash reporting via Sentry, feedback form in-app</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">💰</div>
+            <div>
+              <div class="tc-name">RevenueCat subscriptions</div>
+              <div class="tc-detail">$7.99/mo Pro, entitlement checks, paywall screen, free trial</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">🍎</div>
+            <div>
+              <div class="tc-name">App Store submission</div>
+              <div class="tc-detail">Privacy nutrition labels, app review screenshots, finance category metadata</div>
+            </div>
+          </div>
+          <div class="task-card">
+            <div class="tc-icon">📹</div>
+            <div>
+              <div class="tc-name">YouTube launch video</div>
+              <div class="tc-detail">"I built a Mint replacement with AI" — demo + architecture + lessons learned</div>
+            </div>
+          </div>
+        </div>
+        <div class="milestone"><strong>✓ Milestone:</strong> Live on App Store + YouTube video → ProductHunt launch day</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Schema -->
+  <div class="divider"></div>
+  <div class="schema-section">
+    <div class="phases-label">Supabase Schema</div>
+    <div class="schema-grid">
+
+      <div class="schema-table">
+        <div class="st-name">transactions</div>
+        <div class="st-field"><span class="fname">id</span><span class="ftype">uuid</span></div>
+        <div class="st-field"><span class="fname">user_id</span><span class="ftype">uuid</span><span class="fspecial">RLS</span></div>
+        <div class="st-field"><span class="fname">amount</span><span class="ftype">numeric</span></div>
+        <div class="st-field"><span class="fname">merchant</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">category</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">embedding</span><span class="ftype">vector(1536)</span><span class="fspecial">pgvector ★</span></div>
+        <div class="st-field"><span class="fname">date</span><span class="ftype">timestamptz</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="st-name">accounts</div>
+        <div class="st-field"><span class="fname">id</span><span class="ftype">uuid</span></div>
+        <div class="st-field"><span class="fname">user_id</span><span class="ftype">uuid</span><span class="fspecial">RLS</span></div>
+        <div class="st-field"><span class="fname">plaid_item_id</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">balance_current</span><span class="ftype">numeric</span></div>
+        <div class="st-field"><span class="fname">balance_updated_at</span><span class="ftype">timestamptz</span></div>
+        <div class="st-field"><span class="fname">institution_name</span><span class="ftype">text</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="st-name">budgets</div>
+        <div class="st-field"><span class="fname">id</span><span class="ftype">uuid</span></div>
+        <div class="st-field"><span class="fname">user_id</span><span class="ftype">uuid</span><span class="fspecial">RLS</span></div>
+        <div class="st-field"><span class="fname">category</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">amount_limit</span><span class="ftype">numeric</span></div>
+        <div class="st-field"><span class="fname">period</span><span class="ftype">text</span></div>
+      </div>
+
+      <div class="schema-table">
+        <div class="st-name">chat_messages</div>
+        <div class="st-field"><span class="fname">id</span><span class="ftype">uuid</span></div>
+        <div class="st-field"><span class="fname">user_id</span><span class="ftype">uuid</span><span class="fspecial">RLS</span></div>
+        <div class="st-field"><span class="fname">role</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">content</span><span class="ftype">text</span></div>
+        <div class="st-field"><span class="fname">tx_refs</span><span class="ftype">uuid[]</span></div>
+        <div class="st-field"><span class="fname">created_at</span><span class="ftype">timestamptz</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Launch Content -->
+  <div class="divider"></div>
+  <div class="launch-section">
+    <div class="phases-label">YouTube Content From This Build</div>
+    <div class="launch-grid">
+      <div class="launch-card">
+        <div class="lc-icon">🔥</div>
+        <div class="lc-title">"I built a Mint replacement with AI in 10 weeks"</div>
+        <div class="lc-sub">Full build story. Show the chat interface in action. Mint shut down in 2023 — massive SEO opportunity.</div>
+      </div>
+      <div class="launch-card">
+        <div class="lc-icon">🧠</div>
+        <div class="lc-title">"How pgvector makes your app 10x smarter"</div>
+        <div class="lc-sub">Technical deep-dive on vector search in Supabase. Sponsor opportunity: Supabase or OpenAI.</div>
+      </div>
+      <div class="launch-card">
+        <div class="lc-icon">⚡</div>
+        <div class="lc-title">"Building realtime iOS apps with Supabase"</div>
+        <div class="lc-sub">Tutorial-style video. Live balance updates in SwiftUI. Strong search volume for iOS + Supabase combo.</div>
+      </div>
+      <div class="launch-card">
+        <div class="lc-icon">💸</div>
+        <div class="lc-title">"From side project to App Store in 10 weeks"</div>
+        <div class="lc-sub">Entrepreneur angle. Ship velocity, RevenueCat monetization, first revenue screenshot. Huge for your audience.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function tog(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+</script>
+</body>
+</html>

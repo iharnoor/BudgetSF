@@ -54,12 +54,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (!submittedBy) {
-    return Response.json(
-      { error: "Login required to submit" },
-      { status: 401 }
-    );
-  }
+  // Allow anonymous submissions for now
 
   // Validate field lengths
   if (name.length > 100) {

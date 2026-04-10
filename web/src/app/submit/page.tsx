@@ -1,18 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import { Category, CATEGORIES, NEIGHBORHOODS } from "@/lib/types";
-import { getUser, User } from "@/lib/auth";
-import LoginModal from "@/components/LoginModal";
 
 export default function SubmitPage() {
-  const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [showLogin, setShowLogin] = useState(false);
+  const { data: session, status } = useSession();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     category: "" as Category | "",
@@ -26,17 +23,9 @@ export default function SubmitPage() {
     website: "",
   });
 
-  useEffect(() => {
-    setUser(getUser());
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!user) {
-      setShowLogin(true);
-      return;
-    }
+    setError("");
 
     setSubmitting(true);
     try {
@@ -49,15 +38,18 @@ export default function SubmitPage() {
             .split(",")
             .map((t) => t.trim())
             .filter(Boolean),
-          submitted_by: user.id,
+          submitted_by: session?.user?.email || session?.user?.name || "anonymous",
         }),
       });
 
       if (res.ok) {
         setSubmitted(true);
+      } else {
+        const data = await res.json();
+        setError(data.error || "Something went wrong");
       }
     } catch {
-      // handle error
+      setError("Failed to submit. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -66,19 +58,22 @@ export default function SubmitPage() {
   if (submitted) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background px-4">
-        <div className="text-center max-w-sm">
+        <div className="text-center max-w-sm slide-up">
           <div className="text-5xl mb-4">🎉</div>
-          <h1 className="text-xl font-bold text-foreground mb-2">
+          <h1
+            className="text-xl text-foreground mb-2"
+            style={{ fontFamily: "var(--font-dm-serif)" }}
+          >
             Spot submitted!
           </h1>
-          <p className="text-sm text-muted mb-6">
+          <p className="text-[13px] text-muted mb-6">
             Your spot has been indexed and is available for the community to
             discover via search.
           </p>
           <div className="flex gap-3 justify-center">
             <Link
               href="/"
-              className="px-5 py-2.5 bg-accent text-white font-medium rounded-xl text-sm hover:bg-accent-dark transition-colors"
+              className="px-5 py-2.5 bg-accent text-white font-medium rounded-xl text-[13px] hover:bg-accent-dark transition-colors press shadow-sm"
             >
               Back to Map
             </Link>
@@ -98,7 +93,7 @@ export default function SubmitPage() {
                   website: "",
                 });
               }}
-              className="px-5 py-2.5 bg-white text-foreground font-medium rounded-xl text-sm border border-border hover:bg-gray-50 transition-colors"
+              className="px-5 py-2.5 bg-surface-warm text-foreground font-medium rounded-xl text-[13px] border border-border/60 hover:bg-warm transition-colors press"
             >
               Add Another
             </button>
@@ -110,19 +105,9 @@ export default function SubmitPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {showLogin && (
-        <LoginModal
-          onLogin={(u) => {
-            setUser(u);
-            setShowLogin(false);
-          }}
-          onClose={() => setShowLogin(false)}
-        />
-      )}
-
       {/* Header */}
-      <div className="border-b border-border bg-white">
-        <div className="max-w-xl mx-auto px-4 h-14 flex items-center gap-3">
+      <div className="border-b border-border/60 glass sticky top-0 z-10">
+        <div className="max-w-xl mx-auto px-5 h-[52px] flex items-center gap-3">
           <Link
             href="/"
             className="text-muted hover:text-foreground transition-colors"
@@ -141,197 +126,213 @@ export default function SubmitPage() {
               />
             </svg>
           </Link>
-          <h1 className="font-semibold text-foreground">Add a cheap spot</h1>
+          <h1
+            className="text-[17px] text-foreground"
+            style={{ fontFamily: "var(--font-dm-serif)" }}
+          >
+            Add a cheap spot
+          </h1>
         </div>
       </div>
 
-      <div className="max-w-xl mx-auto px-4 py-6">
-        {!user && (
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
-            <p className="text-sm text-amber-800">
-              You need to{" "}
-              <button
-                onClick={() => setShowLogin(true)}
-                className="font-medium underline hover:no-underline"
-              >
-                sign in
-              </button>{" "}
-              to submit a spot.
-            </p>
+      <div className="max-w-xl mx-auto px-5 py-8">
+        {status === "loading" ? (
+          <div className="text-center py-16">
+            <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
-        )}
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {/* Signed in banner */}
+            {session?.user ? (
+              <div className="flex items-center gap-2.5 px-4 py-3 bg-accent-light/40 border border-accent/10 rounded-xl">
+                {session.user.image && (
+                  <img
+                    src={session.user.image}
+                    alt=""
+                    className="w-6 h-6 rounded-full"
+                    referrerPolicy="no-referrer"
+                  />
+                )}
+                <span className="text-[12px] text-accent-dark font-medium">
+                  Submitting as {session.user.name}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between px-4 py-3 bg-warm border border-border/60 rounded-xl">
+                <span className="text-[12px] text-muted">
+                  Submitting anonymously
+                </span>
+                <Link
+                  href="/login"
+                  className="text-[12px] text-accent font-medium hover:underline"
+                >
+                  Sign in instead
+                </Link>
+              </div>
+            )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Name */}
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Place name *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="e.g., Taqueria El Farolito"
-              className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-            />
-          </div>
+            {error && (
+              <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-[12px] text-red-700">
+                {error}
+              </div>
+            )}
 
-          {/* Category + Subcategory */}
-          <div className="grid grid-cols-2 gap-3">
+            {/* Name */}
             <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Category *
-              </label>
-              <select
-                required
-                value={form.category}
-                onChange={(e) =>
-                  setForm({ ...form, category: e.target.value as Category })
-                }
-                className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-              >
-                <option value="">Select</option>
-                {CATEGORIES.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.icon} {cat.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Subcategory
-              </label>
-              <input
-                type="text"
-                value={form.subcategory}
-                onChange={(e) =>
-                  setForm({ ...form, subcategory: e.target.value })
-                }
-                placeholder="Mexican, Thai..."
-                className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-              />
-            </div>
-          </div>
-
-          {/* Address + Neighborhood */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Address *
-              </label>
+              <label className="form-label">Place name *</label>
               <input
                 type="text"
                 required
-                value={form.address}
-                onChange={(e) => setForm({ ...form, address: e.target.value })}
-                placeholder="2779 Mission St"
-                className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="e.g., Taqueria El Farolito"
+                className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
               />
             </div>
-            <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Neighborhood *
-              </label>
-              <select
-                required
-                value={form.neighborhood}
-                onChange={(e) =>
-                  setForm({ ...form, neighborhood: e.target.value })
-                }
-                className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-              >
-                <option value="">Select</option>
-                {NEIGHBORHOODS.map((n) => (
-                  <option key={n} value={n}>
-                    {n}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
 
-          {/* Description */}
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Why is this spot great? *
-            </label>
-            <textarea
-              required
-              rows={3}
-              value={form.description}
-              onChange={(e) =>
-                setForm({ ...form, description: e.target.value })
-              }
-              placeholder="Mention prices, what to order, tips..."
-              className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent resize-none"
-            />
-          </div>
-
-          {/* Price */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Price range *
-              </label>
-              <div className="flex gap-1.5">
-                {[1, 2, 3, 4].map((tier) => (
-                  <button
-                    key={tier}
-                    type="button"
-                    onClick={() => setForm({ ...form, price_tier: tier })}
-                    className={`flex-1 py-2.5 rounded-lg text-sm font-bold transition-all ${
-                      form.price_tier === tier
-                        ? "bg-accent text-white"
-                        : "bg-white border border-border text-muted hover:border-gray-300"
-                    }`}
-                  >
-                    {"$".repeat(tier)}
-                  </button>
-                ))}
+            {/* Category + Subcategory */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="form-label">Category *</label>
+                <select
+                  required
+                  value={form.category}
+                  onChange={(e) =>
+                    setForm({ ...form, category: e.target.value as Category })
+                  }
+                  className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+                >
+                  <option value="">Select</option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.value} value={cat.value}>
+                      {cat.icon} {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="form-label">Subcategory</label>
+                <input
+                  type="text"
+                  value={form.subcategory}
+                  onChange={(e) =>
+                    setForm({ ...form, subcategory: e.target.value })
+                  }
+                  placeholder="Mexican, Thai..."
+                  className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+                />
               </div>
             </div>
+
+            {/* Address + Neighborhood */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="form-label">Address *</label>
+                <input
+                  type="text"
+                  required
+                  value={form.address}
+                  onChange={(e) =>
+                    setForm({ ...form, address: e.target.value })
+                  }
+                  placeholder="2779 Mission St"
+                  className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+                />
+              </div>
+              <div>
+                <label className="form-label">Neighborhood *</label>
+                <select
+                  required
+                  value={form.neighborhood}
+                  onChange={(e) =>
+                    setForm({ ...form, neighborhood: e.target.value })
+                  }
+                  className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+                >
+                  <option value="">Select</option>
+                  {NEIGHBORHOODS.map((n) => (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Description */}
             <div>
-              <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-                Avg price ($)
+              <label className="form-label">
+                Why is this spot great? *
               </label>
-              <input
-                type="number"
-                min="0"
-                value={form.avg_price}
+              <textarea
+                required
+                rows={3}
+                value={form.description}
                 onChange={(e) =>
-                  setForm({ ...form, avg_price: e.target.value })
+                  setForm({ ...form, description: e.target.value })
                 }
-                placeholder="12"
-                className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
+                placeholder="Mention prices, what to order, tips..."
+                className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px] resize-none"
               />
             </div>
-          </div>
 
-          {/* Tags */}
-          <div>
-            <label className="block text-xs font-medium text-muted mb-1.5 uppercase tracking-wide">
-              Tags (comma-separated)
-            </label>
-            <input
-              type="text"
-              value={form.tags}
-              onChange={(e) => setForm({ ...form, tags: e.target.value })}
-              placeholder="late-night, cash-only, BYOB"
-              className="w-full px-4 py-2.5 bg-white border border-border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent"
-            />
-          </div>
+            {/* Price */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="form-label">Price range *</label>
+                <div className="flex gap-1.5">
+                  {[1, 2, 3, 4].map((tier) => (
+                    <button
+                      key={tier}
+                      type="button"
+                      onClick={() => setForm({ ...form, price_tier: tier })}
+                      className={`flex-1 py-2.5 rounded-lg text-[13px] font-bold transition-all press ${
+                        form.price_tier === tier
+                          ? "bg-accent text-white shadow-sm"
+                          : "bg-surface-warm border border-border/60 text-muted hover:border-border"
+                      }`}
+                    >
+                      {"$".repeat(tier)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="form-label">Avg price ($)</label>
+                <input
+                  type="text"
+                  value={form.avg_price}
+                  onChange={(e) =>
+                    setForm({ ...form, avg_price: e.target.value })
+                  }
+                  placeholder="$8-12"
+                  className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+                />
+              </div>
+            </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={submitting || !user}
-            className="w-full py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed transition-all"
-          >
-            {submitting ? "Submitting..." : "Submit Spot"}
-          </button>
-        </form>
+            {/* Tags */}
+            <div>
+              <label className="form-label">Tags (comma-separated)</label>
+              <input
+                type="text"
+                value={form.tags}
+                onChange={(e) => setForm({ ...form, tags: e.target.value })}
+                placeholder="late-night, cash-only, BYOB"
+                className="w-full px-4 py-2.5 bg-surface-warm border border-border/60 rounded-xl text-[13px]"
+              />
+            </div>
+
+            {/* Submit */}
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full py-3 bg-accent text-white font-semibold rounded-xl hover:bg-accent-dark press disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm text-[14px]"
+            >
+              {submitting ? "Submitting..." : "Submit Spot"}
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

@@ -9,9 +9,11 @@
  * Uses /ingestion/upload_knowledge with app_sources for structured data.
  */
 
-const API_KEY =
-  process.env.HYDRADB_API_KEY ||
-  "REDACTED";
+const API_KEY = process.env.HYDRADB_API_KEY;
+if (!API_KEY) {
+  console.error("Missing HYDRADB_API_KEY env var. Run with: HYDRADB_API_KEY=your_key node scripts/ingest-venues-hydradb.mjs");
+  process.exit(1);
+}
 const TENANT_ID = process.env.HYDRADB_TENANT_ID || "WealthWise";
 const SUB_TENANT_ID = "sf_venues";
 const BASE_URL = "https://api.hydradb.com";

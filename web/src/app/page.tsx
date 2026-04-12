@@ -103,13 +103,15 @@ export default function HomePage() {
       {/* Top nav bar */}
       <Header />
 
-      {/* Map - full screen below header */}
-      <Map
-        places={filteredPlaces}
-        onPlaceClick={handlePlaceClick}
-        selectedPlace={selectedPlace}
-        className="absolute inset-0 top-[52px]"
-      />
+      {/* Map - full screen below header, isolate keeps Leaflet z-indices contained */}
+      <div className="absolute inset-0 top-[52px] isolate">
+        <Map
+          places={filteredPlaces}
+          onPlaceClick={handlePlaceClick}
+          selectedPlace={selectedPlace}
+          className="absolute inset-0"
+        />
+      </div>
 
       {/* === MAP OVERLAYS === */}
 

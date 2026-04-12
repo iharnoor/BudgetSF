@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useUser, SignInButton } from "@clerk/nextjs";
 import { Category, CATEGORIES, NEIGHBORHOODS } from "@/lib/types";
 
 export default function SubmitPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -38,7 +38,7 @@ export default function SubmitPage() {
             .split(",")
             .map((t) => t.trim())
             .filter(Boolean),
-          submitted_by: session?.user?.email || session?.user?.name || "anonymous",
+          submitted_by: user?.primaryEmailAddress?.emailAddress || user?.fullName || "anonymous",
         }),
       });
 
@@ -136,25 +136,25 @@ export default function SubmitPage() {
       </div>
 
       <div className="max-w-xl mx-auto px-5 py-8">
-        {status === "loading" ? (
+        {!isLoaded ? (
           <div className="text-center py-16">
             <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Signed in banner */}
-            {session?.user ? (
+            {isSignedIn ? (
               <div className="flex items-center gap-2.5 px-4 py-3 bg-accent-light/40 border border-accent/10 rounded-xl">
-                {session.user.image && (
+                {user.imageUrl && (
                   <img
-                    src={session.user.image}
+                    src={user.imageUrl}
                     alt=""
                     className="w-6 h-6 rounded-full"
                     referrerPolicy="no-referrer"
                   />
                 )}
                 <span className="text-[12px] text-accent-dark font-medium">
-                  Submitting as {session.user.name}
+                  Submitting as {user.fullName}
                 </span>
               </div>
             ) : (
@@ -162,12 +162,11 @@ export default function SubmitPage() {
                 <span className="text-[12px] text-muted">
                   Submitting anonymously
                 </span>
-                <Link
-                  href="/login"
-                  className="text-[12px] text-accent font-medium hover:underline"
-                >
-                  Sign in instead
-                </Link>
+                <SignInButton>
+                  <button className="text-[12px] text-accent font-medium hover:underline">
+                    Sign in instead
+                  </button>
+                </SignInButton>
               </div>
             )}
 

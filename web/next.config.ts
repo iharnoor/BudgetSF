@@ -18,18 +18,6 @@ const nextConfig: NextConfig = {
             key: "Strict-Transport-Security",
             value: "max-age=63072000; includeSubDomains; preload",
           },
-          {
-            key: "Content-Security-Policy",
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
-              "style-src 'self' 'unsafe-inline' https://unpkg.com",
-              "img-src 'self' data: blob: https://*.tile.openstreetmap.fr https://*.basemaps.cartocdn.com https://tiles.stadiamaps.com https://lh3.googleusercontent.com",
-              "font-src 'self'",
-              "connect-src 'self' https://api.hydradb.com https://accounts.google.com",
-              "frame-ancestors 'none'",
-            ].join("; "),
-          },
         ],
       },
     ];

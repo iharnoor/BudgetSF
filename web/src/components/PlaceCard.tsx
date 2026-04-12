@@ -8,6 +8,13 @@ interface PlaceCardProps {
   isSelected?: boolean;
   onClick?: () => void;
   compact?: boolean;
+  distanceMi?: number;
+}
+
+function formatDistance(mi: number): string {
+  if (mi < 0.1) return "nearby";
+  if (mi < 10) return `${mi.toFixed(1)} mi`;
+  return `${Math.round(mi)} mi`;
 }
 
 export default function PlaceCard({
@@ -15,6 +22,7 @@ export default function PlaceCard({
   isSelected,
   onClick,
   compact,
+  distanceMi,
 }: PlaceCardProps) {
   const category = CATEGORIES.find((c) => c.value === place.category);
   const priceLabel = formatPrice(place.avg_price);
@@ -44,6 +52,9 @@ export default function PlaceCard({
             <p className="text-[11px] text-muted mt-0.5 truncate">
               {place.neighborhood}
               {priceLabel && ` · ${priceLabel}`}
+              {distanceMi !== undefined && (
+                <span className="text-blue-500 font-medium"> · {formatDistance(distanceMi)}</span>
+              )}
             </p>
           </div>
           <span className="text-accent font-bold text-[13px] shrink-0 tracking-tight">

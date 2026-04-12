@@ -1,6 +1,18 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+
+function haversineDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 3959; // Earth radius in miles
+  const dLat = (lat2 - lat1) * (Math.PI / 180);
+  const dLng = (lng2 - lng1) * (Math.PI / 180);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * (Math.PI / 180)) *
+    Math.cos(lat2 * (Math.PI / 180)) *
+    Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 import dynamic from "next/dynamic";
 import { Category, Place } from "@/lib/types";
 import { SAMPLE_PLACES } from "@/lib/sample-data";
@@ -24,12 +36,16 @@ export default function HomePage() {
   const [mobileSheet, setMobileSheet] = useState<"peek" | "half" | "full">(
     "peek"
   );
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [nearMeActive, setNearMeActive] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const approvedPlaces = SAMPLE_PLACES.filter((p) => p.status === "approved");
 
   const filteredPlaces = useMemo(() => {
     const source = hydraResults || approvedPlaces;
-    return source.filter((place) => {
+    let result = source.filter((place) => {
       const matchesCategory =
         selectedCategory === "all" || place.category === selectedCategory;
       if (hydraResults) return matchesCategory;
@@ -42,7 +58,17 @@ export default function HomePage() {
         );
       return matchesCategory && matchesSearch;
     });
-  }, [approvedPlaces, hydraResults, selectedCategory, search]);
+
+    if (nearMeActive && userLocation) {
+      result = [...result].sort((a, b) => {
+        const distA = haversineDistance(userLocation.lat, userLocation.lng, a.lat, a.lng);
+        const distB = haversineDistance(userLocation.lat, userLocation.lng, b.lat, b.lng);
+        return distA - distB;
+      });
+    }
+
+    return result;
+  }, [approvedPlaces, hydraResults, selectedCategory, search, nearMeActive, userLocation]);
 
   const handleSearch = useCallback(async (query: string) => {
     setSearch(query);
@@ -98,6 +124,35 @@ export default function HomePage() {
     setMobileSheet("half");
   }, []);
 
+  const handleNearMe = useCallback(() => {
+    if (nearMeActive) {
+      setNearMeActive(false);
+      setUserLocation(null);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      setLocationError("Geolocation not supported by your browser");
+      setTimeout(() => setLocationError(null), 3000);
+      return;
+    }
+
+    setLocationLoading(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setNearMeActive(true);
+        setLocationLoading(false);
+      },
+      () => {
+        setLocationError("Location access denied");
+        setLocationLoading(false);
+        setTimeout(() => setLocationError(null), 3000);
+      },
+      { timeout: 10000, maximumAge: 60000 }
+    );
+  }, [nearMeActive]);
+
   return (
     <div className="map-page h-full relative overflow-hidden">
       {/* Top nav bar */}
@@ -109,6 +164,7 @@ export default function HomePage() {
           places={filteredPlaces}
           onPlaceClick={handlePlaceClick}
           selectedPlace={selectedPlace}
+          userLocation={userLocation}
           className="absolute inset-0"
         />
       </div>
@@ -166,6 +222,32 @@ export default function HomePage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
+          )}
+        </div>
+
+        {/* Near Me button */}
+        <div className="flex flex-col gap-1">
+          <button
+            onClick={handleNearMe}
+            disabled={locationLoading}
+            className={`flex items-center gap-2 px-3.5 py-2 glass rounded-xl border shadow-lg shadow-black/[0.04] text-[12px] font-semibold transition-all press self-start ${
+              nearMeActive
+                ? "border-blue-300/60 bg-blue-50/80 text-blue-700"
+                : "border-border/60 text-foreground hover:border-border"
+            } disabled:opacity-60 disabled:cursor-not-allowed`}
+          >
+            {locationLoading ? (
+              <div className="w-3.5 h-3.5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <svg className={`w-3.5 h-3.5 ${nearMeActive ? "text-blue-500" : "text-muted"}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            )}
+            {nearMeActive ? "Near Me (on)" : "Near Me"}
+          </button>
+          {locationError && (
+            <p className="text-[11px] text-red-500 font-medium px-1 animate-in">{locationError}</p>
           )}
         </div>
 
@@ -264,6 +346,11 @@ export default function HomePage() {
                   isSelected={selectedPlace?.id === place.id}
                   onClick={() => handlePlaceClick(place)}
                   compact
+                  distanceMi={
+                    nearMeActive && userLocation
+                      ? haversineDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
+                      : undefined
+                  }
                 />
               ))}
             </div>
@@ -324,6 +411,11 @@ export default function HomePage() {
                     isSelected={selectedPlace?.id === place.id}
                     onClick={() => handlePlaceClick(place)}
                     compact
+                    distanceMi={
+                      nearMeActive && userLocation
+                        ? haversineDistance(userLocation.lat, userLocation.lng, place.lat, place.lng)
+                        : undefined
+                    }
                   />
                 ))}
               </div>

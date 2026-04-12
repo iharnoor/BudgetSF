@@ -230,6 +230,36 @@ body {
   transform: scale(0.97);
 }
 
+/* User location marker */
+.user-location-marker {
+  background: none;
+  border: none;
+}
+
+.user-location-dot {
+  width: 16px;
+  height: 16px;
+  background: #3b82f6;
+  border-radius: 50%;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.5);
+  position: relative;
+}
+
+.user-location-dot::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.2);
+  animation: location-pulse 2s ease-out infinite;
+}
+
+@keyframes location-pulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
 /* Noise texture overlay */
 .noise::before {
   content: "";

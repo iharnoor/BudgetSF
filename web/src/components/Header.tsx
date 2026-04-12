@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
-import { useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
@@ -30,7 +29,7 @@ export default function Header() {
           {[
             { href: "/", label: "Map" },
             { href: "/spots", label: "Spots" },
-            { href: "/submit", label: "Add My Fav" },
+            { href: "/community", label: "Vote / Add" },
           ].map((item) => {
             const isActive =
               item.href === "/"
@@ -57,17 +56,6 @@ export default function Header() {
 
         {/* Right */}
         <div className="flex items-center gap-3">
-          <Link
-            href="/pending"
-            className={`hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[13px] font-medium transition-colors ${
-              pathname === "/pending"
-                ? "text-foreground"
-                : "text-muted hover:text-foreground"
-            }`}
-          >
-            Vote
-          </Link>
-
           {isSignedIn ? (
             <UserButton />
           ) : (

@@ -99,7 +99,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="h-full relative overflow-hidden">
+    <div className="map-page h-full relative overflow-hidden">
       {/* Top nav bar */}
       <Header />
 

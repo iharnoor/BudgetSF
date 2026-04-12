@@ -42,6 +42,10 @@
 html, body {
   height: 100%;
   margin: 0;
+}
+
+/* Only lock scroll on the full-screen map page */
+body:has(.map-page) {
   overflow: hidden;
 }
 

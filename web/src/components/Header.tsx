@@ -1,12 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 
+const NAV_ITEMS = [
+  { href: "/", label: "Map" },
+  { href: "/spots", label: "Spots" },
+  { href: "/community", label: "Vote / Add" },
+  { href: "/picks", label: "My Picks" },
+];
+
 export default function Header() {
   const pathname = usePathname();
   const { isSignedIn } = useUser();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="absolute top-0 left-0 right-0 z-40 glass border-b border-border/60">
@@ -24,13 +33,9 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Center nav */}
+        {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-0.5">
-          {[
-            { href: "/", label: "Map" },
-            { href: "/spots", label: "Spots" },
-            { href: "/community", label: "Vote / Add" },
-          ].map((item) => {
+          {NAV_ITEMS.map((item) => {
             const isActive =
               item.href === "/"
                 ? pathname === "/"
@@ -55,7 +60,7 @@ export default function Header() {
         </nav>
 
         {/* Right */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {isSignedIn ? (
             <UserButton />
           ) : (
@@ -65,8 +70,59 @@ export default function Header() {
               </button>
             </SignInButton>
           )}
+
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="sm:hidden p-1.5 text-muted hover:text-foreground transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d={
+                  mobileMenuOpen
+                    ? "M6 18L18 6M6 6l12 12"
+                    : "M4 6h16M4 12h16M4 18h16"
+                }
+              />
+            </svg>
+          </button>
         </div>
       </div>
+
+      {/* Mobile dropdown */}
+      {mobileMenuOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-30"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <nav className="sm:hidden relative z-40 glass border-t border-border/60 py-2 animate-in">
+            {NAV_ITEMS.map((item) => {
+              const isActive =
+                item.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`block px-5 py-2.5 text-[14px] font-medium transition-colors ${
+                    isActive
+                      ? "text-foreground bg-accent-light/30"
+                      : "text-muted hover:text-foreground hover:bg-warm"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+        </>
+      )}
     </header>
   );
 }

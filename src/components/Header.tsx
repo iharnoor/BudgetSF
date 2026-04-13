@@ -8,8 +8,10 @@ import { useUser, UserButton, SignInButton } from "@clerk/nextjs";
 const NAV_ITEMS = [
   { href: "/", label: "Map" },
   { href: "/spots", label: "Spots" },
+  { href: "/workspaces", label: "Work Spots" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
+  { href: "/agents", label: "Agents" },
 ];
 
 export default function Header() {

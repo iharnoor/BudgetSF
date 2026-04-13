@@ -4,6 +4,8 @@ export type Category =
   | "gym"
   | "bars"
   | "coffee"
+  | "workspace"
+  | "housing"
   | "entertainment"
   | "services"
   | "other";
@@ -44,6 +46,8 @@ export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: "gym", label: "Gym & Fitness", icon: "💪" },
   { value: "bars", label: "Bars & Drinks", icon: "🍺" },
   { value: "coffee", label: "Coffee", icon: "☕" },
+  { value: "workspace", label: "Work Spots", icon: "💻" },
+  { value: "housing", label: "Housing", icon: "🏠" },
   { value: "entertainment", label: "Entertainment", icon: "🎭" },
   { value: "services", label: "Services", icon: "✂️" },
   { value: "other", label: "Other", icon: "📍" },

@@ -46,6 +46,129 @@ const PHONE_PLANS = [
   },
 ];
 
+const NEIGHBORHOODS_RANKED = [
+  {
+    name: "Tenderloin",
+    tier: "$",
+    studio: "$1,200-1,800",
+    oneBr: "$1,500-2,200",
+    description: "Cheapest central neighborhood. Gritty but walkable to FiDi/SoMa. Safety concerns are real but improving in spots.",
+    vibe: "Budget central",
+  },
+  {
+    name: "Bayview-Hunters Point",
+    tier: "$",
+    studio: "$1,300-1,800",
+    oneBr: "$1,600-2,200",
+    description: "Rapidly developing. T-line access. Some of the lowest rents in SF proper.",
+    vibe: "Up-and-coming",
+  },
+  {
+    name: "Visitacion Valley",
+    tier: "$",
+    studio: "$1,300-1,800",
+    oneBr: "$1,600-2,200",
+    description: "One of the most affordable neighborhoods. Quieter, more suburban feel.",
+    vibe: "Quiet, affordable",
+  },
+  {
+    name: "Excelsior",
+    tier: "$",
+    studio: "$1,400-1,900",
+    oneBr: "$1,700-2,300",
+    description: "Working-class neighborhood, affordable, diverse food options. BART accessible via Balboa Park.",
+    vibe: "Diverse, family",
+  },
+  {
+    name: "Outer Sunset",
+    tier: "$",
+    studio: "$1,400-1,900",
+    oneBr: "$1,700-2,300",
+    description: "Quiet, foggy, residential. Near Ocean Beach. Long commute downtown but N-Judah helps. Best ethnic food in SF.",
+    vibe: "Chill, foggy",
+  },
+  {
+    name: "Outer Richmond",
+    tier: "$",
+    studio: "$1,400-1,900",
+    oneBr: "$1,700-2,400",
+    description: "Similar to Outer Sunset. Near Golden Gate Park and Land's End. Amazing Asian food scene.",
+    vibe: "Park-adjacent",
+  },
+  {
+    name: "Inner Sunset",
+    tier: "$$",
+    studio: "$1,600-2,100",
+    oneBr: "$1,900-2,600",
+    description: "Near UCSF. Good restaurants and cafes. Better transit than Outer Sunset.",
+    vibe: "Student-friendly",
+  },
+  {
+    name: "Mission District",
+    tier: "$$",
+    studio: "$1,700-2,300",
+    oneBr: "$2,000-2,800",
+    description: "Creative, gritty, diverse. Where tech culture mixes with SF's artistic roots. Tons of founders live here. Startup meetups at taquerias.",
+    vibe: "Founder + artsy",
+  },
+  {
+    name: "SoMa",
+    tier: "$$",
+    studio: "$1,500-2,200",
+    oneBr: "$1,900-2,700",
+    description: "Varies wildly block by block. High density of startup offices and VC activity. Close to everything but can feel sketchy.",
+    vibe: "Tech corridor",
+  },
+  {
+    name: "Dogpatch / Potrero Hill",
+    tier: "$$",
+    studio: "$1,700-2,200",
+    oneBr: "$2,000-2,700",
+    description: "Maker/startup energy. Biotech spillover from Mission Bay. Community-driven, hidden gem for founders who want space.",
+    vibe: "Maker vibes",
+  },
+  {
+    name: "NoPa",
+    tier: "$$",
+    studio: "$1,800-2,300",
+    oneBr: "$2,100-2,800",
+    description: "Chill, creative, local vibe. Walkable to Hayes Valley and Lower Haight. The Mill coffee shop is here.",
+    vibe: "Creative, chill",
+  },
+  {
+    name: "Hayes Valley",
+    tier: "$$$",
+    studio: "$2,000-2,600",
+    oneBr: "$2,400-3,200",
+    description: "Dubbed 'Cerebral Valley' — high concentration of AI folks. La Boulangerie, Patricia's Green. The startup neighborhood.",
+    vibe: "Cerebral Valley",
+  },
+  {
+    name: "Marina",
+    tier: "$$$",
+    studio: "$2,000-2,700",
+    oneBr: "$2,500-3,400",
+    description: "Popular with the just-graduated, tech-adjacent crowd. Lively, safe, social. Bro-y reputation but great location.",
+    vibe: "Social, lively",
+  },
+  {
+    name: "East Cut / Rincon Hill",
+    tier: "$$$",
+    studio: "$2,200-2,800",
+    oneBr: "$2,600-3,500",
+    description: "Luxury high-rises, walkable to FiDi and SoMa. Feels sterile but convenient. The 'freshman dorms of SF' — tons of transplants.",
+    vibe: "Modern, corporate",
+  },
+  {
+    name: "Pacific Heights",
+    tier: "$$$",
+    studio: "$2,400-3,000",
+    oneBr: "$2,800-3,800",
+    description: "The neighborhood everyone wants to end up in. Upscale, safe, chic. Lower Pac Heights / Fillmore has a great social scene.",
+    vibe: "Aspirational",
+  },
+];
+
 const CREDIT_CARDS = [
   {
     name: "Capital One Venture X",
@@ -301,6 +424,65 @@ export default function PicksPage() {
                   </div>
                 </div>
               </AffiliateLink>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Neighborhoods ── */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="🏘️"
+            title="SF Neighborhoods Ranked by Cost"
+            subtitle="Where to live based on your budget and vibe"
+          />
+          <div className="space-y-2.5">
+            {NEIGHBORHOODS_RANKED.map((hood, i) => (
+              <div
+                key={hood.name}
+                className="bg-white rounded-2xl border border-border p-4 sm:p-5 slide-up"
+                style={{
+                  animationDelay: `${0.05 + i * 0.03}s`,
+                  animationFillMode: "both",
+                }}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[11px] text-muted font-mono">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-sm font-semibold text-foreground">
+                        {hood.name}
+                      </h3>
+                      <span
+                        className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                          hood.tier === "$"
+                            ? "bg-green-50 text-green-700"
+                            : hood.tier === "$$"
+                              ? "bg-amber-50 text-amber-700"
+                              : "bg-red-50 text-red-700"
+                        }`}
+                      >
+                        {hood.tier}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted mb-1.5">{hood.description}</p>
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted">
+                      <span>
+                        <span className="font-medium text-foreground">Studio:</span>{" "}
+                        {hood.studio}
+                      </span>
+                      <span>
+                        <span className="font-medium text-foreground">1BR:</span>{" "}
+                        {hood.oneBr}
+                      </span>
+                    </div>
+                  </div>
+                  <span className="text-xs text-muted italic shrink-0">
+                    {hood.vibe}
+                  </span>
+                </div>
+              </div>
             ))}
           </div>
         </section>

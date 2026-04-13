@@ -180,6 +180,14 @@ const COMMUNITIES: Community[] = [
     free: true,
   },
   {
+    name: "South Park Commons",
+    description:
+      "A community for technologists exploring what's next. Members get space to tinker, learn, and find co-founders. Alumni have started companies worth billions.",
+    url: "https://www.southparkcommons.com",
+    vibe: "Exploratory, high-caliber founders",
+    free: false,
+  },
+  {
     name: "Homebrew Club",
     description:
       "24/7 member-run DIY community space. Web3, AI, and frontier tech experimentation.",

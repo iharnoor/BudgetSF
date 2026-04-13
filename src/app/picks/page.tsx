@@ -1,10 +1,30 @@
 "use client";
 
-import { type AnchorHTMLAttributes, useMemo, useState } from "react";
+import { type AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 
 const PHONE_PLANS = [
+  {
+    name: "Visible by Verizon",
+    tagline: "Premium wireless, simplified",
+    price: "$25",
+    pricePer: "/mo",
+    priceNote: "Visible+",
+    color: "#1a1a40",
+    colorLight: "#e8e8f4",
+    emoji: "📡",
+    features: [
+      "Unlimited data on Verizon's network",
+      "Unlimited mobile hotspot",
+      "No annual contracts",
+      "Taxes & fees included",
+    ],
+    highlight: "My Favorite",
+    note: "I use Visible daily — the unlimited hotspot is a lifesaver for working in Ubers and on Caltrain.",
+    url: "https://fxo.co/1535239/singhinusa",
+    cta: "Try Visible",
+  },
   {
     name: "Mint Mobile",
     tagline: "Wireless that's worth it",
@@ -23,25 +43,6 @@ const PHONE_PLANS = [
     highlight: "Best Value",
     url: "https://mintmobile.com/singh",
     cta: "Get Mint Mobile",
-  },
-  {
-    name: "Visible by Verizon",
-    tagline: "Premium wireless, simplified",
-    price: "$25",
-    pricePer: "/mo",
-    priceNote: "Visible+",
-    color: "#1a1a40",
-    colorLight: "#e8e8f4",
-    emoji: "📡",
-    features: [
-      "Unlimited data on Verizon's network",
-      "Unlimited mobile hotspot",
-      "No annual contracts",
-      "Taxes & fees included",
-    ],
-    highlight: "Unlimited Hotspot",
-    url: "https://fxo.co/1535239/singhinusa",
-    cta: "Try Visible",
   },
 ];
 
@@ -147,118 +148,7 @@ const SAVINGS = [
   },
 ];
 
-type BundleItem = {
-  name: string;
-  price: number;
-  url: string;
-  merchant: string;
-};
-
-type ApartmentBundle = {
-  id: string;
-  name: string;
-  maxBudget: number;
-  roomTypes: string[];
-  styles: string[];
-  vibe: string;
-  setupTip: string;
-  items: BundleItem[];
-};
-
-const APARTMENT_BUNDLES: ApartmentBundle[] = [
-  {
-    id: "micro-studio",
-    name: "Micro Studio Starter",
-    maxBudget: 1200,
-    roomTypes: ["Studio", "1BR"],
-    styles: ["Minimal", "Japandi"],
-    vibe: "Clean lines, foldable pieces, and no-wasted-space zones.",
-    setupTip: "Use one anchor furniture color so the room feels bigger.",
-    items: [
-      { name: 'Zinus 14" Platform Bed Frame', price: 169, url: "https://geni.us/3R2dh", merchant: "Amazon" },
-      { name: "Nnewvante Folding Desk", price: 119, url: "https://geni.us/MQ9kB", merchant: "Amazon" },
-      { name: "SONGMICS 43-inch Storage Ottoman", price: 82, url: "https://geni.us/QCzEgt", merchant: "Amazon" },
-      { name: "Mellanni Queen Sheet Set", price: 38, url: "https://geni.us/6G7z9", merchant: "Amazon" },
-      { name: "LEPOWER Floor Lamp", price: 45, url: "https://geni.us/yShv2", merchant: "Amazon" },
-    ],
-  },
-  {
-    id: "cozy-corner",
-    name: "Cozy WFH Corner Kit",
-    maxBudget: 1800,
-    roomTypes: ["Studio", "1BR", "2BR"],
-    styles: ["Cozy", "Minimal"],
-    vibe: "Soft lighting + practical ergonomics for long work days.",
-    setupTip: "Keep your desk near natural light and layer warm lamp tones at night.",
-    items: [
-      { name: 'Marsail Ergonomic Office Chair', price: 249, url: "https://geni.us/8JQf3", merchant: "Amazon" },
-      { name: 'SHW 55" Standing Desk', price: 239, url: "https://geni.us/eS1b6N", merchant: "Amazon" },
-      { name: "Logitech MX Keys S Keyboard", price: 119, url: "https://geni.us/q8Yv", merchant: "Amazon" },
-      { name: "Logitech MX Master 3S Mouse", price: 99, url: "https://geni.us/KyA3", merchant: "Amazon" },
-      { name: 'Mount-It! Monitor Arm', price: 49, url: "https://geni.us/f1q2m", merchant: "Amazon" },
-      { name: "Govee Smart Lamp", price: 49, url: "https://geni.us/nm8Kc", merchant: "Amazon" },
-    ],
-  },
-  {
-    id: "roommate-flex",
-    name: "Roommate Flex Bundle",
-    maxBudget: 2600,
-    roomTypes: ["2BR", "3BR+"],
-    styles: ["Modern", "Cozy"],
-    vibe: "Shared-space friendly picks, durable and easy to replace.",
-    setupTip: "Prioritize modular furniture so everyone can tweak layout quickly.",
-    items: [
-      { name: "HONBAY Convertible Sectional", price: 599, url: "https://geni.us/nfVA3H", merchant: "Amazon" },
-      { name: "Vasagle Coffee Table with Storage", price: 109, url: "https://geni.us/1fN2J", merchant: "Amazon" },
-      { name: 'OLIXIS 63" Dining Table', price: 169, url: "https://geni.us/xW7vJ", merchant: "Amazon" },
-      { name: "4-Pack Dining Chairs", price: 149, url: "https://geni.us/r4z9L", merchant: "Amazon" },
-      { name: "2x Kitchen Utility Racks", price: 160, url: "https://geni.us/U53Qa", merchant: "Amazon" },
-      { name: "Area Rug 8x10", price: 119, url: "https://geni.us/Lz99v", merchant: "Amazon" },
-    ],
-  },
-];
-
-const APARTMENT_PARTNERS = [
-  {
-    name: "Apartments.com Budget Finder",
-    summary: "Filter by rent ceiling + commute + pet policy",
-    url: "https://www.apartments.com/san-francisco-ca/under-2500/",
-  },
-  {
-    name: "Zillow Rentals",
-    summary: "Great for no-fee and owner-listed options",
-    url: "https://www.zillow.com/san-francisco-ca/rentals/",
-  },
-  {
-    name: "HotPads",
-    summary: "Fast neighborhood scanning for budget apartments",
-    url: "https://hotpads.com/san-francisco-ca/apartments-for-rent",
-  },
-];
-
 export default function PicksPage() {
-  const [city, setCity] = useState("San Francisco");
-  const [budget, setBudget] = useState(1800);
-  const [roomType, setRoomType] = useState("Studio");
-  const [style, setStyle] = useState("Minimal");
-
-  const matchingBundles = useMemo(() => {
-    return APARTMENT_BUNDLES.filter(
-      (bundle) =>
-        budget <= bundle.maxBudget &&
-        bundle.roomTypes.includes(roomType) &&
-        bundle.styles.includes(style)
-    );
-  }, [budget, roomType, style]);
-
-  const fallbackBundles = useMemo(
-    () => APARTMENT_BUNDLES.filter((bundle) => budget <= bundle.maxBudget),
-    [budget]
-  );
-
-  const featuredBundles =
-    matchingBundles.length > 0 ? matchingBundles : fallbackBundles;
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -311,197 +201,6 @@ export default function PicksPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 pb-16">
-        <section className="mb-12">
-          <SectionHeader
-            emoji="🏡"
-            title="Budget Apartment Mode"
-            subtitle="Get a magic setup plan in 30 seconds"
-          />
-          <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 slide-up">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
-              <label className="text-xs text-muted">
-                City
-                <input
-                  value={city}
-                  onChange={(event) => setCity(event.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground bg-background"
-                />
-              </label>
-              <label className="text-xs text-muted">
-                Monthly Rent Budget
-                <input
-                  type="number"
-                  min={900}
-                  step={50}
-                  value={budget}
-                  onChange={(event) => setBudget(Number(event.target.value) || 900)}
-                  className="mt-1.5 w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground bg-background"
-                />
-              </label>
-              <label className="text-xs text-muted">
-                Room Type
-                <select
-                  value={roomType}
-                  onChange={(event) => setRoomType(event.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground bg-background"
-                >
-                  <option>Studio</option>
-                  <option>1BR</option>
-                  <option>2BR</option>
-                  <option>3BR+</option>
-                </select>
-              </label>
-              <label className="text-xs text-muted">
-                Style
-                <select
-                  value={style}
-                  onChange={(event) => setStyle(event.target.value)}
-                  className="mt-1.5 w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground bg-background"
-                >
-                  <option>Minimal</option>
-                  <option>Cozy</option>
-                  <option>Modern</option>
-                  <option>Japandi</option>
-                </select>
-              </label>
-            </div>
-
-            <div className="rounded-xl bg-accent-light/60 border border-accent/20 p-4 mb-5">
-              <p className="text-xs text-accent-dark">
-                Magic concept for {city}: prioritize{" "}
-                <span className="font-semibold">{style}</span> pieces with fast
-                assembly for a <span className="font-semibold">{roomType}</span>.{" "}
-                Keep total setup spend under 60% of one month&apos;s rent.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {featuredBundles.slice(0, 2).map((bundle) => {
-                const setupCost = bundle.items.reduce(
-                  (sum, item) => sum + item.price,
-                  0
-                );
-                return (
-                  <div
-                    key={bundle.id}
-                    className="rounded-xl border border-border p-4 bg-background"
-                  >
-                    <div className="flex items-center justify-between gap-2 mb-2">
-                      <h3 className="text-sm font-semibold text-foreground">
-                        {bundle.name}
-                      </h3>
-                      <span className="badge badge-blue">
-                        ${setupCost.toLocaleString()} setup
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted mb-3">{bundle.vibe}</p>
-                    <p className="text-xs text-muted mb-3">
-                      <span className="font-medium text-foreground">Tip:</span>{" "}
-                      {bundle.setupTip}
-                    </p>
-                    <AffiliateLink
-                      section="budget-apartment-mode"
-                      label={`${bundle.name}-full-bundle`}
-                      href={bundle.items[0]?.url ?? "https://amazon.com"}
-                      className="inline-flex items-center text-xs text-accent hover:underline"
-                    >
-                      Shop starter item
-                      <span className="ml-1">&rarr;</span>
-                    </AffiliateLink>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <SectionHeader
-            emoji="🛒"
-            title="Shoppable Bundles"
-            subtitle="Curated packs you can buy item-by-item"
-          />
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {APARTMENT_BUNDLES.map((bundle, index) => {
-              const total = bundle.items.reduce((sum, item) => sum + item.price, 0);
-              return (
-                <div
-                  key={bundle.id}
-                  className="bg-white rounded-2xl border border-border p-5 card-hover slide-up"
-                  style={{
-                    animationDelay: `${0.1 + index * 0.06}s`,
-                    animationFillMode: "both",
-                  }}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <h3 className="text-[15px] font-semibold text-foreground">
-                      {bundle.name}
-                    </h3>
-                    <span className="badge badge-green">${total}</span>
-                  </div>
-                  <ul className="space-y-2 mb-4">
-                    {bundle.items.slice(0, 4).map((item) => (
-                      <li
-                        key={item.name}
-                        className="flex items-center justify-between gap-2 text-xs"
-                      >
-                        <span className="text-muted">{item.name}</span>
-                        <AffiliateLink
-                          section="shoppable-bundles"
-                          label={`${bundle.id}-${item.name}`}
-                          href={item.url}
-                          className="text-accent hover:underline whitespace-nowrap"
-                        >
-                          ${item.price} at {item.merchant}
-                        </AffiliateLink>
-                      </li>
-                    ))}
-                  </ul>
-                  <AffiliateLink
-                    section="shoppable-bundles"
-                    label={`${bundle.id}-shop-all`}
-                    href={bundle.items[0]?.url ?? "https://amazon.com"}
-                    className="w-full py-2.5 rounded-xl text-center text-sm font-semibold text-white bg-accent block hover:bg-accent-dark transition-colors"
-                  >
-                    Shop This Bundle
-                  </AffiliateLink>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        <section className="mb-12">
-          <SectionHeader
-            emoji="🏙️"
-            title="Budget Apartment Search"
-            subtitle="Find apartments first, then map your setup budget"
-          />
-          <div className="bg-white rounded-2xl border border-border p-5">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {APARTMENT_PARTNERS.map((partner) => (
-                <div
-                  key={partner.name}
-                  className="rounded-xl border border-border p-3 bg-background"
-                >
-                  <h3 className="text-sm font-semibold text-foreground mb-1">
-                    {partner.name}
-                  </h3>
-                  <p className="text-xs text-muted mb-2">{partner.summary}</p>
-                  <AffiliateLink
-                    section="budget-apartment-search"
-                    label={partner.name}
-                    href={partner.url}
-                    className="text-xs text-accent hover:underline"
-                  >
-                    Open search
-                  </AffiliateLink>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ── Phone Plans ── */}
         <section className="mb-12">
           <SectionHeader emoji="📱" title="Phone Plans" subtitle="Cut your phone bill without cutting corners" />
@@ -582,6 +281,13 @@ export default function PicksPage() {
                       </li>
                     ))}
                   </ul>
+
+                  {/* Personal note */}
+                  {"note" in plan && plan.note && (
+                    <div className="rounded-lg bg-accent-light/40 border border-accent/10 px-3 py-2 mb-4">
+                      <p className="text-[11px] text-accent-dark">{plan.note}</p>
+                    </div>
+                  )}
 
                   {/* CTA */}
                   <div

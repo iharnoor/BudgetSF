@@ -215,7 +215,7 @@ const BANKING = [
   {
     name: "SoFi Bank",
     tagline: "A smarter way to bank",
-    bonus: "Up to $250",
+    bonus: "Up to $425",
     bonusNote: "with direct deposit",
     color: "#6b35b5",
     colorLight: "#f3edfc",
@@ -226,8 +226,8 @@ const BANKING = [
       { label: "No account fees", desc: "No minimums, no overdraft fees" },
       { label: "Early paycheck", desc: "Get paid up to 2 days early" },
     ],
-    highlight: "Up to $250 Bonus",
-    url: "https://www.sofi.com/invite/money?gcp=ba1670b7-b9c7-41e8-b1fa-c549dfc6c9cc&isAliasGcp=false",
+    highlight: "Up to $425 Bonus",
+    url: "https://www.sofi.com/invite/money?gcp=145a5a84-2c09-4647-b446-cac4a9a2a1c9&isAliasGcp=false",
     cta: "Open SoFi Account",
   },
   {

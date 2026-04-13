@@ -10,8 +10,6 @@ const NAV_ITEMS = [
   { href: "/spots", label: "Spots" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
-  { href: "/affiliate-dashboard", label: "Dashboard" },
-  { href: "/about", label: "About" },
 ];
 
 export default function Header() {

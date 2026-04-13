@@ -276,9 +276,6 @@ export default function PicksPage() {
             <span className="text-muted text-xs">/ My Picks</span>
           </div>
           <div className="flex items-center gap-3">
-            <Link href="/affiliate-dashboard" className="text-xs text-accent hover:underline">
-              Dashboard
-            </Link>
             <Link href="/" className="text-xs text-accent hover:underline">
               Back to Map
             </Link>

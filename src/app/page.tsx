@@ -7,6 +7,7 @@ import { SAMPLE_PLACES } from "@/lib/sample-data";
 import CategoryFilter from "@/components/CategoryFilter";
 import PlaceCard from "@/components/PlaceCard";
 import PlaceDetail from "@/components/PlaceDetail";
+import Link from "next/link";
 import Header from "@/components/Header";
 import MapLegend from "@/components/MapLegend";
 
@@ -269,6 +270,14 @@ export default function HomePage() {
       <div className="hidden sm:block absolute top-[68px] right-4 z-30">
         <MapLegend />
       </div>
+
+      {/* Bottom-left: About Me */}
+      <Link
+        href="/about"
+        className="absolute bottom-6 left-4 z-30 glass px-3.5 py-2 rounded-xl shadow-lg shadow-black/[0.04] border border-border/60 text-[12px] font-medium text-muted hover:text-foreground transition-colors"
+      >
+        About Me
+      </Link>
 
       {/* Bottom-right: list toggle */}
       <button

@@ -1,8 +1,5 @@
 import { NextRequest } from "next/server";
-import {
-  getAffiliateDashboardStats,
-  recordAffiliateClick,
-} from "@/lib/affiliate-clicks";
+import { recordAffiliateClick } from "@/lib/affiliate-clicks";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,16 +45,4 @@ export async function POST(request: NextRequest) {
   });
 
   return Response.json({ ok: true });
-}
-
-export async function GET(request: NextRequest) {
-  const daysParam = request.nextUrl.searchParams.get("days");
-  const windowDays = Number(daysParam);
-  const safeWindowDays =
-    Number.isFinite(windowDays) && windowDays > 0 && windowDays <= 365
-      ? Math.floor(windowDays)
-      : 30;
-
-  const stats = await getAffiliateDashboardStats(safeWindowDays);
-  return Response.json(stats);
 }

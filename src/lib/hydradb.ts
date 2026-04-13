@@ -1,3 +1,59 @@
+const CATEGORY_KEYWORDS: Record<string, string[]> = {
+  food: [
+    "food", "eat", "eating", "restaurant", "lunch", "dinner", "breakfast",
+    "taco", "tacos", "burrito", "burritos", "pizza", "sushi", "ramen",
+    "noodles", "thai", "chinese", "mexican", "indian", "italian",
+    "sandwich", "burger", "pho", "dim sum", "brunch", "cheap eats",
+  ],
+  coffee: [
+    "coffee", "cafe", "latte", "espresso", "cappuccino", "matcha",
+    "tea", "roaster", "bakery",
+  ],
+  grocery: [
+    "grocery", "groceries", "supermarket", "market", "produce",
+    "costco", "trader joe", "whole foods",
+  ],
+  gym: [
+    "gym", "fitness", "workout", "exercise", "yoga", "pilates",
+    "crossfit", "training", "weights",
+  ],
+  bars: [
+    "bar", "bars", "drinks", "cocktail", "cocktails", "beer",
+    "wine", "pub", "happy hour", "nightlife",
+  ],
+  housing: [
+    "housing", "apartment", "rent", "coliving", "co-living",
+    "hacker house", "room", "lease", "studio",
+  ],
+  workspace: [
+    "coworking", "co-working", "workspace", "work spot", "office",
+    "library", "hotel lobby", "remote work", "wfh",
+  ],
+  startup: [
+    "accelerator", "program", "fellowship", "residency", "yc",
+    "y combinator", "incubator", "startup program", "vc",
+  ],
+};
+
+function detectCategory(query: string): string | null {
+  const q = query.toLowerCase();
+  let bestCategory: string | null = null;
+  let bestCount = 0;
+
+  for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
+    let count = 0;
+    for (const kw of keywords) {
+      if (q.includes(kw)) count++;
+    }
+    if (count > bestCount) {
+      bestCount = count;
+      bestCategory = category;
+    }
+  }
+
+  return bestCount > 0 ? bestCategory : null;
+}
+
 const HYDRA_API = "https://api.hydradb.com";
 const TENANT_ID = process.env.HYDRADB_TENANT_ID || "WealthWise";
 const API_KEY = process.env.HYDRADB_API_KEY || "";
@@ -28,6 +84,8 @@ export async function searchVenues(
   query: string,
   maxResults = 20
 ): Promise<SearchResult[]> {
+  const intendedCategory = detectCategory(query);
+
   const res = await fetch(`${HYDRA_API}/recall/full_recall`, {
     method: "POST",
     headers: {
@@ -91,6 +149,11 @@ export async function searchVenues(
           if (venue.tags?.some((t) => t.toLowerCase().includes(term))) {
             boostedScore += 0.1;
           }
+        }
+
+        // Penalize off-category results when intent is clear
+        if (intendedCategory && venue.category !== intendedCategory) {
+          boostedScore -= 0.5;
         }
 
         results.push({ venue, score: boostedScore });

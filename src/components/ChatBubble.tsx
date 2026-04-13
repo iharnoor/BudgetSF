@@ -182,7 +182,10 @@ export default function ChatBubble({
                     {msg.places.map((place) => (
                       <button
                         key={place.id + place.name}
-                        onClick={() => onPlaceClick?.(place)}
+                        onClick={() => {
+                          onPlaceClick?.(place);
+                          setOpen(false);
+                        }}
                         className="w-full text-left bg-background hover:bg-accent-light/40 rounded-lg px-3 py-2 transition-colors border border-border/40"
                       >
                         <span className="text-xs font-medium text-foreground">

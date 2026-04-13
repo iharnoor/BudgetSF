@@ -104,14 +104,15 @@ export default function Map({
     };
   }, []);
 
-  // Track previous places list to know when to fitBounds
-  const prevPlacesRef = useRef<Place[]>([]);
+  // Stable ref for onPlaceClick so markers don't rebuild on every render
+  const onPlaceClickRef = useRef(onPlaceClick);
+  onPlaceClickRef.current = onPlaceClick;
 
-  // Update markers whenever places change AND map is ready
-  const updateMarkers = useCallback(() => {
+  // Rebuild markers when places change (filter/search)
+  useEffect(() => {
     const L = leafletRef.current;
     const map = mapInstanceRef.current;
-    if (!L || !map) return;
+    if (!L || !map || !mapReady) return;
 
     markersRef.current.forEach((m) => m.remove());
     markersRef.current = [];
@@ -119,11 +120,10 @@ export default function Map({
     places.forEach((place) => {
       const cat = CATEGORIES.find((c) => c.value === place.category);
       const color = CATEGORY_COLORS[place.category] || "#6c757d";
-      const isSelected = selectedPlace?.id === place.id;
 
       const icon = L.divIcon({
         className: "custom-marker",
-        html: `<div class="map-marker ${isSelected ? "selected" : ""}" style="--marker-color: ${color}">
+        html: `<div class="map-marker" style="--marker-color: ${color}">
           <span class="map-marker-icon">${cat?.icon || "📍"}</span>
         </div>`,
         iconSize: [32, 32],
@@ -142,33 +142,22 @@ export default function Map({
       );
 
       marker.on("click", () => {
-        if (onPlaceClick) onPlaceClick(place);
+        onPlaceClickRef.current?.(place);
       });
 
       markersRef.current.push(marker);
     });
 
-    // Only fitBounds when the places list actually changes (filter/search),
-    // not when selectedPlace changes
-    const placesChanged = prevPlacesRef.current !== places;
-    prevPlacesRef.current = places;
-
-    if (placesChanged && places.length > 0) {
+    // Fit bounds only when places list changes — never on select
+    if (places.length > 0) {
       const bounds = L.latLngBounds(
         places.map((p) => [p.lat, p.lng] as [number, number])
       );
       map.fitBounds(bounds, { padding: [60, 60], maxZoom: 14 });
     }
-  }, [places, selectedPlace, onPlaceClick]);
+  }, [places, mapReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Trigger marker update when map becomes ready or places change
-  useEffect(() => {
-    if (mapReady) {
-      updateMarkers();
-    }
-  }, [mapReady, updateMarkers]);
-
-  // Pan to selected — smooth zoom without resetting view
+  // Pan to selected — only pans, never zooms out
   useEffect(() => {
     if (selectedPlace && mapInstanceRef.current) {
       const currentZoom = mapInstanceRef.current.getZoom();

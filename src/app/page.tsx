@@ -9,6 +9,7 @@ import PlaceCard from "@/components/PlaceCard";
 import PlaceDetail from "@/components/PlaceDetail";
 import Header from "@/components/Header";
 import MapLegend from "@/components/MapLegend";
+import ChatBubble from "@/components/ChatBubble";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -269,6 +270,9 @@ export default function HomePage() {
       <div className="hidden sm:block absolute top-[68px] right-4 z-30">
         <MapLegend />
       </div>
+
+      {/* Bottom-left: chat bubble */}
+      <ChatBubble onPlaceClick={handlePlaceClick} />
 
       {/* Bottom-right: list toggle */}
       <button

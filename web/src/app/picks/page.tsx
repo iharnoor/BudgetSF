@@ -104,6 +104,45 @@ const BANKING = [
     url: "https://www.sofi.com/invite/money?gcp=ba1670b7-b9c7-41e8-b1fa-c549dfc6c9cc&isAliasGcp=false",
     cta: "Open SoFi Account",
   },
+  {
+    name: "Robinhood",
+    tagline: "Start investing with free stock",
+    bonus: "Free Stock",
+    bonusNote: "you pick your gift stock",
+    color: "#00c805",
+    colorLight: "#e6fbe7",
+    emoji: "📈",
+    features: [
+      { label: "Commission-free trading", desc: "Stocks, ETFs, options, crypto" },
+      { label: "Free stock on sign-up", desc: "We both pick a gift stock" },
+      { label: "Fractional shares", desc: "Invest with as little as $1" },
+      { label: "No account minimums", desc: "Start investing immediately" },
+    ],
+    highlight: "Free Stock Gift",
+    url: "https://join.robinhood.com/harnoos28",
+    cta: "Get Free Stock",
+  },
+];
+
+const SAVINGS = [
+  {
+    name: "Rakuten",
+    tagline: "Get cash back on everything you buy",
+    bonus: "Up to $30",
+    bonusNote: "welcome bonus",
+    color: "#e6002a",
+    colorLight: "#fce8ec",
+    emoji: "💸",
+    features: [
+      { label: "Cash back at 3,500+ stores", desc: "Up to 19% back on Temu, plus Amazon, Walmart & more" },
+      { label: "Browser extension", desc: "Auto-applies coupons + earns cash back" },
+      { label: "Quarterly payouts", desc: "Big Fat Check or PayPal deposit" },
+      { label: "Stack with credit card rewards", desc: "Double dip on every purchase" },
+    ],
+    highlight: "Free Money",
+    url: "https://www.rakuten.com/r/IHARNO2?eeid=44749",
+    cta: "Start Earning Cash Back",
+  },
 ];
 
 export default function PicksPage() {
@@ -559,6 +598,105 @@ export default function PicksPage() {
                   style={{ background: bank.color }}
                 >
                   {bank.cta}
+                  <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">
+                    &rarr;
+                  </span>
+                </div>
+              </div>
+            </a>
+          ))}
+        </section>
+
+        {/* ── Savings ── */}
+        <section className="mb-12">
+          <SectionHeader emoji="💸" title="Cash Back & Savings" subtitle="Free money on stuff you already buy" />
+          {SAVINGS.map((item, i) => (
+            <a
+              key={item.name}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative block bg-white rounded-2xl border border-border overflow-hidden card-hover press slide-up"
+              style={{
+                animationDelay: `${0.15 + i * 0.08}s`,
+                animationFillMode: "both",
+              }}
+            >
+              {/* Top color bar */}
+              <div
+                className="h-1.5 w-full"
+                style={{
+                  background: `linear-gradient(to right, ${item.color}, ${item.color}cc)`,
+                }}
+              />
+
+              <div className="p-5 sm:p-6">
+                {/* Title row */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm"
+                      style={{ background: item.colorLight }}
+                    >
+                      {item.emoji}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-base">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-muted">{item.tagline}</p>
+                    </div>
+                  </div>
+                  <div
+                    className="shrink-0 px-4 py-2 rounded-xl text-white text-center"
+                    style={{ background: item.color }}
+                  >
+                    <div className="text-lg font-bold leading-tight">
+                      {item.bonus}
+                    </div>
+                    <div className="text-[10px] opacity-80 font-medium">
+                      {item.bonusNote}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Features */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  {item.features.map((f) => (
+                    <div
+                      key={f.label}
+                      className="flex items-start gap-2.5 p-3 rounded-xl bg-background"
+                    >
+                      <svg
+                        className="w-4 h-4 mt-0.5 shrink-0"
+                        style={{ color: item.color }}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">
+                          {f.label}
+                        </div>
+                        <div className="text-[11px] text-muted">{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* CTA */}
+                <div
+                  className="w-full py-3 rounded-xl text-center text-sm font-semibold text-white transition-all group-hover:shadow-lg group-hover:scale-[1.005]"
+                  style={{ background: item.color }}
+                >
+                  {item.cta}
                   <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">
                     &rarr;
                   </span>

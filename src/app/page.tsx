@@ -54,7 +54,10 @@ export default function HomePage() {
   } | null>(null);
   const [locatingUser, setLocatingUser] = useState(false);
 
-  const approvedPlaces = SAMPLE_PLACES.filter((p) => p.status === "approved");
+  const approvedPlaces = useMemo(
+    () => SAMPLE_PLACES.filter((p) => p.status === "approved"),
+    []
+  );
 
   const filteredPlaces = useMemo(() => {
     const source = hydraResults || approvedPlaces;

@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { href: "/", label: "Map" },
   { href: "/spots", label: "Spots" },
   { href: "/workspaces", label: "Work Spots" },
+  { href: "/transport", label: "Getting Around" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
   { href: "/about", label: "About Me" },

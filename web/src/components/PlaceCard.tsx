@@ -8,6 +8,7 @@ interface PlaceCardProps {
   isSelected?: boolean;
   onClick?: () => void;
   compact?: boolean;
+  distance?: string;
 }
 
 export default function PlaceCard({
@@ -15,6 +16,7 @@ export default function PlaceCard({
   isSelected,
   onClick,
   compact,
+  distance,
 }: PlaceCardProps) {
   const category = CATEGORIES.find((c) => c.value === place.category);
   const priceLabel = formatPrice(place.avg_price);
@@ -44,6 +46,7 @@ export default function PlaceCard({
             <p className="text-[11px] text-muted mt-0.5 truncate">
               {place.neighborhood}
               {priceLabel && ` · ${priceLabel}`}
+              {distance && ` · ${distance}`}
             </p>
           </div>
           <span className="text-accent font-bold text-[13px] shrink-0 tracking-tight">
@@ -76,6 +79,7 @@ export default function PlaceCard({
               </h3>
               <p className="text-[11px] text-muted mt-0.5">
                 {place.neighborhood}
+                {distance && ` · ${distance}`}
               </p>
             </div>
           </div>

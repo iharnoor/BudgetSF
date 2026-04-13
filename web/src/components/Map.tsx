@@ -8,6 +8,7 @@ interface MapProps {
   places: Place[];
   onPlaceClick?: (place: Place) => void;
   selectedPlace?: Place | null;
+  userLocation?: { lat: number; lng: number } | null;
   className?: string;
 }
 
@@ -26,11 +27,13 @@ export default function Map({
   places,
   onPlaceClick,
   selectedPlace,
+  userLocation,
   className = "",
 }: MapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+  const userMarkerRef = useRef<L.Marker | null>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const leafletRef = useRef<any>(null);
   const [mapReady, setMapReady] = useState(false);
@@ -164,6 +167,31 @@ export default function Map({
       );
     }
   }, [selectedPlace]);
+
+  // Show user location marker
+  useEffect(() => {
+    const L = leafletRef.current;
+    const map = mapInstanceRef.current;
+    if (!L || !map || !mapReady) return;
+
+    if (userMarkerRef.current) {
+      userMarkerRef.current.remove();
+      userMarkerRef.current = null;
+    }
+
+    if (userLocation) {
+      const icon = L.divIcon({
+        className: "custom-marker",
+        html: '<div class="user-location-dot"></div>',
+        iconSize: [16, 16],
+        iconAnchor: [8, 8],
+      });
+      userMarkerRef.current = L.marker([userLocation.lat, userLocation.lng], {
+        icon,
+        zIndexOffset: 1000,
+      }).addTo(map);
+    }
+  }, [userLocation, mapReady]);
 
   return (
     <>

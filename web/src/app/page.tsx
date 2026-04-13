@@ -12,6 +12,29 @@ import MapLegend from "@/components/MapLegend";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
+function getDistanceKm(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number
+): number {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLng = ((lng2 - lng1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLng / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+function formatDistance(km: number): string {
+  const miles = km * 0.621371;
+  if (miles < 0.1) return `${Math.round(miles * 5280)} ft`;
+  return `${miles.toFixed(1)} mi`;
+}
+
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     "all"
@@ -24,12 +47,17 @@ export default function HomePage() {
   const [mobileSheet, setMobileSheet] = useState<"peek" | "half" | "full">(
     "peek"
   );
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [locatingUser, setLocatingUser] = useState(false);
 
   const approvedPlaces = SAMPLE_PLACES.filter((p) => p.status === "approved");
 
   const filteredPlaces = useMemo(() => {
     const source = hydraResults || approvedPlaces;
-    return source.filter((place) => {
+    const filtered = source.filter((place) => {
       const matchesCategory =
         selectedCategory === "all" || place.category === selectedCategory;
       if (hydraResults) return matchesCategory;
@@ -42,7 +70,25 @@ export default function HomePage() {
         );
       return matchesCategory && matchesSearch;
     });
-  }, [approvedPlaces, hydraResults, selectedCategory, search]);
+    if (userLocation) {
+      filtered.sort(
+        (a, b) =>
+          getDistanceKm(userLocation.lat, userLocation.lng, a.lat, a.lng) -
+          getDistanceKm(userLocation.lat, userLocation.lng, b.lat, b.lng)
+      );
+    }
+    return filtered;
+  }, [approvedPlaces, hydraResults, selectedCategory, search, userLocation]);
+
+  const distanceMap = useMemo(() => {
+    if (!userLocation) return null;
+    const map = new window.Map<string, string>();
+    filteredPlaces.forEach((p) => {
+      const km = getDistanceKm(userLocation.lat, userLocation.lng, p.lat, p.lng);
+      map.set(p.id, formatDistance(km));
+    });
+    return map;
+  }, [filteredPlaces, userLocation]);
 
   const handleSearch = useCallback(async (query: string) => {
     setSearch(query);
@@ -98,6 +144,24 @@ export default function HomePage() {
     setMobileSheet("half");
   }, []);
 
+  const handleNearMe = useCallback(() => {
+    if (userLocation) {
+      setUserLocation(null);
+      return;
+    }
+    setLocatingUser(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+        setLocatingUser(false);
+      },
+      () => {
+        setLocatingUser(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  }, [userLocation]);
+
   return (
     <div className="map-page h-full relative overflow-hidden">
       {/* Top nav bar */}
@@ -109,6 +173,7 @@ export default function HomePage() {
           places={filteredPlaces}
           onPlaceClick={handlePlaceClick}
           selectedPlace={selectedPlace}
+          userLocation={userLocation}
           className="absolute inset-0"
         />
       </div>
@@ -169,7 +234,29 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* Category filter pills */}
+        {/* Near Me + Category filter pills */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleNearMe}
+            disabled={locatingUser}
+            className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold shadow-lg shadow-black/[0.04] border transition-all press ${
+              userLocation
+                ? "bg-[#4285f4] text-white border-[#4285f4]"
+                : "glass border-border/60 text-foreground"
+            }`}
+          >
+            {locatingUser ? (
+              <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 2a10 10 0 110 20 10 10 0 010-20z" />
+                <circle cx="12" cy="12" r="3" fill="currentColor" stroke="none" />
+                <path strokeLinecap="round" d="M12 2v3M12 19v3M2 12h3M19 12h3" />
+              </svg>
+            )}
+            {userLocation ? "Near Me" : "Near Me"}
+          </button>
+        </div>
         <div className="max-w-[340px]">
           <CategoryFilter
             selected={selectedCategory}
@@ -263,6 +350,7 @@ export default function HomePage() {
                   place={place}
                   isSelected={selectedPlace?.id === place.id}
                   onClick={() => handlePlaceClick(place)}
+                  distance={distanceMap?.get(place.id)}
                   compact
                 />
               ))}
@@ -323,6 +411,7 @@ export default function HomePage() {
                     place={place}
                     isSelected={selectedPlace?.id === place.id}
                     onClick={() => handlePlaceClick(place)}
+                    distance={distanceMap?.get(place.id)}
                     compact
                   />
                 ))}

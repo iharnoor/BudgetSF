@@ -49,7 +49,7 @@ export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: "gym", label: "Gym & Fitness", icon: "💪" },
   { value: "bars", label: "Bars & Drinks", icon: "🍺" },
   { value: "grocery", label: "Grocery", icon: "🛒" },
-  { value: "startup", label: "Programs", icon: "🚀" },
+  { value: "startup", label: "Accelerators", icon: "🚀" },
   { value: "entertainment", label: "Entertainment", icon: "🎭" },
   { value: "services", label: "Services", icon: "✂️" },
   { value: "other", label: "Other", icon: "📍" },

@@ -254,6 +254,9 @@ export default function TransportPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 pb-16">
+        {/* Transit commuter chart */}
+        <TransitChart />
+
         {/* Budget hacks */}
         <div className="bg-white rounded-2xl border border-border p-5 mb-10">
           <h2
@@ -366,6 +369,96 @@ export default function TransportPage() {
             Starter Guide to SF
           </a>
         </div>
+      </div>
+    </div>
+  );
+}
+
+const TRANSIT_DATA = [
+  { city: "New York, NY", pct: 31.2, country: "us" },
+  { city: "Toronto, ON", pct: 24.7, country: "ca" },
+  { city: "Vancouver, BC", pct: 21.5, country: "ca" },
+  { city: "Montreal, QC", pct: 21.5, country: "ca" },
+  { city: "Calgary, AB", pct: 15.5, country: "ca" },
+  { city: "San Francisco, CA", pct: 14.4, country: "us" },
+  { city: "Ottawa-Gatineau, ON", pct: 12.7, country: "ca" },
+  { city: "Boston, MA", pct: 11.6, country: "us" },
+  { city: "Victoria, BC", pct: 11.4, country: "ca" },
+  { city: "Winnipeg, MB", pct: 11.2, country: "ca" },
+  { city: "Washington, DC", pct: 10.4, country: "us" },
+  { city: "Chicago, IL", pct: 10.2, country: "us" },
+  { city: "Bridgeport, CT", pct: 10.0, country: "us" },
+  { city: "Hamilton, ON", pct: 9.5, country: "ca" },
+  { city: "Philadelphia, PA", pct: 8.7, country: "us" },
+  { city: "Kitchener-Waterloo, ON", pct: 8.6, country: "ca" },
+  { city: "Edmonton, AB", pct: 8.3, country: "ca" },
+  { city: "Seattle, WA", pct: 8.1, country: "us" },
+];
+
+const MAX_PCT = 35;
+
+function TransitChart() {
+  return (
+    <div className="bg-white rounded-2xl border border-border p-5 sm:p-6 mb-10 slide-up">
+      <h2
+        className="text-lg text-foreground mb-1"
+        style={{ fontFamily: "var(--font-dm-serif)" }}
+      >
+        SF is a transit city
+      </h2>
+      <p className="text-[11px] text-muted mb-5">
+        Canadian &amp; U.S. metro areas with the highest share of transit
+        commuters.{" "}
+        <span className="italic">
+          Source: Statistics Canada (LFS 2025) &amp; U.S. Census Bureau (ACS
+          2024)
+        </span>
+      </p>
+
+      <div className="space-y-1.5">
+        {TRANSIT_DATA.map((d) => {
+          const isSF = d.city.startsWith("San Francisco");
+          const barColor =
+            isSF
+              ? "bg-accent"
+              : d.country === "ca"
+                ? "bg-red-400"
+                : "bg-blue-400";
+          const textColor = isSF ? "text-accent font-semibold" : "text-muted";
+
+          return (
+            <div key={d.city} className="flex items-center gap-2">
+              <span
+                className={`text-[11px] w-[140px] sm:w-[170px] shrink-0 text-right truncate ${textColor}`}
+              >
+                {d.city}
+              </span>
+              <div className="flex-1 h-5 bg-background rounded overflow-hidden">
+                <div
+                  className={`h-full rounded transition-all duration-700 ${barColor} ${isSF ? "shadow-sm" : ""}`}
+                  style={{ width: `${(d.pct / MAX_PCT) * 100}%` }}
+                />
+              </div>
+              <span
+                className={`text-[11px] w-[38px] shrink-0 ${textColor}`}
+              >
+                {d.pct}%
+              </span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="flex items-center gap-4 mt-4 text-[10px] text-muted">
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded bg-blue-400 inline-block" /> U.S.
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded bg-red-400 inline-block" /> Canada
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-2.5 h-2.5 rounded bg-accent inline-block" /> San Francisco
+        </span>
       </div>
     </div>
   );

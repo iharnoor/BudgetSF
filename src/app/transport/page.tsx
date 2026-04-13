@@ -16,10 +16,47 @@ type TransportMode = {
 };
 
 const TRANSPORT_MODES: TransportMode[] = [
+  // === Robotaxis ===
+  {
+    name: "Tesla Robotaxi",
+    icon: "🚘",
+    tagline: "Tesla's autonomous ride-hailing — now in SF",
+    cost: "Varies (check the app for pricing)",
+    bestFor: "Autonomous rides in a Tesla",
+    description:
+      "Tesla's Robotaxi service is rolling out in SF. Hail a self-driving Tesla from the app. The future of ride-hailing from the company that's been building towards this for years.",
+    tips: [
+      "Download the Tesla app to request rides",
+      "Availability is expanding — check for coverage in your area",
+      "No driver, no tipping, no awkward small talk",
+      "Compare pricing with Waymo — competition is good for your wallet",
+    ],
+    link: "https://www.tesla.com/robotaxi",
+    linkLabel: "Tesla Robotaxi",
+    highlight: "New in SF",
+  },
+  {
+    name: "Zoox Robotaxi",
+    icon: "🤖",
+    tagline: "Amazon's purpose-built robotaxi — coming soon",
+    cost: "TBD",
+    bestFor: "Another autonomous option hitting SF streets",
+    description:
+      "Zoox is Amazon's autonomous vehicle company with a purpose-built robotaxi (no steering wheel, no pedals). It's a completely different form factor — the vehicle is designed from scratch for passengers, not adapted from a regular car. Currently testing in SF with a public launch on the horizon.",
+    tips: [
+      "Purpose-built vehicle — not a retrofitted car like Waymo or Tesla",
+      "Bi-directional design means it doesn't need to do U-turns",
+      "Keep an eye out for their cube-shaped vehicles around SoMa and downtown",
+      "Sign up for early access on their website",
+    ],
+    link: "https://zoox.com",
+    linkLabel: "Zoox",
+    highlight: "Coming Soon",
+  },
   {
     name: "Waymo Robotaxi",
     icon: "🤖",
-    tagline: "The future is here and it's budget-friendly",
+    tagline: "The OG robotaxi — reliable and no surge pricing",
     cost: "~$4-15 per ride (comparable to Uber, often cheaper)",
     bestFor: "Getting around SF without surge pricing",
     description:
@@ -35,6 +72,50 @@ const TRANSPORT_MODES: TransportMode[] = [
     linkLabel: "Get Waymo One",
     highlight: "No Surge Pricing",
   },
+
+  // === Rideshare & Bikes ===
+  {
+    name: "Lyft (Rides + Bay Wheels E-Bikes)",
+    icon: "🚗",
+    tagline: "Rides, bikes, and scooters all in one app",
+    cost: "Rides: $8-25+ | Bay Wheels: $3/ride or $20/mo unlimited",
+    bestFor: "Rides when robotaxis aren't available + e-bikes for short trips",
+    description:
+      "Lyft does rides AND operates Bay Wheels, SF's e-bike share network. The $20/month bike membership gives you unlimited 30-min rides — honestly the best deal in SF transit. E-bikes make the hills totally manageable. For car rides, Lyft is often cheaper than Uber in SF.",
+    tips: [
+      "Bay Wheels e-bikes are game-changers for SF hills — $20/mo unlimited",
+      "BART + Bay Wheels combo gets you anywhere in SF for under $5",
+      "Check Lyft vs Uber pricing — one is often 30% cheaper",
+      "Lyft Shared can save 30-50% if you're not in a rush",
+      "Bay Wheels stations are on almost every corner — check availability in app",
+      "Sign up with this link and get 50% off your first ride",
+    ],
+    link: "https://www.lyft.com/i/HARNOOR348519?utm_medium=2pi_iacc",
+    linkLabel: "Get 50% off first Lyft ride",
+    highlight: "50% Off First Ride",
+  },
+  {
+    name: "Uber",
+    icon: "🚙",
+    tagline: "The default — use strategically",
+    cost: "$8-25+ per ride (varies wildly with surge)",
+    bestFor: "Late nights, groups splitting, airport trips",
+    description:
+      "The default ride-hail but not always the cheapest. Surge pricing during events, rain, and Friday nights can make a $10 ride cost $35. Always check Waymo and Lyft first. Best for scheduled airport rides and splitting with friends.",
+    tips: [
+      "Always compare with Lyft and Waymo before booking",
+      "Check Waymo first for no-surge pricing",
+      "Split rides with friends — SF is small enough that most rides are short",
+      "Schedule rides in advance to lock in pricing for airport trips",
+      "UberX Share can save 30-50% if you're not in a rush",
+      "Sign up with this link and get $25 off your first 2 rides",
+    ],
+    link: "https://referrals.uber.com/refer?id=q3bjmq31be1h",
+    linkLabel: "Get $25 off first 2 Uber rides",
+    highlight: "$25 Off First 2 Rides",
+  },
+
+  // === Public Transit ===
   {
     name: "Muni (Bus & Metro)",
     icon: "🚌",
@@ -93,43 +174,6 @@ const TRANSPORT_MODES: TransportMode[] = [
     link: "https://www.caltrain.com",
     linkLabel: "Caltrain",
     highlight: "SF to Palo Alto 45min",
-  },
-  {
-    name: "Bay Wheels (E-Bikes)",
-    icon: "🚲",
-    tagline: "The fastest way to get around SF on a budget",
-    cost: "$3/ride or $20/month membership",
-    bestFor: "Short trips, running to meetings, exploring neighborhoods",
-    description:
-      "Lyft-operated bike share with stations on almost every corner. E-bikes make SF's hills totally manageable. The $20/month membership gives you unlimited 30-min rides. Honestly the best-kept secret for getting around SF fast and cheap.",
-    tips: [
-      "E-bikes are game-changers for SF hills — don't suffer on a regular bike",
-      "$20/month membership pays for itself in 3 days of riding",
-      "Check the app for bike availability before walking to a station",
-      "Great for the last-mile problem — BART + Bay Wheels is chef's kiss",
-      "Lock it properly at a station or you'll get charged for a lost bike",
-      "Helmet not required by law but highly recommended — SF drivers are wild",
-    ],
-    link: "https://www.lyft.com/bikes/bay-wheels",
-    linkLabel: "Bay Wheels",
-    highlight: "$20/mo Unlimited",
-  },
-  {
-    name: "Uber / Lyft",
-    icon: "🚗",
-    tagline: "You know what it is — but use strategically",
-    cost: "$8-25+ per ride (varies wildly)",
-    bestFor: "Late nights, groups splitting, when transit doesn't work",
-    description:
-      "The default but not always the cheapest. Surge pricing during events, rain, and Friday nights can make a $10 ride cost $35. Use strategically — check Waymo first, and consider Muni or BART for predictable trips.",
-    tips: [
-      "Always compare Uber vs Lyft pricing — one is often 30% cheaper",
-      "Check Waymo first for no-surge pricing",
-      "Split rides with friends — SF is small enough that most rides are short",
-      "Schedule rides in advance to lock in pricing for airport trips",
-      "UberX Share / Lyft Shared can save 30-50% if you're not in a rush",
-    ],
-    highlight: "Compare First",
   },
   {
     name: "Walking",

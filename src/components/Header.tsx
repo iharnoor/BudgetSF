@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: "/events", label: "Events" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
+  { href: "/diet", label: "Diet" },
   { href: "/about", label: "About Me" },
 ];
 

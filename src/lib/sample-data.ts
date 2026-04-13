@@ -1610,7 +1610,7 @@ export const SAMPLE_PLACES: Place[] = [
   },
   {
     id: "mission-control-hh",
-    name: "Mission Control",
+    name: "Mission Control Hacker House",
     category: "housing",
     subcategory: "Hacker House",
     address: "Mission District, SF",
@@ -1631,7 +1631,7 @@ export const SAMPLE_PLACES: Place[] = [
   },
   {
     id: "atmosphere-house",
-    name: "Atmosphere House",
+    name: "Atmosphere Hacker House",
     category: "housing",
     subcategory: "Hacker House",
     address: "San Francisco",
@@ -1671,7 +1671,7 @@ export const SAMPLE_PLACES: Place[] = [
   },
   {
     id: "gomry-house",
-    name: "Gomry House",
+    name: "Gomry Hacker House",
     category: "housing",
     subcategory: "Hacker House",
     address: "San Francisco",

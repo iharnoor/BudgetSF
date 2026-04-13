@@ -18,7 +18,7 @@ export default function ChatBubble({
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      text: "Hey! Ask me anything about budget spots in SF. Try \"cheap tacos\" or \"free coworking\" or \"best coffee in Hayes Valley\"",
+      text: "Hey! Ask me anything about budget spots in SF. Powered by HydraDB. Try \"cheap tacos\" or \"free coworking\" or \"best coffee in Hayes Valley\"",
     },
   ]);
   const [input, setInput] = useState("");

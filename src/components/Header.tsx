@@ -14,6 +14,8 @@ const NAV_ITEMS = [
   { href: "/about", label: "About Me" },
 ];
 
+const AUTH_ENABLED = process.env.NEXT_PUBLIC_AUTH_ENABLED === "true";
+
 export default function Header() {
   const pathname = usePathname();
   const { isSignedIn } = useUser();
@@ -63,14 +65,16 @@ export default function Header() {
 
         {/* Right */}
         <div className="flex items-center gap-2">
-          {isSignedIn ? (
-            <UserButton />
-          ) : (
-            <SignInButton>
-              <button className="text-[13px] font-medium text-white bg-accent px-3.5 py-1.5 rounded-lg hover:bg-accent-dark transition-colors press shadow-sm">
-                Sign in
-              </button>
-            </SignInButton>
+          {AUTH_ENABLED && (
+            isSignedIn ? (
+              <UserButton />
+            ) : (
+              <SignInButton>
+                <button className="text-[13px] font-medium text-white bg-accent px-3.5 py-1.5 rounded-lg hover:bg-accent-dark transition-colors press shadow-sm">
+                  Sign in
+                </button>
+              </SignInButton>
+            )
           )}
 
           {/* Mobile hamburger */}

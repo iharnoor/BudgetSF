@@ -4,12 +4,15 @@ import { useState } from "react";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { Place } from "@/lib/types";
 
+const AUTH_ENABLED = process.env.NEXT_PUBLIC_AUTH_ENABLED === "true";
+
 interface VoteButtonProps {
   place: Place;
 }
 
 export default function VoteButton({ place }: VoteButtonProps) {
   const { isSignedIn } = useUser();
+  const canVote = !AUTH_ENABLED || isSignedIn;
   const [voted, setVoted] = useState(false);
   const [voteCount, setVoteCount] = useState(place.vote_count);
   const progress = Math.min((voteCount / place.votes_needed) * 100, 100);
@@ -27,7 +30,7 @@ export default function VoteButton({ place }: VoteButtonProps) {
   return (
     <div className="space-y-2">
       <div className="flex items-center gap-3">
-        {!isSignedIn ? (
+        {!canVote ? (
           <SignInButton>
             <button className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-accent text-white hover:bg-accent-dark active:scale-95 transition-all">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,57 +1,24 @@
+// Map common query terms to HydraDB metadata category values
 const CATEGORY_KEYWORDS: Record<string, string[]> = {
   food: [
-    "food", "eat", "eating", "restaurant", "lunch", "dinner", "breakfast",
-    "taco", "tacos", "burrito", "burritos", "pizza", "sushi", "ramen",
-    "noodles", "thai", "chinese", "mexican", "indian", "italian",
-    "sandwich", "burger", "pho", "dim sum", "brunch", "cheap eats",
+    "food", "eat", "restaurant", "lunch", "dinner", "breakfast",
+    "taco", "burrito", "pizza", "sushi", "ramen", "pho", "brunch",
   ],
-  coffee: [
-    "coffee", "cafe", "latte", "espresso", "cappuccino", "matcha",
-    "tea", "roaster", "bakery",
-  ],
-  grocery: [
-    "grocery", "groceries", "supermarket", "market", "produce",
-    "costco", "trader joe", "whole foods",
-  ],
-  gym: [
-    "gym", "fitness", "workout", "exercise", "yoga", "pilates",
-    "crossfit", "training", "weights",
-  ],
-  bars: [
-    "bar", "bars", "drinks", "cocktail", "cocktails", "beer",
-    "wine", "pub", "happy hour", "nightlife",
-  ],
-  housing: [
-    "housing", "apartment", "rent", "coliving", "co-living",
-    "hacker house", "room", "lease", "studio",
-  ],
-  workspace: [
-    "coworking", "co-working", "workspace", "work spot", "office",
-    "library", "hotel lobby", "remote work", "wfh",
-  ],
-  startup: [
-    "accelerator", "program", "fellowship", "residency", "yc",
-    "y combinator", "incubator", "startup program", "vc",
-  ],
+  coffee: ["coffee", "cafe", "latte", "espresso", "matcha"],
+  grocery: ["grocery", "groceries", "supermarket", "market", "costco"],
+  gym: ["gym", "fitness", "workout", "yoga", "crossfit"],
+  bars: ["bar", "bars", "drinks", "cocktail", "beer", "wine", "happy hour"],
+  housing: ["housing", "apartment", "rent", "coliving", "hacker house"],
+  workspace: ["coworking", "workspace", "work spot", "office", "library"],
+  startup: ["accelerator", "fellowship", "yc", "y combinator", "incubator"],
 };
 
 function detectCategory(query: string): string | null {
   const q = query.toLowerCase();
-  let bestCategory: string | null = null;
-  let bestCount = 0;
-
   for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    let count = 0;
-    for (const kw of keywords) {
-      if (q.includes(kw)) count++;
-    }
-    if (count > bestCount) {
-      bestCount = count;
-      bestCategory = category;
-    }
+    if (keywords.some((kw) => q.includes(kw))) return category;
   }
-
-  return bestCount > 0 ? bestCategory : null;
+  return null;
 }
 
 const HYDRA_API = "https://api.hydradb.com";
@@ -86,21 +53,28 @@ export async function searchVenues(
 ): Promise<SearchResult[]> {
   const intendedCategory = detectCategory(query);
 
+  const body: Record<string, unknown> = {
+    tenant_id: TENANT_ID,
+    sub_tenant_id: SUB_TENANT,
+    query,
+    max_results: maxResults,
+    mode: "fast",
+    alpha: "auto",
+    recency_bias: 0,
+  };
+
+  // Use HydraDB native metadata filtering when category intent is clear
+  if (intendedCategory) {
+    body.metadata_filters = { category: intendedCategory };
+  }
+
   const res = await fetch(`${HYDRA_API}/recall/full_recall`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      tenant_id: TENANT_ID,
-      sub_tenant_id: SUB_TENANT,
-      query,
-      max_results: maxResults,
-      mode: "fast",
-      alpha: 0.8,
-      recency_bias: 0,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -149,11 +123,6 @@ export async function searchVenues(
           if (venue.tags?.some((t) => t.toLowerCase().includes(term))) {
             boostedScore += 0.1;
           }
-        }
-
-        // Penalize off-category results when intent is clear
-        if (intendedCategory && venue.category !== intendedCategory) {
-          boostedScore -= 0.5;
         }
 
         results.push({ venue, score: boostedScore });

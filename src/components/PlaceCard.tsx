@@ -20,6 +20,8 @@ export default function PlaceCard({
 }: PlaceCardProps) {
   const category = CATEGORIES.find((c) => c.value === place.category);
   const priceLabel = formatPrice(place.avg_price);
+  const isFree = place.tags.includes("free");
+  const priceDisplay = isFree ? "Free" : "$".repeat(place.price_tier);
 
   if (compact) {
     return (
@@ -50,7 +52,7 @@ export default function PlaceCard({
             </p>
           </div>
           <span className="text-accent font-bold text-[13px] shrink-0 tracking-tight">
-            {"$".repeat(place.price_tier)}
+            {priceDisplay}
           </span>
         </div>
       </button>
@@ -84,7 +86,7 @@ export default function PlaceCard({
             </div>
           </div>
           <span className="text-accent font-bold text-sm shrink-0 tracking-tight">
-            {"$".repeat(place.price_tier)}
+            {priceDisplay}
           </span>
         </div>
 

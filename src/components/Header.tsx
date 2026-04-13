@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { href: "/workspaces", label: "Work Spots" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
-  { href: "/agents", label: "Agents" },
+  { href: "/about", label: "About Me" },
 ];
 
 export default function Header() {

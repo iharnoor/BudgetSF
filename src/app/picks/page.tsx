@@ -1021,15 +1021,6 @@ export default function PicksPage() {
           </p>
         </div>
 
-        {/* About Me */}
-        <div className="text-center pb-8">
-          <Link
-            href="/about"
-            className="text-xs text-accent hover:underline"
-          >
-            About Me
-          </Link>
-        </div>
       </div>
     </div>
   );

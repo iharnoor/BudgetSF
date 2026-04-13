@@ -1020,6 +1020,16 @@ export default function PicksPage() {
             bonus too. I only recommend services I personally use and trust.
           </p>
         </div>
+
+        {/* About Me */}
+        <div className="text-center pb-8">
+          <Link
+            href="/about"
+            className="text-xs text-accent hover:underline"
+          >
+            About Me
+          </Link>
+        </div>
       </div>
     </div>
   );

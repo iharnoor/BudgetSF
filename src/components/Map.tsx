@@ -104,6 +104,9 @@ export default function Map({
     };
   }, []);
 
+  // Track previous places list to know when to fitBounds
+  const prevPlacesRef = useRef<Place[]>([]);
+
   // Update markers whenever places change AND map is ready
   const updateMarkers = useCallback(() => {
     const L = leafletRef.current;
@@ -145,7 +148,12 @@ export default function Map({
       markersRef.current.push(marker);
     });
 
-    if (places.length > 0) {
+    // Only fitBounds when the places list actually changes (filter/search),
+    // not when selectedPlace changes
+    const placesChanged = prevPlacesRef.current !== places;
+    prevPlacesRef.current = places;
+
+    if (placesChanged && places.length > 0) {
       const bounds = L.latLngBounds(
         places.map((p) => [p.lat, p.lng] as [number, number])
       );
@@ -160,12 +168,13 @@ export default function Map({
     }
   }, [mapReady, updateMarkers]);
 
-  // Pan to selected
+  // Pan to selected — smooth zoom without resetting view
   useEffect(() => {
     if (selectedPlace && mapInstanceRef.current) {
+      const currentZoom = mapInstanceRef.current.getZoom();
       mapInstanceRef.current.setView(
         [selectedPlace.lat, selectedPlace.lng],
-        15,
+        Math.max(currentZoom, 15),
         { animate: true }
       );
     }

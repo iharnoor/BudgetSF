@@ -4,10 +4,10 @@ const LEGEND_ITEMS = [
   { color: "#e63946", label: "Food" },
   { color: "#10b981", label: "Housing" },
   { color: "#0ea5e9", label: "Work Spots" },
-  { color: "#f4845f", label: "Coffee" },
-  { color: "#f59e0b", label: "Accelerators" },
+  { color: "#8b5e3c", label: "Coffee" },
+  { color: "#7c3aed", label: "Accelerators" },
   { color: "#1a1a2e", label: "Gym" },
-  { color: "#264653", label: "Bars" },
+  { color: "#d4507a", label: "Bars" },
   { color: "#2a9d8f", label: "Grocery" },
 ];
 

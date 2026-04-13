@@ -14,14 +14,14 @@ interface MapProps {
 
 const CATEGORY_COLORS: Record<string, string> = {
   food: "#e63946",
-  grocery: "#2a9d8f",
-  gym: "#1a1a2e",
-  bars: "#264653",
-  coffee: "#f4845f",
-  workspace: "#0ea5e9",
   housing: "#10b981",
-  startup: "#f59e0b",
-  entertainment: "#7209b7",
+  workspace: "#0ea5e9",
+  coffee: "#8b5e3c",
+  startup: "#7c3aed",
+  gym: "#1a1a2e",
+  bars: "#d4507a",
+  grocery: "#2a9d8f",
+  entertainment: "#f59e0b",
   services: "#4895ef",
   other: "#6c757d",
 };

@@ -1,11 +1,11 @@
 export type Category =
   | "food"
-  | "grocery"
+  | "housing"
+  | "workspace"
+  | "coffee"
   | "gym"
   | "bars"
-  | "coffee"
-  | "workspace"
-  | "housing"
+  | "grocery"
   | "entertainment"
   | "services"
   | "other";
@@ -42,12 +42,12 @@ export interface Vote {
 
 export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: "food", label: "Food", icon: "🍽️" },
-  { value: "grocery", label: "Grocery", icon: "🛒" },
+  { value: "housing", label: "Housing", icon: "🏠" },
+  { value: "workspace", label: "Work Spots", icon: "💻" },
+  { value: "coffee", label: "Coffee", icon: "☕" },
   { value: "gym", label: "Gym & Fitness", icon: "💪" },
   { value: "bars", label: "Bars & Drinks", icon: "🍺" },
-  { value: "coffee", label: "Coffee", icon: "☕" },
-  { value: "workspace", label: "Work Spots", icon: "💻" },
-  { value: "housing", label: "Housing", icon: "🏠" },
+  { value: "grocery", label: "Grocery", icon: "🛒" },
   { value: "entertainment", label: "Entertainment", icon: "🎭" },
   { value: "services", label: "Services", icon: "✂️" },
   { value: "other", label: "Other", icon: "📍" },

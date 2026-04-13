@@ -2,12 +2,12 @@
 
 const LEGEND_ITEMS = [
   { color: "#e63946", label: "Food" },
-  { color: "#2a9d8f", label: "Grocery" },
+  { color: "#10b981", label: "Housing" },
+  { color: "#0ea5e9", label: "Work Spots" },
+  { color: "#f4845f", label: "Coffee" },
   { color: "#1a1a2e", label: "Gym" },
   { color: "#264653", label: "Bars" },
-  { color: "#f4845f", label: "Coffee" },
-  { color: "#0ea5e9", label: "Work Spots" },
-  { color: "#10b981", label: "Housing" },
+  { color: "#2a9d8f", label: "Grocery" },
 ];
 
 export default function MapLegend() {

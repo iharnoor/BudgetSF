@@ -1,6 +1,6 @@
 "use client";
 
-import { type AnchorHTMLAttributes } from "react";
+import { type AnchorHTMLAttributes, useState } from "react";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 
@@ -631,55 +631,70 @@ export default function PicksPage() {
             title="SF Neighborhoods Ranked by Cost"
             subtitle="Where I'd look depending on budget — ranked cheapest to priciest"
           />
-          <div className="space-y-2.5">
-            {NEIGHBORHOODS_RANKED.map((hood, i) => (
-              <div
-                key={hood.name}
-                className="bg-white rounded-2xl border border-border p-4 sm:p-5 slide-up"
-                style={{
-                  animationDelay: `${0.05 + i * 0.03}s`,
-                  animationFillMode: "both",
-                }}
-              >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[11px] text-muted font-mono">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <h3 className="text-sm font-semibold text-foreground">
-                        {hood.name}
-                      </h3>
-                      <span
-                        className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
-                          hood.tier === "$"
-                            ? "bg-green-50 text-green-700"
-                            : hood.tier === "$$"
-                              ? "bg-amber-50 text-amber-700"
-                              : "bg-red-50 text-red-700"
-                        }`}
-                      >
-                        {hood.tier}
-                      </span>
+          <NeighborhoodsList />
+
+          {/* Housing Tips & Resources */}
+          <div className="mt-6 bg-white rounded-2xl border border-border p-5 sm:p-6">
+            <h3
+              className="text-base text-foreground mb-3"
+              style={{ fontFamily: "var(--font-dm-serif)" }}
+            >
+              Housing Tips
+            </h3>
+            <ul className="space-y-2 mb-5">
+              {[
+                "Start your search 2-3 weeks before move-in — SF moves fast",
+                "Bring a checkbook to open houses — good units go same day",
+                "Co-living and shared housing can cut rent by 40-50%",
+                "Negotiate rent on older buildings — many landlords prefer a reliable tenant at a lower price",
+                "Check for rent-controlled units (buildings built before 1979) — your rent can only increase ~2%/year",
+                "Avoid broker fees — most SF rentals don't require them, unlike NYC",
+              ].map((tip) => (
+                <li key={tip} className="flex items-start gap-2 text-xs text-muted">
+                  <span className="text-accent mt-0.5 shrink-0">-</span>
+                  {tip}
+                </li>
+              ))}
+            </ul>
+
+            <h3
+              className="text-base text-foreground mb-3"
+              style={{ fontFamily: "var(--font-dm-serif)" }}
+            >
+              Housing Resources
+            </h3>
+            <div className="space-y-2">
+              {[
+                { name: "DirectorySF", desc: "Curated SF housing directory", url: "https://www.directorysf.com/" },
+                { name: "Apartment Buddy SF", desc: "Find roommates and apartments in SF", url: "https://www.apartmentbuddysf.com/" },
+                { name: "Flashmates Subletter", desc: "Short-term sublets and furnished rooms", url: "https://subletter.flashmates.tech/sf" },
+                { name: "SF Housing Guide", desc: "Comprehensive housing resource by Aqeel Ali", url: "https://www.notion.so/SF-Housing-71efb428467d4fd9914efbca1faf8ec0" },
+              ].map((link) => (
+                <a
+                  key={link.name}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 rounded-xl bg-background hover:bg-accent-light/40 transition-colors group"
+                >
+                  <div>
+                    <div className="text-sm font-medium text-foreground group-hover:text-accent transition-colors">
+                      {link.name}
                     </div>
-                    <p className="text-xs text-muted mb-1.5">{hood.description}</p>
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted">
-                      <span>
-                        <span className="font-medium text-foreground">Studio:</span>{" "}
-                        {hood.studio}
-                      </span>
-                      <span>
-                        <span className="font-medium text-foreground">1BR:</span>{" "}
-                        {hood.oneBr}
-                      </span>
-                    </div>
+                    <div className="text-[11px] text-muted">{link.desc}</div>
                   </div>
-                  <span className="text-xs text-muted italic shrink-0">
-                    {hood.vibe}
-                  </span>
-                </div>
-              </div>
-            ))}
+                  <svg
+                    className="w-4 h-4 text-muted group-hover:text-accent shrink-0 transition-colors"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -1425,5 +1440,95 @@ function AffiliateLink({
     >
       {children}
     </a>
+  );
+}
+
+function NeighborhoodsList() {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div>
+      {/* Preview — always show first 3 */}
+      <div className="space-y-2.5">
+        {NEIGHBORHOODS_RANKED.slice(0, 3).map((hood, i) => (
+          <NeighborhoodCard key={hood.name} hood={hood} index={i} />
+        ))}
+      </div>
+
+      {/* Expandable rest */}
+      {expanded && (
+        <div className="space-y-2.5 mt-2.5">
+          {NEIGHBORHOODS_RANKED.slice(3).map((hood, i) => (
+            <NeighborhoodCard key={hood.name} hood={hood} index={i + 3} />
+          ))}
+        </div>
+      )}
+
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full mt-3 py-2.5 rounded-xl border border-border bg-white hover:bg-background text-sm font-medium text-muted hover:text-foreground transition-colors flex items-center justify-center gap-2"
+      >
+        {expanded ? "Show less" : `Show all ${NEIGHBORHOODS_RANKED.length} neighborhoods`}
+        <svg
+          className={`w-4 h-4 transition-transform ${expanded ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+function NeighborhoodCard({ hood, index }: { hood: (typeof NEIGHBORHOODS_RANKED)[number]; index: number }) {
+  return (
+    <div
+      className="bg-white rounded-2xl border border-border p-4 sm:p-5 slide-up"
+      style={{
+        animationDelay: `${0.05 + index * 0.03}s`,
+        animationFillMode: "both",
+      }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-[11px] text-muted font-mono">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <h3 className="text-sm font-semibold text-foreground">
+              {hood.name}
+            </h3>
+            <span
+              className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${
+                hood.tier === "$"
+                  ? "bg-green-50 text-green-700"
+                  : hood.tier === "$$"
+                    ? "bg-amber-50 text-amber-700"
+                    : "bg-red-50 text-red-700"
+              }`}
+            >
+              {hood.tier}
+            </span>
+          </div>
+          <p className="text-xs text-muted mb-1.5">{hood.description}</p>
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted">
+            <span>
+              <span className="font-medium text-foreground">Studio:</span>{" "}
+              {hood.studio}
+            </span>
+            <span>
+              <span className="font-medium text-foreground">1BR:</span>{" "}
+              {hood.oneBr}
+            </span>
+          </div>
+        </div>
+        <span className="text-xs text-muted italic shrink-0">
+          {hood.vibe}
+        </span>
+      </div>
+    </div>
   );
 }

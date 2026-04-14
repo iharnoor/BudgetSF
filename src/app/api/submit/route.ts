@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { ingestVenue, VenueData } from "@/lib/hydradb";
 
 const VALID_CATEGORIES = [
-  "food", "grocery", "gym", "bars", "coffee", "entertainment", "services", "other",
+  "food", "housing", "workspace", "coffee", "startup", "vc",
+  "gym", "bars", "grocery", "entertainment", "services", "other",
 ];
 
 // Simple in-memory rate limiter (per-IP, resets on deploy)

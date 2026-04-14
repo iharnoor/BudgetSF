@@ -668,6 +668,9 @@ export default function PicksPage() {
                 { name: "DirectorySF", desc: "Curated SF housing directory", url: "https://www.directorysf.com/" },
                 { name: "Apartment Buddy SF", desc: "Find roommates and apartments in SF", url: "https://www.apartmentbuddysf.com/" },
                 { name: "Flashmates Subletter", desc: "Short-term sublets and furnished rooms", url: "https://subletter.flashmates.tech/sf" },
+                { name: "SF Bay Housing (Reddit)", desc: "Active subreddit for Bay Area housing posts and roommate searches", url: "https://www.reddit.com/r/SFBayHousing/" },
+                { name: "SF Housing Facebook Group", desc: "Large community group for SF apartment listings and roommates", url: "https://www.facebook.com/groups/843764532374203/" },
+                { name: "Craigslist SF Apartments", desc: "Still one of the best places to find direct-from-landlord listings", url: "https://sfbay.craigslist.org/search/sfc/apa" },
                 { name: "SF Housing Guide", desc: "Comprehensive housing resource by Aqeel Ali", url: "https://www.notion.so/SF-Housing-71efb428467d4fd9914efbca1faf8ec0" },
               ].map((link) => (
                 <a

@@ -253,7 +253,7 @@ const BANKING = [
 const GROCERIES = [
   {
     name: "Walmart+",
-    tagline: "Budget grocery delivery — skip Amazon Fresh",
+    tagline: "What I use for same-day grocery delivery",
     price: "$12.95",
     pricePer: "/mo",
     priceNote: "or $98/year",
@@ -267,7 +267,7 @@ const GROCERIES = [
       { label: "Fuel savings", desc: "Up to 10¢ off per gallon at Exxon, Mobil, Walmart & Murphy stations" },
     ],
     highlight: "My Pick",
-    note: "Skip Amazon Fresh. Walmart+ delivers at real store prices — no markups. $12.95/mo, free delivery on $35+.",
+    note: "I switched from Amazon Fresh to Walmart+ — same-day delivery, actual store prices, and way cheaper.",
     url: "https://walmrt.us/41truU3",
     cta: "Shop My Walmart Grocery List",
   },
@@ -453,7 +453,7 @@ export default function PicksPage() {
 
         {/* ── Groceries ── */}
         <section className="mb-12">
-          <SectionHeader emoji="🛒" title="Groceries" subtitle="Don't use Amazon Fresh — use Walmart+ for budget groceries" />
+          <SectionHeader emoji="🛒" title="Groceries" subtitle="How I get same-day grocery delivery on a budget" />
           {GROCERIES.map((item, i) => (
             <AffiliateLink
               key={item.name}
@@ -510,7 +510,7 @@ export default function PicksPage() {
                   </div>
                   <div className="w-px h-8 bg-border" />
                   <p className="text-xs text-muted leading-relaxed flex-1">
-                    Walmart grocery delivery at real store prices. No markups, no games.
+                    I stopped using Amazon Fresh — Walmart+ has same-day delivery at actual store prices.
                   </p>
                 </div>
 

@@ -251,13 +251,13 @@ export default function DietPage() {
                   Get Groceries Delivered
                 </h2>
                 <p className="text-xs text-muted">
-                  Don&apos;t use Amazon Fresh &mdash; use Walmart+ for budget groceries
+                  How I get same-day grocery delivery on a budget
                 </p>
               </div>
             </div>
             <div className="rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 mb-4">
               <p className="text-xs text-blue-800 leading-relaxed">
-                <span className="font-semibold">Skip Amazon Fresh.</span> Walmart+ delivers at real store prices &mdash; no markups. $12.95/mo, free delivery on $35+.
+                I switched from Amazon Fresh to Walmart+ &mdash; same-day delivery, actual store prices, and way cheaper.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">

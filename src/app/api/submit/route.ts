@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ingestVenue, VenueData } from "@/lib/hydradb";
+import { addSpot } from "@/lib/spots-store";
 
 const VALID_CATEGORIES = [
   "food", "housing", "workspace", "coffee", "startup", "vc",
@@ -46,7 +46,6 @@ export async function POST(request: NextRequest) {
   const neighborhood = typeof body.neighborhood === "string" ? body.neighborhood.trim() : "";
   const address = typeof body.address === "string" ? body.address.trim() : "";
   const description = typeof body.description === "string" ? body.description.trim() : "";
-  const submittedBy = typeof body.submitted_by === "string" ? body.submitted_by.trim() : "";
 
   if (!name || !category || !neighborhood || !address) {
     return Response.json(
@@ -55,9 +54,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Allow anonymous submissions for now
-
-  // Validate field lengths
   if (name.length > 100) {
     return Response.json({ error: "Name too long (max 100 chars)" }, { status: 400 });
   }
@@ -68,18 +64,15 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: "Address too long (max 200 chars)" }, { status: 400 });
   }
 
-  // Validate category
   if (!VALID_CATEGORIES.includes(category)) {
-    return Response.json({ error: "Invalid category" }, { status: 400 });
+    return Response.json({ error: `Invalid category: ${category}` }, { status: 400 });
   }
 
-  // Validate price tier
   const priceTier = Number(body.price_tier) || 1;
   if (priceTier < 1 || priceTier > 4) {
     return Response.json({ error: "Price tier must be 1-4" }, { status: 400 });
   }
 
-  // Validate tags (max 10 tags, max 30 chars each)
   let tags: string[] = [];
   if (Array.isArray(body.tags)) {
     tags = body.tags
@@ -89,43 +82,25 @@ export async function POST(request: NextRequest) {
       .filter(Boolean);
   }
 
-  // Validate coordinates (must be within SF area)
-  const lat = Number(body.lat) || 37.7749;
-  const lng = Number(body.lng) || -122.4194;
-  if (lat < 37.6 || lat > 37.85 || lng < -122.55 || lng > -122.35) {
-    // Default to SF center if coordinates are outside SF bounds
+  try {
+    const spot = await addSpot({
+      name: name.slice(0, 100),
+      category,
+      subcategory: typeof body.subcategory === "string" ? body.subcategory.trim().slice(0, 50) : undefined,
+      neighborhood: neighborhood.slice(0, 50),
+      address: address.slice(0, 200),
+      description: description.slice(0, 500),
+      price_tier: priceTier,
+      avg_price: typeof body.avg_price === "string" ? body.avg_price.trim().slice(0, 20) : undefined,
+      tags,
+      website: typeof body.website === "string" ? body.website.trim().slice(0, 200) : undefined,
+      submitted_by: "community",
+    });
+
+    return Response.json({ success: true, spot }, { status: 201 });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Unknown error";
+    console.error("Submit failed:", message);
+    return Response.json({ error: `Failed to submit: ${message}` }, { status: 500 });
   }
-
-  const slug = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 80);
-
-  const venue: VenueData = {
-    name: name.slice(0, 100),
-    slug,
-    category,
-    subcategory: typeof body.subcategory === "string" ? body.subcategory.trim().slice(0, 50) : undefined,
-    neighborhood: neighborhood.slice(0, 50),
-    address: address.slice(0, 200),
-    price_tier: priceTier,
-    avg_price: typeof body.avg_price === "string" ? body.avg_price.trim().slice(0, 20) : undefined,
-    tags,
-    is_chain: false,
-    description: description.slice(0, 500),
-    lat,
-    lng,
-  };
-
-  const success = await ingestVenue(venue);
-
-  if (!success) {
-    return Response.json(
-      { error: "Failed to submit venue. Please try again." },
-      { status: 500 }
-    );
-  }
-
-  return Response.json({ success: true, venue }, { status: 201 });
 }

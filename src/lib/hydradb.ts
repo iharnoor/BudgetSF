@@ -190,10 +190,14 @@ export async function ingestVenue(venue: VenueData): Promise<boolean> {
   });
 
   if (!res.ok) {
-    console.error("HydraDB ingest failed:", res.status);
-    return false;
+    const errorText = await res.text().catch(() => "unknown");
+    console.error("HydraDB ingest failed:", res.status, errorText);
+    throw new Error(`HydraDB error (${res.status}): ${errorText}`);
   }
 
   const result = await res.json();
-  return (result.success_count || 0) > 0;
+  if ((result.success_count || 0) === 0) {
+    throw new Error("HydraDB accepted the request but indexed 0 documents");
+  }
+  return true;
 }

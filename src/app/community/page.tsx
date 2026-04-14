@@ -1,17 +1,39 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { useUser, SignInButton } from "@clerk/nextjs";
 import { SAMPLE_PLACES } from "@/lib/sample-data";
 import { Category, CATEGORIES, NEIGHBORHOODS } from "@/lib/types";
 import VoteButton from "@/components/VoteButton";
+import type { PendingSpot } from "@/lib/spots-store";
 
 type Tab = "vote" | "add";
 
 export default function CommunityPage() {
   const [tab, setTab] = useState<Tab>("vote");
-  const { user, isLoaded, isSignedIn } = useUser();
+  const [blobSpots, setBlobSpots] = useState<PendingSpot[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchSpots = useCallback(async () => {
+    try {
+      const res = await fetch("/api/spots");
+      if (res.ok) {
+        const data = await res.json();
+        setBlobSpots(data.spots || []);
+      }
+    } catch {
+      // silent fail
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSpots();
+  }, [fetchSpots]);
+
+  const samplePending = SAMPLE_PLACES.filter((p) => p.status === "pending");
+  const totalPending = samplePending.length + blobSpots.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,7 +73,7 @@ export default function CommunityPage() {
           >
             Vote on Spots
             <span className="ml-1.5 text-[11px] bg-pending/20 text-pending-dark px-1.5 py-0.5 rounded-full">
-              {SAMPLE_PLACES.filter((p) => p.status === "pending").length}
+              {totalPending}
             </span>
           </button>
           <button
@@ -69,9 +91,9 @@ export default function CommunityPage() {
 
       <div className="max-w-2xl mx-auto px-4 py-6">
         {tab === "vote" ? (
-          <VoteTab />
+          <VoteTab blobSpots={blobSpots} loading={loading} onVote={fetchSpots} />
         ) : (
-          <AddTab user={user} isLoaded={isLoaded} isSignedIn={isSignedIn} />
+          <AddTab onSubmitted={() => { setTab("vote"); fetchSpots(); }} />
         )}
       </div>
     </div>
@@ -80,19 +102,29 @@ export default function CommunityPage() {
 
 /* ─── Vote Tab ─── */
 
-function VoteTab() {
+function VoteTab({
+  blobSpots,
+  loading,
+  onVote,
+}: {
+  blobSpots: PendingSpot[];
+  loading: boolean;
+  onVote: () => void;
+}) {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     "all"
   );
 
-  const pendingPlaces = useMemo(() => {
-    return SAMPLE_PLACES.filter((p) => {
-      const isPending = p.status === "pending";
-      const matchesCategory =
-        selectedCategory === "all" || p.category === selectedCategory;
-      return isPending && matchesCategory;
-    });
-  }, [selectedCategory]);
+  const samplePending = SAMPLE_PLACES.filter((p) => {
+    const isPending = p.status === "pending";
+    const matchesCategory =
+      selectedCategory === "all" || p.category === selectedCategory;
+    return isPending && matchesCategory;
+  });
+
+  const filteredBlobSpots = blobSpots.filter((s) => {
+    return selectedCategory === "all" || s.category === selectedCategory;
+  });
 
   return (
     <>
@@ -155,15 +187,32 @@ function VoteTab() {
         ))}
       </div>
 
-      {/* Pending cards */}
-      {pendingPlaces.length === 0 ? (
+      {loading ? (
+        <div className="text-center py-16">
+          <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+        </div>
+      ) : samplePending.length === 0 && filteredBlobSpots.length === 0 ? (
         <div className="text-center py-16">
           <p className="text-3xl mb-2">🗳️</p>
           <p className="text-sm text-muted font-medium">No pending spots</p>
         </div>
       ) : (
         <div className="space-y-3">
-          {pendingPlaces.map((place) => {
+          {/* Community-submitted spots from Blob */}
+          {filteredBlobSpots.map((spot) => {
+            const cat = CATEGORIES.find((c) => c.value === spot.category);
+            return (
+              <BlobSpotCard
+                key={spot.id}
+                spot={spot}
+                catIcon={cat?.icon || "📍"}
+                onVote={onVote}
+              />
+            );
+          })}
+
+          {/* Hardcoded sample pending spots */}
+          {samplePending.map((place) => {
             const cat = CATEGORIES.find((c) => c.value === place.category);
             return (
               <div
@@ -209,17 +258,124 @@ function VoteTab() {
   );
 }
 
+/* ─── Blob Spot Card with voting ─── */
+
+function BlobSpotCard({
+  spot,
+  catIcon,
+  onVote,
+}: {
+  spot: PendingSpot;
+  catIcon: string;
+  onVote: () => void;
+}) {
+  const [voted, setVoted] = useState(false);
+  const [voteCount, setVoteCount] = useState(spot.vote_count);
+  const progress = Math.min((voteCount / 5) * 100, 100);
+
+  const handleVote = async () => {
+    if (voted) return;
+    setVoted(true);
+    setVoteCount((prev) => prev + 1);
+
+    try {
+      const fingerprint = `fp-${Math.random().toString(36).slice(2, 10)}`;
+      const res = await fetch(`/api/spots/${spot.id}/vote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fingerprint }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVoteCount(data.vote_count);
+        onVote();
+      }
+    } catch {
+      // vote already reflected optimistically
+    }
+  };
+
+  return (
+    <div className="bg-white border border-border rounded-xl p-5">
+      <div className="flex items-start gap-3 mb-3">
+        <span className="text-xl">{catIcon}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="font-semibold text-foreground">{spot.name}</h3>
+            <span className="px-1.5 py-0.5 rounded-md bg-blue-50 text-[9px] text-blue-600 font-medium">
+              NEW
+            </span>
+          </div>
+          <p className="text-xs text-muted">
+            {spot.neighborhood} · {spot.address}
+          </p>
+        </div>
+        <span className="text-accent font-bold">
+          {"$".repeat(spot.price_tier)}
+        </span>
+      </div>
+      <p className="text-sm text-muted leading-relaxed mb-3">
+        {spot.description}
+      </p>
+      {spot.tags.length > 0 && (
+        <div className="flex flex-wrap gap-1 mb-3">
+          {spot.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-0.5 rounded-md bg-gray-50 text-[10px] text-muted"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Vote */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleVote}
+            disabled={voted}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              voted
+                ? "bg-gray-100 text-muted cursor-default"
+                : "bg-accent text-white hover:bg-accent-dark active:scale-95"
+            }`}
+          >
+            {voted ? (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                Voted
+              </>
+            ) : (
+              <>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
+                </svg>
+                Approve
+              </>
+            )}
+          </button>
+          <span className="text-sm text-muted">{voteCount}/5</span>
+        </div>
+        <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              voteCount >= 5 ? "bg-accent" : "bg-pending"
+            }`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Add Tab ─── */
 
-function AddTab({
-  user,
-  isLoaded,
-  isSignedIn,
-}: {
-  user: ReturnType<typeof useUser>["user"];
-  isLoaded: boolean;
-  isSignedIn: boolean | undefined;
-}) {
+function AddTab({ onSubmitted }: { onSubmitted: () => void }) {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -250,10 +406,6 @@ function AddTab({
             .split(",")
             .map((t) => t.trim())
             .filter(Boolean),
-          submitted_by:
-            user?.primaryEmailAddress?.emailAddress ||
-            user?.fullName ||
-            "anonymous",
         }),
       });
 
@@ -281,71 +433,42 @@ function AddTab({
           Spot submitted!
         </h2>
         <p className="text-[13px] text-muted mb-6">
-          Your spot has been indexed and is available for the community to
-          discover via search.
+          Your spot is now live in the Vote tab. The community can vote on it!
         </p>
-        <button
-          onClick={() => {
-            setSubmitted(false);
-            setForm({
-              name: "",
-              category: "",
-              subcategory: "",
-              address: "",
-              neighborhood: "",
-              description: "",
-              price_tier: 1,
-              avg_price: "",
-              tags: "",
-              website: "",
-            });
-          }}
-          className="px-5 py-2.5 bg-accent text-white font-medium rounded-xl text-[13px] hover:bg-accent-dark transition-colors press shadow-sm"
-        >
-          Add Another
-        </button>
-      </div>
-    );
-  }
-
-  if (!isLoaded) {
-    return (
-      <div className="text-center py-16">
-        <div className="w-6 h-6 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto" />
+        <div className="flex gap-3 justify-center">
+          <button
+            onClick={() => {
+              setSubmitted(false);
+              setForm({
+                name: "",
+                category: "",
+                subcategory: "",
+                address: "",
+                neighborhood: "",
+                description: "",
+                price_tier: 1,
+                avg_price: "",
+                tags: "",
+                website: "",
+              });
+            }}
+            className="px-5 py-2.5 bg-white border border-border text-foreground font-medium rounded-xl text-[13px] hover:bg-background transition-colors press shadow-sm"
+          >
+            Add Another
+          </button>
+          <button
+            onClick={onSubmitted}
+            className="px-5 py-2.5 bg-accent text-white font-medium rounded-xl text-[13px] hover:bg-accent-dark transition-colors press shadow-sm"
+          >
+            See Votes
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      {/* Signed in banner */}
-      {isSignedIn ? (
-        <div className="flex items-center gap-2.5 px-4 py-3 bg-accent-light/40 border border-accent/10 rounded-xl">
-          {user?.imageUrl && (
-            <img
-              src={user.imageUrl}
-              alt=""
-              className="w-6 h-6 rounded-full"
-              referrerPolicy="no-referrer"
-            />
-          )}
-          <span className="text-[12px] text-accent-dark font-medium">
-            Submitting as {user?.fullName}
-          </span>
-        </div>
-      ) : (
-        <div className="flex items-center justify-between px-4 py-3 bg-warm border border-border/60 rounded-xl">
-          <span className="text-[12px] text-muted">
-            Submitting anonymously
-          </span>
-          <SignInButton>
-            <button className="text-[12px] text-accent font-medium hover:underline">
-              Sign in instead
-            </button>
-          </SignInButton>
-        </div>
-      )}
-
       {error && (
         <div className="px-4 py-3 bg-red-50 border border-red-200 rounded-xl text-[12px] text-red-700">
           {error}

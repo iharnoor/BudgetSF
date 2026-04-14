@@ -286,6 +286,13 @@ export default function EventsPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] via-transparent to-warm/40" />
         <div className="relative max-w-4xl mx-auto px-4 pt-10 pb-8 text-center">
+          <div className="mb-5 slide-up">
+            <img
+              src="/hackathon.jpg"
+              alt="At a hackathon in SF"
+              className="mx-auto w-full max-w-md rounded-2xl shadow-lg border border-border/60 object-cover"
+            />
+          </div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4 slide-up">
             <span>🗓️</span> Get plugged in
           </div>

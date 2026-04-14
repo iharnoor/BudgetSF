@@ -7,7 +7,7 @@ import { track } from "@vercel/analytics";
 const PHONE_PLANS = [
   {
     name: "Visible by Verizon",
-    tagline: "Premium wireless, simplified",
+    tagline: "What I use daily — unlimited hotspot is a game changer",
     price: "$25",
     pricePer: "/mo",
     priceNote: "Visible+",
@@ -27,7 +27,7 @@ const PHONE_PLANS = [
   },
   {
     name: "Mint Mobile",
-    tagline: "Wireless that's worth it",
+    tagline: "Solid budget option if you don't need hotspot",
     price: "$15",
     pricePer: "/mo",
     priceNote: "starting price",
@@ -172,17 +172,17 @@ const NEIGHBORHOODS_RANKED = [
 const CREDIT_CARDS = [
   {
     name: "Capital One Venture X",
-    tagline: "Premium travel rewards, simplified",
+    tagline: "My daily card — the credits make it basically free",
     color: "#1a1a2e",
     colorLight: "#f0eff5",
     emoji: "💳",
     annualFee: "$395",
     features: [
-      { label: "$300 travel credit", desc: "Applied automatically each year" },
-      { label: "10,000 anniversary points", desc: "Worth $100+ annually" },
-      { label: "2X miles on everything", desc: "No categories to track" },
-      { label: "Priority Pass lounge access", desc: "1,300+ lounges worldwide" },
-      { label: "Global Entry / TSA Pre credit", desc: "Up to $100 statement credit" },
+      { label: "$300 travel credit", desc: "Hits automatically — I don't even think about it" },
+      { label: "10,000 anniversary points", desc: "Another ~$100 back every year just for having it" },
+      { label: "2X miles on everything", desc: "I just swipe it everywhere, no categories to track" },
+      { label: "Priority Pass lounge access", desc: "Free airport lounges — huge when traveling" },
+      { label: "Global Entry / TSA Pre credit", desc: "Paid for my TSA Pre — skip the line every time" },
     ],
     highlight: "Net $0 Annual Fee",
     highlightNote: "after credits",
@@ -194,16 +194,16 @@ const CREDIT_CARDS = [
 const TECH = [
   {
     name: 'MacBook Air 15"',
-    tagline: "The best budget laptop for everything",
+    tagline: "What I carry everywhere — lightweight, all-day battery, big screen",
     price: "From $1,099",
     color: "#3b3b3b",
     colorLight: "#f5f5f7",
     emoji: "💻",
     features: [
-      { label: '15-inch Liquid Retina display', desc: "Gorgeous screen, perfect for work & media" },
-      { label: "All-day battery life", desc: "Up to 18 hours — charge less, do more" },
-      { label: "Apple Silicon chip", desc: "Fast, silent, fanless design" },
-      { label: "Lightweight & portable", desc: "Thin enough for any backpack" },
+      { label: '15-inch Liquid Retina display', desc: "Big enough to split-screen code and browser" },
+      { label: "All-day battery life", desc: "I go all day without a charger — 18 hours" },
+      { label: "Apple Silicon chip", desc: "Silent, no fan, runs everything I need" },
+      { label: "Lightweight & portable", desc: "Fits in any backpack, barely notice it" },
     ],
     highlight: "Best Value Mac",
     url: "https://geni.us/6BCrWL",
@@ -214,17 +214,17 @@ const TECH = [
 const BANKING = [
   {
     name: "SoFi Bank",
-    tagline: "A smarter way to bank",
+    tagline: "Where I keep my money — high yield, no fees, and I got a $425 bonus",
     bonus: "Up to $425",
     bonusNote: "with direct deposit",
     color: "#6b35b5",
     colorLight: "#f3edfc",
     emoji: "🏦",
     features: [
-      { label: "High-yield savings", desc: "Earn more on every dollar saved" },
-      { label: "Checking with interest", desc: "Your checking earns too" },
-      { label: "No account fees", desc: "No minimums, no overdraft fees" },
-      { label: "Early paycheck", desc: "Get paid up to 2 days early" },
+      { label: "High-yield savings", desc: "My savings actually earn something here" },
+      { label: "Checking with interest", desc: "Even the checking account pays you" },
+      { label: "No account fees", desc: "No minimums, no overdraft fees, nothing" },
+      { label: "Early paycheck", desc: "I get paid up to 2 days early" },
     ],
     highlight: "Up to $425 Bonus",
     url: "https://www.sofi.com/invite/money?gcp=145a5a84-2c09-4647-b446-cac4a9a2a1c9&isAliasGcp=false",
@@ -232,17 +232,17 @@ const BANKING = [
   },
   {
     name: "Robinhood",
-    tagline: "Start investing with free stock",
+    tagline: "Where I invest — we both get a free stock when you sign up",
     bonus: "Free Stock",
     bonusNote: "you pick your gift stock",
     color: "#00c805",
     colorLight: "#e6fbe7",
     emoji: "📈",
     features: [
-      { label: "Commission-free trading", desc: "Stocks, ETFs, options, crypto" },
-      { label: "Free stock on sign-up", desc: "We both pick a gift stock" },
-      { label: "Fractional shares", desc: "Invest with as little as $1" },
-      { label: "No account minimums", desc: "Start investing immediately" },
+      { label: "Commission-free trading", desc: "Stocks, ETFs, options, crypto — no fees" },
+      { label: "Free stock on sign-up", desc: "We both get to pick a gift stock" },
+      { label: "Fractional shares", desc: "I started with just a few bucks" },
+      { label: "No account minimums", desc: "Just sign up and start" },
     ],
     highlight: "Free Stock Gift",
     url: "https://join.robinhood.com/harnoos28",
@@ -276,17 +276,17 @@ const GROCERIES = [
 const SAVINGS = [
   {
     name: "Rakuten",
-    tagline: "Get cash back on everything you buy",
+    tagline: "I get cash back on stuff I'm already buying — it just runs in the background",
     bonus: "Up to $30",
     bonusNote: "welcome bonus",
     color: "#e6002a",
     colorLight: "#fce8ec",
     emoji: "💸",
     features: [
-      { label: "Cash back at 3,500+ stores", desc: "Up to 19% back on Temu, plus Amazon, Walmart & more" },
-      { label: "Browser extension", desc: "Auto-applies coupons + earns cash back" },
-      { label: "Quarterly payouts", desc: "Big Fat Check or PayPal deposit" },
-      { label: "Stack with credit card rewards", desc: "Double dip on every purchase" },
+      { label: "Cash back at 3,500+ stores", desc: "I get up to 19% back on Temu, Amazon, Walmart, etc." },
+      { label: "Browser extension", desc: "It just pops up and applies coupons automatically" },
+      { label: "Quarterly payouts", desc: "They send you a check or PayPal deposit" },
+      { label: "Stack with credit card rewards", desc: "I double dip — Rakuten + Venture X on every purchase" },
     ],
     highlight: "Free Money",
     url: "https://www.rakuten.com/r/IHARNO2?eeid=44749",
@@ -572,7 +572,7 @@ export default function PicksPage() {
           <SectionHeader
             emoji="🏘️"
             title="SF Neighborhoods Ranked by Cost"
-            subtitle="Where to live based on your budget and vibe"
+            subtitle="Where I'd look depending on budget — ranked cheapest to priciest"
           />
           <div className="space-y-2.5">
             {NEIGHBORHOODS_RANKED.map((hood, i) => (
@@ -628,7 +628,7 @@ export default function PicksPage() {
 
         {/* ── Tech ── */}
         <section className="mb-12">
-          <SectionHeader emoji="💻" title="Tech" subtitle="The gear I actually use every day" />
+          <SectionHeader emoji="💻" title="Tech" subtitle="What's in my backpack — I work from cafes and Caltrain daily" />
           {TECH.map((item, i) => (
             <AffiliateLink
               key={item.name}
@@ -681,8 +681,8 @@ export default function PicksPage() {
                   </div>
                   <div className="w-px h-8 bg-border" />
                   <p className="text-xs text-muted leading-relaxed flex-1">
-                    Best balance of screen size, performance, and portability.
-                    The 15&quot; is the sweet spot for productivity.
+                    I went with the 15&quot; — big enough to get real work done,
+                    light enough to carry everywhere.
                   </p>
                 </div>
 
@@ -734,7 +734,7 @@ export default function PicksPage() {
 
         {/* ── Savings ── */}
         <section className="mb-12">
-          <SectionHeader emoji="💸" title="Cash Back & Savings" subtitle="Free money on stuff you already buy" />
+          <SectionHeader emoji="💸" title="Cash Back & Savings" subtitle="How I get money back without thinking about it" />
           {SAVINGS.map((item, i) => (
             <AffiliateLink
               key={item.name}
@@ -833,7 +833,7 @@ export default function PicksPage() {
 
         {/* ── Credit Cards ── */}
         <section className="mb-12">
-          <SectionHeader emoji="💳" title="Credit Cards" subtitle="Maximize rewards on everyday spending" />
+          <SectionHeader emoji="💳" title="Credit Cards" subtitle="The one card I use for everything — pays for itself" />
           {CREDIT_CARDS.map((card, i) => (
             <AffiliateLink
               key={card.name}
@@ -892,9 +892,9 @@ export default function PicksPage() {
                   </div>
                   <div className="w-px h-8 bg-border" />
                   <p className="text-xs text-muted leading-relaxed flex-1">
-                    Easily offset by the <strong>$300 travel credit</strong> +{" "}
-                    <strong>10K anniversary points</strong> &mdash; making it{" "}
-                    <span className="text-accent font-semibold">effectively free</span>.
+                    The <strong>$300 travel credit</strong> +{" "}
+                    <strong>10K anniversary points</strong> cover it &mdash; I basically pay{" "}
+                    <span className="text-accent font-semibold">$0/year</span>.
                   </p>
                 </div>
 
@@ -942,7 +942,7 @@ export default function PicksPage() {
 
         {/* ── Banking ── */}
         <section className="mb-12">
-          <SectionHeader emoji="🏦" title="Banking" subtitle="Make your money work harder" />
+          <SectionHeader emoji="🏦" title="Banking" subtitle="Where I bank and invest — both gave me sign-up bonuses" />
           {BANKING.map((bank, i) => (
             <AffiliateLink
               key={bank.name}

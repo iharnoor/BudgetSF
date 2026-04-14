@@ -13,8 +13,8 @@ const NAV_ITEMS = [
   { href: "/events", label: "Events" },
   { href: "/free", label: "Free" },
   { href: "/community", label: "Vote / Add" },
-  { href: "/picks", label: "My Picks" },
   { href: "/diet", label: "Diet" },
+  { href: "/picks", label: "My Picks", special: true },
   { href: "/about", label: "About Me" },
 ];
 
@@ -53,14 +53,16 @@ export default function Header() {
                 key={item.href}
                 href={item.href}
                 className={`relative px-3.5 py-1.5 text-[13px] font-medium tracking-wide transition-colors ${
-                  isActive
-                    ? "text-foreground"
-                    : "text-muted hover:text-foreground"
+                  item.special
+                    ? "text-amber-500 hover:text-amber-400"
+                    : isActive
+                      ? "text-foreground"
+                      : "text-muted hover:text-foreground"
                 }`}
               >
-                {item.label}
+                {item.special && "⭐ "}{item.label}
                 {isActive && (
-                  <span className="absolute bottom-0 left-3.5 right-3.5 h-[2px] bg-accent rounded-full" />
+                  <span className={`absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full ${item.special ? "bg-amber-500" : "bg-accent"}`} />
                 )}
               </Link>
             );
@@ -121,12 +123,14 @@ export default function Header() {
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={`block px-5 py-2.5 text-[14px] font-medium transition-colors ${
-                    isActive
-                      ? "text-foreground bg-accent-light/30"
-                      : "text-muted hover:text-foreground hover:bg-warm"
+                    item.special
+                      ? "text-amber-500 hover:text-amber-400 hover:bg-warm"
+                      : isActive
+                        ? "text-foreground bg-accent-light/30"
+                        : "text-muted hover:text-foreground hover:bg-warm"
                   }`}
                 >
-                  {item.label}
+                  {item.special && "⭐ "}{item.label}
                 </Link>
               );
             })}

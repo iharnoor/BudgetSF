@@ -18,6 +18,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   workspace: "#0ea5e9",
   coffee: "#8b5e3c",
   startup: "#ea580c",
+  vc: "#6d28d9",
   gym: "#1a1a2e",
   bars: "#d4507a",
   grocery: "#2a9d8f",

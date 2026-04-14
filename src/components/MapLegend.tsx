@@ -6,6 +6,7 @@ const LEGEND_ITEMS = [
   { color: "#0ea5e9", label: "Work Spots" },
   { color: "#8b5e3c", label: "Coffee" },
   { color: "#ea580c", label: "Accelerators" },
+  { color: "#6d28d9", label: "VCs" },
   { color: "#1a1a2e", label: "Gym" },
   { color: "#d4507a", label: "Bars" },
   { color: "#2a9d8f", label: "Grocery" },

@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
   { href: "/events", label: "Events" },
+  { href: "/free", label: "Free" },
   { href: "/community", label: "Vote / Add" },
   { href: "/picks", label: "My Picks" },
   { href: "/diet", label: "Diet" },

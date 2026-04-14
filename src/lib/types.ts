@@ -7,6 +7,7 @@ export type Category =
   | "bars"
   | "grocery"
   | "startup"
+  | "vc"
   | "entertainment"
   | "services"
   | "other";
@@ -47,6 +48,7 @@ export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: "workspace", label: "Work Spots", icon: "💻" },
   { value: "coffee", label: "Coffee", icon: "☕" },
   { value: "startup", label: "Accelerators", icon: "🚀" },
+  { value: "vc", label: "VCs", icon: "💰" },
   { value: "gym", label: "Gym & Fitness", icon: "💪" },
   { value: "bars", label: "Bars & Drinks", icon: "🍺" },
   { value: "grocery", label: "Grocery", icon: "🛒" },

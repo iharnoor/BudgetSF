@@ -302,6 +302,73 @@ export default function DietPage() {
           </div>
         </div>
 
+        {/* Mushroom Coffee */}
+        <div className="bg-white rounded-2xl border border-border overflow-hidden mb-10">
+          <div
+            className="h-1.5 w-full"
+            style={{ background: "linear-gradient(to right, #5c3d2e, #5c3d2ecc)" }}
+          />
+          <div className="p-5">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🍄</span>
+              <div>
+                <h2
+                  className="text-lg text-foreground mb-1"
+                  style={{ fontFamily: "var(--font-dm-serif)" }}
+                >
+                  My Morning Coffee: RYZE
+                </h2>
+                <p className="text-xs text-muted">
+                  Mushroom coffee that replaced my $6/day cafe habit
+                </p>
+              </div>
+            </div>
+            <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 mb-4">
+              <p className="text-xs text-amber-800 leading-relaxed">
+                I was spending $5-7/day on SF coffee shops. Switched to RYZE and it&apos;s ~$1/cup, takes 30 seconds &mdash; just hot water and stir. No machine, no filters, no cleanup. Steady energy all day, no crash.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[
+                { label: "~$1/cup", desc: "vs $5-7 at a cafe" },
+                { label: "Steady energy", desc: "No jitters or crash" },
+                { label: "30 seconds to make", desc: "Hot water + stir" },
+                { label: "Better for your gut", desc: "Less acidic than coffee" },
+                { label: "6 mushrooms", desc: "Lion's Mane, Reishi & more" },
+                { label: "Half the caffeine", desc: "Focus without the anxiety" },
+              ].map((f) => (
+                <div key={f.label} className="flex items-start gap-2 p-2.5 rounded-xl bg-background">
+                  <svg
+                    className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#5c3d2e]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <div>
+                    <div className="text-xs font-medium text-foreground">{f.label}</div>
+                    <div className="text-[10px] text-muted">{f.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-[#5c3d2e]/5 border border-[#5c3d2e]/10 mb-4">
+              <span className="text-xs text-[#5c3d2e] font-medium">15% off with code</span>
+              <span className="px-2.5 py-1 rounded-md bg-[#5c3d2e] text-white text-xs font-bold tracking-wide">IHARNOOR15</span>
+            </div>
+            <a
+              href="https://get.aspr.app/SH1gdN"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full py-2.5 rounded-xl text-center text-sm font-semibold text-white bg-[#5c3d2e] hover:bg-[#4a3024] transition-colors"
+            >
+              Try RYZE &mdash; 15% Off &rarr;
+            </a>
+          </div>
+        </div>
+
         <div className="text-center text-[11px] text-muted">
           Prices are approximate Costco SF prices as of 2025. Your costs may
           vary slightly.

@@ -298,6 +298,31 @@ const GROCERIES = [
   },
 ];
 
+const MUSHROOM_COFFEE = [
+  {
+    name: "RYZE Mushroom Coffee",
+    tagline: "What I switched to from regular coffee — steady energy, no crash",
+    price: "~$1",
+    pricePer: "/cup",
+    color: "#5c3d2e",
+    colorLight: "#f5efe8",
+    emoji: "🍄",
+    features: [
+      { label: "Smooth, sustained energy", desc: "No jitters, no afternoon crash — just steady focus all day" },
+      { label: "6 functional mushrooms", desc: "Lion's Mane, Reishi, Cordyceps, Shiitake, Turkey Tail, King Trumpet" },
+      { label: "Way easier to make", desc: "Just add hot water and stir — no machine, no filters, no cleanup" },
+      { label: "Better for your gut", desc: "Less acidic than regular coffee, easier on digestion" },
+      { label: "Supports immunity & focus", desc: "Adaptogens help with stress, brain fog, and immune health" },
+      { label: "Half the caffeine", desc: "48mg vs ~95mg in regular coffee — enough to work, not enough to crash" },
+    ],
+    highlight: "15% Off",
+    highlightNote: "code IHARNOOR15",
+    note: "I was spending $5-7/day on SF coffee shops. Switched to RYZE and it's ~$1/cup, takes 30 seconds to make, and I actually feel better — no midday crash. Use code IHARNOOR15 for 15% off.",
+    url: "https://get.aspr.app/SH1gdN",
+    cta: "Try RYZE — 15% Off",
+  },
+];
+
 const SAVINGS = [
   {
     name: "Rakuten",
@@ -1186,6 +1211,130 @@ export default function PicksPage() {
                   style={{ background: bank.color }}
                 >
                   {bank.cta}
+                  <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">
+                    &rarr;
+                  </span>
+                </div>
+              </div>
+            </AffiliateLink>
+          ))}
+        </section>
+
+        {/* ── Mushroom Coffee ── */}
+        <section className="mb-12">
+          <SectionHeader emoji="🍄" title="Mushroom Coffee" subtitle="How I replaced $6 cafe lattes with something that actually works better" />
+          {MUSHROOM_COFFEE.map((item, i) => (
+            <AffiliateLink
+              key={item.name}
+              section="mushroom-coffee"
+              label={item.name}
+              href={item.url}
+              className="group relative block bg-white rounded-2xl border border-border overflow-hidden card-hover press slide-up"
+              style={{
+                animationDelay: `${0.15 + i * 0.08}s`,
+                animationFillMode: "both",
+              }}
+            >
+              {/* Top color bar */}
+              <div
+                className="h-1.5 w-full"
+                style={{
+                  background: `linear-gradient(to right, ${item.color}, ${item.color}cc)`,
+                }}
+              />
+
+              <div className="p-5 sm:p-6">
+                {/* Title row */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm"
+                      style={{ background: item.colorLight }}
+                    >
+                      {item.emoji}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-base">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-muted">{item.tagline}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-right">
+                      <span
+                        className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white"
+                        style={{ background: item.color }}
+                      >
+                        {item.highlight}
+                      </span>
+                      {item.highlightNote && (
+                        <p className="text-[10px] text-muted mt-0.5 text-right">
+                          {item.highlightNote}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Price callout */}
+                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-warm border border-border/60 mb-5">
+                  <div>
+                    <span className="text-lg font-bold" style={{ color: item.color }}>
+                      {item.price}
+                    </span>
+                    <span className="text-sm text-muted font-medium">{item.pricePer}</span>
+                  </div>
+                  <div className="w-px h-8 bg-border" />
+                  <p className="text-xs text-muted leading-relaxed flex-1">
+                    vs $5-7 for a coffee shop latte in SF. That&apos;s $150+/month back in your pocket.
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  {item.features.map((f) => (
+                    <div
+                      key={f.label}
+                      className="flex items-start gap-2.5 p-3 rounded-xl bg-background"
+                    >
+                      <svg
+                        className="w-4 h-4 mt-0.5 shrink-0"
+                        style={{ color: item.color }}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">
+                          {f.label}
+                        </div>
+                        <div className="text-[11px] text-muted">{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Personal note */}
+                <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 mb-5">
+                  <p className="text-xs text-amber-800 leading-relaxed">
+                    <span className="font-semibold">My experience:</span> {item.note}
+                  </p>
+                </div>
+
+                {/* CTA */}
+                <div
+                  className="w-full py-3 rounded-xl text-center text-sm font-semibold text-white transition-all group-hover:shadow-lg group-hover:scale-[1.005]"
+                  style={{ background: item.color }}
+                >
+                  {item.cta}
                   <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">
                     &rarr;
                   </span>

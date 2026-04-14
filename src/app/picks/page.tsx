@@ -21,7 +21,7 @@ const PHONE_PLANS = [
       "Taxes & fees included",
     ],
     highlight: "My Favorite",
-    note: "I use Visible daily — the unlimited hotspot is a lifesaver for working in Ubers and on Caltrain.",
+    note: "I hotspot off Visible everywhere — Ubers, Caltrain, cafes. Unlimited hotspot on Verizon's network for $25/mo is hard to beat.",
     url: "https://fxo.co/1535239/singhinusa",
     cta: "Try Visible",
   },
@@ -349,7 +349,7 @@ export default function PicksPage() {
       <div className="max-w-4xl mx-auto px-4 pb-16">
         {/* ── Phone Plans ── */}
         <section className="mb-12">
-          <SectionHeader emoji="📱" title="Phone Plans" subtitle="Cut your phone bill without cutting corners" />
+          <SectionHeader emoji="📱" title="Phone Plans" subtitle="How I get fast hotspot everywhere for $25/mo" />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {PHONE_PLANS.map((plan, i) => (
               <AffiliateLink

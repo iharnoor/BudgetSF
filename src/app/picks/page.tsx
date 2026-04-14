@@ -267,7 +267,7 @@ const GROCERIES = [
       { label: "Fuel savings", desc: "Up to 10¢ off per gallon at Exxon, Mobil, Walmart & Murphy stations" },
     ],
     highlight: "My Pick",
-    note: "Don't use Amazon Fresh — use Walmart+ for budget groceries. Same-day delivery, real store prices, and way cheaper than any other delivery service in SF.",
+    note: "Skip Amazon Fresh. Walmart+ delivers at real store prices — no markups. $12.95/mo, free delivery on $35+.",
     url: "https://walmrt.us/41truU3",
     cta: "Shop My Walmart Grocery List",
   },

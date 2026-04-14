@@ -169,6 +169,31 @@ const NEIGHBORHOODS_RANKED = [
   },
 ];
 
+const BUSINESS = [
+  {
+    name: "doola",
+    tagline: "How I formed my LLC — Business in a Box handles taxes, everything",
+    price: "$297",
+    priceNote: "+ state fees",
+    color: "#1a1a1a",
+    colorLight: "#f5f5e8",
+    emoji: "📌",
+    features: [
+      { label: "Company Formation", desc: "$0 + state fees — they handle the paperwork" },
+      { label: "EIN & Operating Agreement", desc: "Included — no extra legal fees" },
+      { label: "Registered Agent Service", desc: "Required for your LLC, included in the $297" },
+      { label: "US Bank Account Setup", desc: "They walk you through opening a business bank account" },
+      { label: "Mailing Address / Virtual Mailbox", desc: "Included with Registered Agent — no PO box needed" },
+      { label: "Trustpilot: 4.5 stars", desc: "Higher rated than LegalZoom, Atlas, and Firstbase" },
+    ],
+    highlight: "10% Off",
+    highlightNote: "code DOOLAHARNOOR10",
+    note: "I used doola to set up my LLC — way cheaper than LegalZoom ($806) or Firstbase ($848). The Starter Plan covers formation, EIN, registered agent, and a virtual mailbox for $297 total. Use code DOOLAHARNOOR10 for 10% off.",
+    url: "https://partnersps.doola.com/64gf2eto223k",
+    cta: "Start Your LLC with doola",
+  },
+];
+
 const CREDIT_CARDS = [
   {
     name: "Capital One Venture X",
@@ -821,6 +846,130 @@ export default function PicksPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* CTA */}
+                <div
+                  className="w-full py-3 rounded-xl text-center text-sm font-semibold text-white transition-all group-hover:shadow-lg group-hover:scale-[1.005]"
+                  style={{ background: item.color }}
+                >
+                  {item.cta}
+                  <span className="ml-1.5 inline-block transition-transform group-hover:translate-x-0.5">
+                    &rarr;
+                  </span>
+                </div>
+              </div>
+            </AffiliateLink>
+          ))}
+        </section>
+
+        {/* ── Business ── */}
+        <section className="mb-12">
+          <SectionHeader emoji="📌" title="Start Your Business" subtitle="How I formed my LLC — taxes, banking, everything handled" />
+          {BUSINESS.map((item, i) => (
+            <AffiliateLink
+              key={item.name}
+              section="business"
+              label={item.name}
+              href={item.url}
+              className="group relative block bg-white rounded-2xl border border-border overflow-hidden card-hover press slide-up"
+              style={{
+                animationDelay: `${0.15 + i * 0.08}s`,
+                animationFillMode: "both",
+              }}
+            >
+              {/* Top color bar */}
+              <div
+                className="h-1.5 w-full"
+                style={{
+                  background: `linear-gradient(to right, ${item.color}, ${item.color}cc)`,
+                }}
+              />
+
+              <div className="p-5 sm:p-6">
+                {/* Title row */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm"
+                      style={{ background: item.colorLight }}
+                    >
+                      {item.emoji}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground text-base">
+                        {item.name}
+                      </h3>
+                      <p className="text-xs text-muted">{item.tagline}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-right">
+                      <span
+                        className="shrink-0 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider text-white"
+                        style={{ background: item.color }}
+                      >
+                        {item.highlight}
+                      </span>
+                      {item.highlightNote && (
+                        <p className="text-[10px] text-muted mt-0.5 text-right">
+                          {item.highlightNote}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Price callout */}
+                <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-warm border border-border/60 mb-5">
+                  <div>
+                    <span className="text-lg font-bold" style={{ color: item.color }}>
+                      {item.price}
+                    </span>
+                    <span className="text-[10px] text-muted ml-1.5">{item.priceNote}</span>
+                  </div>
+                  <div className="w-px h-8 bg-border" />
+                  <p className="text-xs text-muted leading-relaxed flex-1">
+                    Cheaper than LegalZoom ($806), Atlas ($410), and Firstbase ($848).
+                  </p>
+                </div>
+
+                {/* Features */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+                  {item.features.map((f) => (
+                    <div
+                      key={f.label}
+                      className="flex items-start gap-2.5 p-3 rounded-xl bg-background"
+                    >
+                      <svg
+                        className="w-4 h-4 mt-0.5 shrink-0"
+                        style={{ color: item.color }}
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                      <div>
+                        <div className="text-sm font-medium text-foreground">
+                          {f.label}
+                        </div>
+                        <div className="text-[11px] text-muted">{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Personal note */}
+                <div className="rounded-lg bg-amber-50 border border-amber-200 px-4 py-3 mb-5">
+                  <p className="text-xs text-amber-800 leading-relaxed">
+                    <span className="font-semibold">My experience:</span> {item.note}
+                  </p>
                 </div>
 
                 {/* CTA */}

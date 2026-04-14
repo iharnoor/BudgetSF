@@ -257,9 +257,7 @@ export default function DietPage() {
             </div>
             <div className="rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 mb-4">
               <p className="text-xs text-blue-800 leading-relaxed">
-                <span className="font-semibold">Pro tip:</span> Walmart+ delivers at real in-store prices with no markups.
-                Amazon Fresh and other delivery apps charge more per item. For budget grocery shopping in SF,
-                Walmart+ is the move &mdash; $12.95/mo for free delivery on $35+ orders.
+                <span className="font-semibold">Skip Amazon Fresh.</span> Walmart+ delivers at real store prices &mdash; no markups. $12.95/mo, free delivery on $35+.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">

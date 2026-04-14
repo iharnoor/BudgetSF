@@ -224,6 +224,7 @@ export default function DietPage() {
               "This diet hits ~130g+ protein/day without eating out",
               "Total grocery bill: ~$250-300/month for one person",
               "No Uber Eats, no DoorDash — that's where SF food budgets die",
+              "Use Walmart+ for grocery delivery ($12.95/mo) — real store prices, no markups like Amazon Fresh",
             ].map((tip) => (
               <li
                 key={tip}
@@ -234,6 +235,66 @@ export default function DietPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Walmart+ Grocery Delivery */}
+        <div className="bg-white rounded-2xl border border-border overflow-hidden mb-10">
+          <div className="h-1.5 w-full bg-[#0071dc]" />
+          <div className="p-5">
+            <div className="flex items-start gap-3 mb-3">
+              <span className="text-2xl">🛒</span>
+              <div>
+                <h2
+                  className="text-lg text-foreground mb-1"
+                  style={{ fontFamily: "var(--font-dm-serif)" }}
+                >
+                  Get Groceries Delivered
+                </h2>
+                <p className="text-xs text-muted">
+                  Don&apos;t use Amazon Fresh &mdash; use Walmart+ for budget groceries
+                </p>
+              </div>
+            </div>
+            <div className="rounded-lg bg-blue-50 border border-blue-200 px-4 py-3 mb-4">
+              <p className="text-xs text-blue-800 leading-relaxed">
+                <span className="font-semibold">Pro tip:</span> Walmart+ delivers at real in-store prices with no markups.
+                Amazon Fresh and other delivery apps charge more per item. For budget grocery shopping in SF,
+                Walmart+ is the move &mdash; $12.95/mo for free delivery on $35+ orders.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 mb-4">
+              {[
+                { label: "Store prices", desc: "No delivery markups" },
+                { label: "Free delivery", desc: "On orders $35+" },
+                { label: "$12.95/mo", desc: "Or $98/year" },
+                { label: "Same-day", desc: "Get groceries fast" },
+              ].map((f) => (
+                <div key={f.label} className="flex items-start gap-2 p-2.5 rounded-xl bg-background">
+                  <svg
+                    className="w-3.5 h-3.5 mt-0.5 shrink-0 text-[#0071dc]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <div>
+                    <div className="text-xs font-medium text-foreground">{f.label}</div>
+                    <div className="text-[10px] text-muted">{f.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <a
+              href="https://walmrt.us/41truU3"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block w-full py-2.5 rounded-xl text-center text-sm font-semibold text-white bg-[#0071dc] hover:bg-[#004c91] transition-colors"
+            >
+              Shop My Walmart Grocery List &rarr;
+            </a>
+          </div>
         </div>
 
         <div className="text-center text-[11px] text-muted">

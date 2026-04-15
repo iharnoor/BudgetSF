@@ -68,8 +68,8 @@ const TRANSPORT_MODES: TransportMode[] = [
       "Can't go to the airport yet — use BART for SFO instead",
       "The car will pull up exactly where you pin it, so be precise with your pickup",
     ],
-    link: "https://waymo.com/waymo-one",
-    linkLabel: "Get Waymo One",
+    link: "https://waymo.smart.link/4pcoqniy5?code=HARNOO2645",
+    linkLabel: "Get $10 Off Waymo (Code: HARNOO2645)",
     highlight: "No Surge Pricing",
   },
 

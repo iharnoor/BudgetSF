@@ -25,17 +25,27 @@ export default function Header() {
     <header className="absolute top-0 left-0 right-0 z-40 glass border-b border-border/60">
       <div className="max-w-screen-2xl mx-auto px-5 h-[52px] flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-white text-[10px] font-bold tracking-tight shadow-sm group-hover:shadow-md transition-shadow">
-            SF
-          </div>
-          <span
-            className="text-[17px] text-foreground tracking-tight"
-            style={{ fontFamily: "var(--font-dm-serif)" }}
+        <div className="flex items-baseline gap-2.5">
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center text-white text-[10px] font-bold tracking-tight shadow-sm group-hover:shadow-md transition-shadow">
+              SF
+            </div>
+            <span
+              className="text-[17px] text-foreground tracking-tight"
+              style={{ fontFamily: "var(--font-dm-serif)" }}
+            >
+              BudgetSF
+            </span>
+          </Link>
+          <a
+            href="https://hydradb.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline text-[10px] font-medium text-muted/60 hover:text-muted tracking-wide transition-colors"
           >
-            BudgetSF
-          </span>
-        </Link>
+            powered by HydraDB
+          </a>
+        </div>
 
         {/* Desktop nav */}
         <nav className="hidden sm:flex items-center gap-0.5">

@@ -41,9 +41,9 @@ export default function Header() {
             href="https://hydradb.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline text-[10px] font-medium text-muted/60 hover:text-muted tracking-wide transition-colors"
+            className="hidden sm:inline text-[12px] font-medium text-muted/60 hover:text-muted tracking-wide transition-colors"
           >
-            powered by HydraDB
+            by HydraDB
           </a>
         </div>
 

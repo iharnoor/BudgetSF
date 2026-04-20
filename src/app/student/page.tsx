@@ -1,6 +1,7 @@
 "use client";
 
 import { type AnchorHTMLAttributes } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { track } from "@vercel/analytics";
 
@@ -253,7 +254,23 @@ export default function StudentPage() {
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] via-transparent to-warm/40" />
         <div className="relative max-w-4xl mx-auto px-4 pt-10 pb-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4 slide-up">
+          <div
+            className="mx-auto mb-5 w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border border-border shadow-sm slide-up"
+            style={{ animationFillMode: "both" }}
+          >
+            <Image
+              src="/Student.JPG"
+              alt="Harnoor during his F-1 student years in SF"
+              width={512}
+              height={512}
+              priority
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4 slide-up"
+            style={{ animationDelay: "0.03s", animationFillMode: "both" }}
+          >
             <span>🎓</span> Built from my own F-1 → OPT journey
           </div>
           <h1

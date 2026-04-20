@@ -67,6 +67,29 @@ const MEALS: Meal[] = [
   },
 ];
 
+const HIDDEN_GEMS = [
+  {
+    name: "Saigon Sandwich",
+    deal: "$6",
+    dealNote: "chicken sandwich",
+    address: "560 Larkin St, Tenderloin",
+    emoji: "🥖",
+    color: "#c0392b",
+    colorLight: "#fbe9e7",
+    note: "Legendary banh mi, cash only, always a line — always worth it. My go-to cheap lunch when I'm not eating Costco prep.",
+  },
+  {
+    name: "Good Mong Kok Bakery",
+    deal: "3 for $3",
+    dealNote: "dumplings",
+    address: "1039 Stockton St, Chinatown",
+    emoji: "🥟",
+    color: "#d35400",
+    colorLight: "#fff1e6",
+    note: "Dim sum to-go, cash only. Three dumplings for $3 is unbeatable — grab a box and keep it moving.",
+  },
+];
+
 function getMealCost(meal: Meal): number {
   return meal.ingredients.reduce((sum, ing) => sum + ing.costPerServing, 0);
 }
@@ -242,6 +265,64 @@ export default function DietPage() {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Hidden Gem Eats */}
+        <div className="bg-white rounded-2xl border border-border p-5 mb-10">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="text-lg">💎</span>
+            <h2
+              className="text-lg text-foreground"
+              style={{ fontFamily: "var(--font-dm-serif)" }}
+            >
+              Hidden Gem Cheap Eats
+            </h2>
+          </div>
+          <p className="text-xs text-muted mb-4">
+            When I&apos;m not eating Costco prep, these are my two go-to spots — both cash only.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {HIDDEN_GEMS.map((gem) => (
+              <div
+                key={gem.name}
+                className="rounded-xl border border-border overflow-hidden"
+              >
+                <div className="h-1 w-full" style={{ background: gem.color }} />
+                <div className="p-4">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center text-lg shrink-0"
+                        style={{ background: gem.colorLight }}
+                      >
+                        {gem.emoji}
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-semibold text-foreground leading-tight">
+                          {gem.name}
+                        </h3>
+                        <p className="text-[10px] text-muted">{gem.address}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-baseline gap-1.5 mb-2">
+                    <span
+                      className="text-2xl font-bold"
+                      style={{ color: gem.color }}
+                    >
+                      {gem.deal}
+                    </span>
+                    <span className="text-[11px] text-muted font-medium">
+                      {gem.dealNote}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted leading-relaxed">
+                    {gem.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Walmart+ Grocery Delivery */}

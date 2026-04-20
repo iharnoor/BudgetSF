@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { href: "/free", label: "Free" },
   { href: "/community", label: "Vote / Add" },
   { href: "/diet", label: "Diet" },
+  { href: "/student", label: "Student" },
   { href: "/picks", label: "My Picks", special: true },
   { href: "/about", label: "About Me" },
 ];

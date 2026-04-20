@@ -323,6 +323,31 @@ const MUSHROOM_COFFEE = [
   },
 ];
 
+const HIDDEN_GEMS = [
+  {
+    name: "Saigon Sandwich",
+    tagline: "$6 chicken banh mi in the Tenderloin — my go-to cheap lunch",
+    deal: "$6",
+    dealNote: "chicken sandwich",
+    address: "560 Larkin St, Tenderloin",
+    color: "#c0392b",
+    colorLight: "#fbe9e7",
+    emoji: "🥖",
+    note: "Legendary banh mi, cash only, always a line — always worth it. Best $6 lunch in SF.",
+  },
+  {
+    name: "Good Mong Kok Bakery",
+    tagline: "3 dumplings for $3 in Chinatown — unbeatable grab-and-go",
+    deal: "3 for $3",
+    dealNote: "dumplings",
+    address: "1039 Stockton St, Chinatown",
+    color: "#d35400",
+    colorLight: "#fff1e6",
+    emoji: "🥟",
+    note: "Dim sum to-go, cash only. Grab a box of dumplings or buns for a few bucks and keep it moving.",
+  },
+];
+
 const SAVINGS = [
   {
     name: "Rakuten",
@@ -504,6 +529,73 @@ export default function PicksPage() {
                   </div>
                 </div>
               </AffiliateLink>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Hidden Gem Eats ── */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="💎"
+            title="Hidden Gem Eats"
+            subtitle="Two cheap-eat spots I always come back to — both cash only"
+          />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {HIDDEN_GEMS.map((gem, i) => (
+              <div
+                key={gem.name}
+                className="group relative bg-white rounded-2xl border border-border overflow-hidden card-hover slide-up"
+                style={{
+                  animationDelay: `${0.1 + i * 0.08}s`,
+                  animationFillMode: "both",
+                }}
+              >
+                <div
+                  className="h-1.5 w-full"
+                  style={{ background: gem.color }}
+                />
+                <div className="p-5">
+                  <div className="flex items-start justify-between mb-3 gap-3">
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shadow-sm"
+                        style={{ background: gem.colorLight }}
+                      >
+                        {gem.emoji}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-foreground text-[15px]">
+                          {gem.name}
+                        </h3>
+                        <p className="text-[11px] text-muted">{gem.address}</p>
+                      </div>
+                    </div>
+                    <span
+                      className="shrink-0 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider text-white"
+                      style={{ background: gem.color }}
+                    >
+                      Hidden Gem
+                    </span>
+                  </div>
+                  <p className="text-xs text-muted mb-3">{gem.tagline}</p>
+                  <div className="flex items-baseline gap-2 mb-3">
+                    <span
+                      className="text-3xl font-bold"
+                      style={{ color: gem.color }}
+                    >
+                      {gem.deal}
+                    </span>
+                    <span className="text-xs text-muted font-medium">
+                      {gem.dealNote}
+                    </span>
+                  </div>
+                  <div className="rounded-lg bg-surface-warm border border-border/60 px-3 py-2">
+                    <p className="text-[11px] text-foreground/80 leading-relaxed">
+                      {gem.note}
+                    </p>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         </section>

@@ -101,6 +101,20 @@ const BANKING = {
   emoji: "🏦",
 };
 
+const STUDENT_LOAN = {
+  name: "SoFi Student Loan Refinance",
+  tagline: "Refinance your student loans and pocket a $300 welcome bonus",
+  bonus: "$300",
+  bonusNote: "welcome bonus",
+  highlight: "$300 Bonus",
+  note: "If you have US student loans, refinancing with SoFi can drop your rate and stacks a $300 welcome bonus on top. No fees, no prepayment penalty. Worth checking your rate even if you don't refinance.",
+  url: "https://www.sofi.com/invite/student-loans?gcp=174b310b-f306-454b-86e5-062ce06a9ec7&isAliasGcp=false",
+  cta: "Check My Rate",
+  color: "#6b35b5",
+  colorLight: "#f3edfc",
+  emoji: "🎓",
+};
+
 const BUSINESS = {
   name: "doola",
   tagline: "Form your LLC as an international student — I used them for mine",
@@ -341,6 +355,16 @@ export default function StudentPage() {
             subtitle="First real US bank account — no fees, early paycheck, bonus cash"
           />
           <PickCard section="student-banking" item={BANKING} fullBonus />
+        </section>
+
+        {/* Student Loan Refi */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="🎓"
+            title="Student Loan Refinance"
+            subtitle="$300 bonus + potentially lower rates if you have US student loans"
+          />
+          <PickCard section="student-loan-refi" item={STUDENT_LOAN} fullBonus />
         </section>
 
         {/* Credit Card */}

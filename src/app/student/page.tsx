@@ -255,7 +255,7 @@ export default function StudentPage() {
         <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] via-transparent to-warm/40" />
         <div className="relative max-w-4xl mx-auto px-4 pt-10 pb-8 text-center">
           <div
-            className="mx-auto mb-5 w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden border border-border shadow-sm slide-up"
+            className="mx-auto mb-5 w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border border-border shadow-sm slide-up"
             style={{ animationFillMode: "both" }}
           >
             <Image

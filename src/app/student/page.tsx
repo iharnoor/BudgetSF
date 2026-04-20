@@ -103,11 +103,11 @@ const BANKING = {
 
 const STUDENT_LOAN = {
   name: "SoFi Student Loan Refinance",
-  tagline: "Refinance your student loans and pocket a $300 welcome bonus",
+  tagline: "Refinance your Leap/Prodigy loan and drop under 7% — even on F-1",
   bonus: "$300",
   bonusNote: "welcome bonus",
   highlight: "$300 Bonus",
-  note: "If you have US student loans, refinancing with SoFi can drop your rate and stacks a $300 welcome bonus on top. No fees, no prepayment penalty. Worth checking your rate even if you don't refinance.",
+  note: "Most international students I know got their USD loans from LeapFinance or Prodigy at 11-13% APR — those rates eat you alive. Once you land a US job on OPT (and sometimes even earlier on F-1 with a co-signer), SoFi refi can drop you under 7%. The $300 welcome bonus stacks on top. Check your rate first — soft pull, doesn't hit your credit. Saved a friend ~$18K over the life of his loan.",
   url: "https://www.sofi.com/invite/student-loans?gcp=174b310b-f306-454b-86e5-062ce06a9ec7&isAliasGcp=false",
   cta: "Check My Rate",
   color: "#6b35b5",
@@ -347,6 +347,16 @@ export default function StudentPage() {
           </div>
         </section>
 
+        {/* Student Loan Refi */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="🎓"
+            title="Student Loan Refinance"
+            subtitle="Escape those 11-13% Leap/Prodigy rates once you're working in the US"
+          />
+          <PickCard section="student-loan-refi" item={STUDENT_LOAN} fullBonus />
+        </section>
+
         {/* Banking */}
         <section className="mb-12">
           <SectionHeader
@@ -355,16 +365,6 @@ export default function StudentPage() {
             subtitle="First real US bank account — no fees, early paycheck, bonus cash"
           />
           <PickCard section="student-banking" item={BANKING} fullBonus />
-        </section>
-
-        {/* Student Loan Refi */}
-        <section className="mb-12">
-          <SectionHeader
-            emoji="🎓"
-            title="Student Loan Refinance"
-            subtitle="$300 bonus + potentially lower rates if you have US student loans"
-          />
-          <PickCard section="student-loan-refi" item={STUDENT_LOAN} fullBonus />
         </section>
 
         {/* Credit Card */}

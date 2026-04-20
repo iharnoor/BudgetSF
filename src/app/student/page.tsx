@@ -12,7 +12,7 @@ const FIRST_MONTH_CHECKLIST = [
   },
   {
     title: "Open a US bank account",
-    desc: "SoFi lets international students open accounts with ITIN or passport in many cases. Get the $425 bonus with direct deposit once you're set up.",
+    desc: "SoFi lets international students open accounts with a passport in many cases. Get the $425 bonus with direct deposit once you're set up.",
     emoji: "🏦",
   },
   {
@@ -43,10 +43,6 @@ const VISA_TIPS = [
     desc: "International students on F-1 can legally form an LLC — you just can't work for it until you have OPT/CPT. doola handles the whole setup for $297 including EIN and registered agent.",
   },
   {
-    title: "Use your ITIN before you get an SSN",
-    desc: "You can get an ITIN from the IRS — many banks, phone carriers, and even some credit cards accept ITIN. Don't wait 3 months for an SSN to get set up.",
-  },
-  {
     title: "OPT = 12 months of US work authorization",
     desc: "Apply 90 days before graduation. STEM majors get 24 extra months. This is your window to build US work experience.",
   },
@@ -70,7 +66,7 @@ const PHONE_PLANS = [
     tagline: "What I use — unlimited hotspot, no SSN needed to sign up",
     price: "$25/mo",
     highlight: "Best for students",
-    note: "Runs on Verizon, unlimited hotspot is huge for study sessions at cafes and Caltrain commutes. Accepts ITIN/passport.",
+    note: "Runs on Verizon, unlimited hotspot is huge for study sessions at cafes and Caltrain commutes.",
     url: "https://fxo.co/1535239/singhinusa",
     cta: "Try Visible",
     color: "#1a1a40",
@@ -97,7 +93,7 @@ const BANKING = {
   bonus: "Up to $425",
   bonusNote: "with direct deposit",
   highlight: "Up to $425 Bonus",
-  note: "SoFi accepts ITIN in most cases. No minimum, no fees, early paycheck, and the savings account actually earns interest. I got $300+ back in bonuses.",
+  note: "No minimum, no fees, early paycheck, and the savings account actually earns interest. I got $300+ back in bonuses.",
   url: "https://www.sofi.com/invite/money?gcp=145a5a84-2c09-4647-b446-cac4a9a2a1c9&isAliasGcp=false",
   cta: "Open SoFi Account",
   color: "#6b35b5",
@@ -328,7 +324,7 @@ export default function StudentPage() {
           <SectionHeader
             emoji="📱"
             title="Phone Plan"
-            subtitle="No SSN? No problem — both of these work with ITIN or passport"
+            subtitle="What I use for unlimited hotspot — works everywhere in SF"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {PHONE_PLANS.map((plan) => (
@@ -342,7 +338,7 @@ export default function StudentPage() {
           <SectionHeader
             emoji="🏦"
             title="Banking"
-            subtitle="First real US bank account — SoFi accepts ITIN"
+            subtitle="First real US bank account — no fees, early paycheck, bonus cash"
           />
           <PickCard section="student-banking" item={BANKING} fullBonus />
         </section>

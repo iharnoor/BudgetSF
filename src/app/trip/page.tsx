@@ -270,8 +270,15 @@ const STAY_CHEAP = [
     name: "Green Tortoise Hostel",
     type: "Hostel",
     price: "$40-65/night (dorm)",
-    why: "North Beach, free breakfast, social vibe. Best for solo travelers.",
+    why: "North Beach, free breakfast, social vibe. Best for solo travelers. Walk to Chinatown and City Lights.",
     url: "https://www.greentortoise.com",
+  },
+  {
+    name: "Orange Village Hostel",
+    type: "Hostel",
+    price: "$40-65/night (dorm)",
+    why: "Budget SoMa hostel close to Powell BART, Moscone, and SFMOMA. Shared kitchen — groceries + fridge = big savings.",
+    url: "https://www.orangevillagehostel.com",
   },
   {
     name: "Hotel Zephyr / budget chains (Wharf area)",

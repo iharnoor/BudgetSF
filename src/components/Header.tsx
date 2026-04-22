@@ -6,12 +6,12 @@ import { usePathname } from "next/navigation";
 
 const NAV_ITEMS = [
   { href: "/", label: "Map" },
+  { href: "/trip", label: "Plan a Trip" },
   { href: "/spots", label: "Spots" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
   { href: "/events", label: "Events" },
   { href: "/free", label: "Free" },
-  { href: "/community", label: "Vote / Add" },
   { href: "/diet", label: "Diet" },
   { href: "/student", label: "Student" },
   { href: "/picks", label: "My Picks", special: true },

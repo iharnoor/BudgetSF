@@ -10,6 +10,7 @@ import PlaceDetail from "@/components/PlaceDetail";
 import Header from "@/components/Header";
 import MapLegend from "@/components/MapLegend";
 import ChatBubble from "@/components/ChatBubble";
+import Link from "next/link";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
 
@@ -277,7 +278,16 @@ export default function HomePage() {
       {/* Bottom-left: chat bubble */}
       <ChatBubble onPlaceClick={handlePlaceClick} />
 
-      {/* Bottom-right: list toggle */}
+      {/* Bottom-right: Add a spot + list toggle */}
+      <Link
+        href="/community"
+        className="absolute bottom-6 right-[128px] sm:right-[140px] z-30 glass px-4 py-3 rounded-2xl shadow-lg shadow-black/[0.06] border border-border/60 hover:shadow-xl transition-all flex items-center gap-2 text-[13px] font-semibold text-foreground press"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+        </svg>
+        <span className="hidden sm:inline">Add / Vote</span>
+      </Link>
       <button
         onClick={() => {
           setPanelOpen(!panelOpen);

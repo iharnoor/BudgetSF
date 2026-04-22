@@ -327,6 +327,63 @@ export default function TripPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 pb-16">
+        {/* Try before you commit */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="🎥"
+            title="Try Before You Commit"
+            subtitle="SF isn't for everyone — test it first"
+          />
+          <div className="bg-white rounded-2xl border border-border overflow-hidden">
+            <div className="grid grid-cols-1 sm:grid-cols-[280px,1fr]">
+              <a
+                href="https://www.youtube.com/watch?v=-SLgCQKE1zg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="relative block group aspect-video sm:aspect-auto sm:h-full bg-black"
+              >
+                <img
+                  src="https://img.youtube.com/vi/-SLgCQKE1zg/hqdefault.jpg"
+                  alt="Singh in USA — Day in the Life of an Engineer in SF"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
+                  <div className="w-14 h-14 rounded-full bg-white/95 shadow-lg flex items-center justify-center group-hover:scale-105 transition-transform">
+                    <svg
+                      className="w-6 h-6 text-red-600 ml-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                </div>
+              </a>
+              <div className="p-5 sm:p-6 flex flex-col justify-center">
+                <p className="text-sm text-foreground mb-3 leading-relaxed">
+                  SF is not for everyone. Before you sign a 12-month lease, do
+                  a week or two in hostels and Airbnbs across different
+                  neighborhoods — Mission, SoMa, Sunset, North Beach all feel
+                  like different cities.
+                </p>
+                <p className="text-xs text-muted leading-relaxed mb-3">
+                  I did multiple hostel and Airbnb trips before committing. The
+                  vibe, the fog, the hills, the pace — you need to feel it.
+                </p>
+                <a
+                  href="https://www.youtube.com/watch?v=-SLgCQKE1zg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center text-xs font-medium text-accent hover:underline"
+                >
+                  Watch: Day in the Life of an Engineer in SF
+                  <span className="ml-1">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Daily budget card */}
         <section className="mb-12">
           <SectionHeader
@@ -522,7 +579,14 @@ export default function TripPage() {
               </div>
             ))}
           </div>
-          <div className="mt-4 bg-accent-light/40 rounded-2xl border border-accent/20 p-4 text-xs text-foreground">
+          <div className="mt-4 bg-warm rounded-2xl border border-border p-4 text-xs text-foreground">
+            <span className="font-semibold">🍳 Hostels have full kitchens + fridges.</span>{" "}
+            This is the budget cheat code. Hit Trader Joe&apos;s or Safeway
+            once, cook your own breakfasts and a couple dinners, and you can
+            cut food spend in half. Store leftovers in the shared fridge
+            (label your bag). Cuts a $55/day food budget down to $20-25.
+          </div>
+          <div className="mt-3 bg-accent-light/40 rounded-2xl border border-accent/20 p-4 text-xs text-foreground">
             <span className="font-semibold">Staying 2+ weeks?</span> Look at
             hacker houses and co-livings on the{" "}
             <Link href="/" className="text-accent hover:underline">

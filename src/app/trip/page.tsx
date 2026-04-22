@@ -13,6 +13,8 @@ type Airport = {
     cost: string;
     time: string;
     note: string;
+    url?: string;
+    cta?: string;
   }[];
   tips: string[];
   url: string;
@@ -40,10 +42,12 @@ const AIRPORTS: Airport[] = [
         note: "Pickup is at the Domestic Garage level 5. Surge hits hard during peak.",
       },
       {
-        mode: "Waymo",
-        cost: "Not available at SFO yet",
+        mode: "Waymo (within SF, not SFO pickup)",
+        cost: "~$4-15 per ride in SF",
         time: "—",
-        note: "Waymo doesn't serve SFO — use BART or Uber from the airport, Waymo within SF.",
+        note: "Waymo doesn't serve SFO yet — take BART into SF, then Waymo for everything after. No surge pricing.",
+        url: "https://waymo.smart.link/4pcoqniy5?code=HARNOO2645",
+        cta: "Get $10 off with code HARNOO2645",
       },
     ],
     tips: [
@@ -158,6 +162,9 @@ type TripTip = {
   title: string;
   body: string;
   icon: string;
+  url?: string;
+  cta?: string;
+  badge?: string;
 };
 
 const BEFORE_YOU_LAND: TripTip[] = [
@@ -170,11 +177,16 @@ const BEFORE_YOU_LAND: TripTip[] = [
     icon: "🚕",
     title: "Set up Waymo One",
     body: "Join the Waymo One waitlist before you arrive — it can take a few days. Cheaper than Uber in SF, no surge, and the ride itself is the attraction.",
+    url: "https://waymo.smart.link/4pcoqniy5?code=HARNOO2645",
+    cta: "Get $10 off Waymo",
+    badge: "code HARNOO2645",
   },
   {
-    icon: "🚗",
-    title: "Install Uber AND Lyft",
-    body: "Price-check both at peak times. Lyft's bike rentals (Bay Wheels) live in the Lyft app — useful for quick hops the Waymo won't do.",
+    icon: "📡",
+    title: "Get a US number + hotspot",
+    body: "I use Visible (Verizon) — $25/mo unlimited, including unlimited hotspot. No SSN needed to sign up. Huge for working from cafes, on Caltrain, or tethering a laptop anywhere.",
+    url: "https://fxo.co/1535239/singhinusa",
+    cta: "Try Visible",
   },
   {
     icon: "🌁",
@@ -189,7 +201,9 @@ const BEFORE_YOU_LAND: TripTip[] = [
   {
     icon: "💳",
     title: "Bring a no-FX card",
-    body: "If you're coming internationally, a no-foreign-transaction card saves 3% on every charge. Wise, Revolut, Capital One Venture all work.",
+    body: "Coming internationally? A no-foreign-transaction card saves 3% on every charge. Capital One Venture X is my daily — $300 travel credit + lounge access makes the fee basically $0 net.",
+    url: "https://i.capitalone.com/JxtpzL0LQ",
+    cta: "Apply for Venture X",
   },
 ];
 
@@ -479,6 +493,17 @@ export default function TripPage() {
                         <p className="text-[11px] text-muted leading-snug">
                           {opt.note}
                         </p>
+                        {opt.url && opt.cta && (
+                          <a
+                            href={opt.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center text-[11px] font-medium text-accent hover:underline mt-1"
+                          >
+                            {opt.cta}
+                            <span className="ml-1">&rarr;</span>
+                          </a>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -520,25 +545,45 @@ export default function TripPage() {
           <SectionHeader
             emoji="📋"
             title="Before You Land"
-            subtitle="6 things to do while you're still on the plane"
+            subtitle="A few things to do while you're still on the plane"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {BEFORE_YOU_LAND.map((tip) => (
               <div
                 key={tip.title}
-                className="bg-white rounded-2xl border border-border p-4 sm:p-5"
+                className="bg-white rounded-2xl border border-border p-4 sm:p-5 flex flex-col"
               >
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-3 flex-1">
                   <span className="text-xl shrink-0">{tip.icon}</span>
-                  <div>
-                    <h3 className="text-sm font-semibold text-foreground mb-1">
-                      {tip.title}
-                    </h3>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-1">
+                      <h3 className="text-sm font-semibold text-foreground">
+                        {tip.title}
+                      </h3>
+                      {tip.badge && (
+                        <span className="px-2 py-0.5 rounded-full bg-accent-light text-accent-dark text-[10px] font-semibold">
+                          {tip.badge}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-muted leading-relaxed">
                       {tip.body}
                     </p>
                   </div>
                 </div>
+                {tip.url && tip.cta && (
+                  <div className="mt-3 pl-9">
+                    <a
+                      href={tip.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center text-xs font-medium text-accent hover:underline"
+                    >
+                      {tip.cta}
+                      <span className="ml-1">&rarr;</span>
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -584,7 +629,17 @@ export default function TripPage() {
             This is the budget cheat code. Hit Trader Joe&apos;s or Safeway
             once, cook your own breakfasts and a couple dinners, and you can
             cut food spend in half. Store leftovers in the shared fridge
-            (label your bag). Cuts a $55/day food budget down to $20-25.
+            (label your bag). Cuts a $55/day food budget down to $20-25.{" "}
+            <a
+              href="https://walmrt.us/41truU3"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline font-medium"
+            >
+              Walmart+ same-day delivery
+            </a>{" "}
+            straight to the hostel works too — actual in-store prices, free on
+            $35+.
           </div>
           <div className="mt-3 bg-accent-light/40 rounded-2xl border border-accent/20 p-4 text-xs text-foreground">
             <span className="font-semibold">Staying 2+ weeks?</span> Look at
@@ -748,6 +803,14 @@ export default function TripPage() {
             Add it
           </Link>
           .
+        </div>
+
+        {/* Affiliate disclosure */}
+        <div className="text-center pt-4">
+          <p className="text-[11px] text-muted leading-relaxed max-w-md mx-auto">
+            Some links above are referral/affiliate links. Using them supports
+            BudgetSF at no extra cost to you — and often gets you a bonus too.
+          </p>
         </div>
       </div>
     </div>

@@ -4,9 +4,23 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAV_ITEMS = [
+type NavItem = {
+  href: string;
+  label: string;
+  special?: boolean;
+  external?: boolean;
+  icon?: string;
+};
+
+const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Map" },
   { href: "/trip", label: "Plan a Trip" },
+  {
+    href: "https://sf.offpeak.workers.dev/",
+    label: "Offpeak",
+    external: true,
+    icon: "✈️",
+  },
   { href: "/spots", label: "Spots" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
@@ -52,25 +66,44 @@ export default function Header() {
         <nav className="hidden sm:flex items-center gap-0.5">
           {NAV_ITEMS.map((item) => {
             const isActive =
-              item.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`relative px-3.5 py-1.5 text-[13px] font-medium tracking-wide transition-colors ${
-                  item.special
-                    ? "text-amber-500 hover:text-amber-400"
-                    : isActive
-                      ? "text-foreground"
-                      : "text-muted hover:text-foreground"
-                }`}
-              >
-                {item.special && "⭐ "}{item.label}
+              item.external
+                ? false
+                : item.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(item.href);
+            const className = `relative px-3.5 py-1.5 text-[13px] font-medium tracking-wide transition-colors ${
+              item.special
+                ? "text-amber-500 hover:text-amber-400"
+                : isActive
+                  ? "text-foreground"
+                  : "text-muted hover:text-foreground"
+            }`;
+            const content = (
+              <>
+                {item.special && "⭐ "}
+                {item.icon && <span className="mr-1">{item.icon}</span>}
+                {item.label}
                 {isActive && (
                   <span className={`absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full ${item.special ? "bg-amber-500" : "bg-accent"}`} />
                 )}
+              </>
+            );
+            if (item.external) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={className}
+                >
+                  {content}
+                </a>
+              );
+            }
+            return (
+              <Link key={item.href} href={item.href} className={className}>
+                {content}
               </Link>
             );
           })}
@@ -109,23 +142,47 @@ export default function Header() {
           <nav className="sm:hidden relative z-40 glass border-t border-border/60 py-2 animate-in">
             {NAV_ITEMS.map((item) => {
               const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+                item.external
+                  ? false
+                  : item.href === "/"
+                    ? pathname === "/"
+                    : pathname.startsWith(item.href);
+              const className = `block px-5 py-2.5 text-[14px] font-medium transition-colors ${
+                item.special
+                  ? "text-amber-500 hover:text-amber-400 hover:bg-warm"
+                  : isActive
+                    ? "text-foreground bg-accent-light/30"
+                    : "text-muted hover:text-foreground hover:bg-warm"
+              }`;
+              const content = (
+                <>
+                  {item.special && "⭐ "}
+                  {item.icon && <span className="mr-1.5">{item.icon}</span>}
+                  {item.label}
+                </>
+              );
+              if (item.external) {
+                return (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={className}
+                  >
+                    {content}
+                  </a>
+                );
+              }
               return (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-5 py-2.5 text-[14px] font-medium transition-colors ${
-                    item.special
-                      ? "text-amber-500 hover:text-amber-400 hover:bg-warm"
-                      : isActive
-                        ? "text-foreground bg-accent-light/30"
-                        : "text-muted hover:text-foreground hover:bg-warm"
-                  }`}
+                  className={className}
                 >
-                  {item.special && "⭐ "}{item.label}
+                  {content}
                 </Link>
               );
             })}

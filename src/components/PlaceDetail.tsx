@@ -80,13 +80,26 @@ export default function PlaceDetail({ place, onClose }: PlaceDetailProps) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2.5">
+        <div className="flex flex-wrap gap-2.5">
           <Link
             href={`/place/${place.id}`}
-            className="flex-1 text-center py-2.5 bg-accent text-white text-[12px] font-semibold rounded-xl hover:bg-accent-dark transition-colors press shadow-sm"
+            className="flex-1 min-w-[120px] text-center py-2.5 bg-accent text-white text-[12px] font-semibold rounded-xl hover:bg-accent-dark transition-colors press shadow-sm"
           >
             View Details
           </Link>
+          {place.website && (
+            <a
+              href={place.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 bg-warm text-foreground text-[12px] font-semibold rounded-xl hover:bg-warm-dark/40 transition-colors press"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+              Website
+            </a>
+          )}
           <a
             href={`https://maps.google.com/?q=${encodeURIComponent(place.address + ", San Francisco, CA")}`}
             target="_blank"

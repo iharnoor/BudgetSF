@@ -2666,7 +2666,6 @@ export const SAMPLE_PLACES: Place[] = [
     description: "Community-focused co-living with curated housemates. Furnished rooms, cleaning, and utilities included.",
     price_tier: 2,
     avg_price: "$1,300-2,000/mo",
-    website: "https://www.tribecoliving.com/",
     tags: ["co-living", "community", "furnished", "utilities-included"],
     lat: 37.7694,
     lng: -122.4462,

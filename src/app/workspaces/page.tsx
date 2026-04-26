@@ -24,9 +24,30 @@ type Workspace = {
   address?: string;
   url?: string;
   tip?: string;
+  favorite?: boolean;
+  referralBonus?: string;
 };
 
+const TANDEM_VIDEO_ID = "tjr_wOYdUrY";
+
 const WORKSPACES: Workspace[] = [
+  // My Favorite
+  {
+    name: "Tandem Space",
+    type: "coworking",
+    neighborhood: "SoMa",
+    description:
+      "My personal favorite coworking space in SF. Great community, fast wifi, private offices, and flex desks. Perfect for founders, remote workers, and small teams.",
+    price: "From $299/mo",
+    wifi: true,
+    outlets: true,
+    hours: "24/7 member access",
+    vibe: "Community-driven, energetic",
+    url: "render:///tandem.space?utm_medium=referral&utm_source=customerIO&utm_campaign=7151b4e1-d8ea-495a-9554-df7a2deccb24",
+    tip: "Use my referral link to get $500 in credit when you sign up.",
+    favorite: true,
+    referralBonus: "$500 credit",
+  },
   // Free coworking
   {
     name: "Founders Cafe",
@@ -458,6 +479,43 @@ export default function WorkspacesPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 pb-16">
+        {/* My Favorite: Tandem Space */}
+        <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50/60 p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <span>⭐</span>
+            <h2 className="text-sm font-semibold text-foreground">My Favorite Workspace</h2>
+          </div>
+          <div className="mb-4">
+            <p className="text-sm font-semibold text-foreground mb-3">
+              My Tour of Tandem Space
+            </p>
+            <div className="relative w-full rounded-xl overflow-hidden bg-black" style={{ paddingBottom: "56.25%" }}>
+              <iframe
+                src={`https://www.youtube.com/embed/${TANDEM_VIDEO_ID}`}
+                title="My Tour of Tandem Space"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <p className="text-sm font-semibold text-foreground">Tandem Space</p>
+              <p className="text-xs text-muted mt-0.5">SoMa · Coworking · From $299/mo · 24/7 access</p>
+              <p className="text-xs text-muted mt-0.5">Community-driven, energetic · Wifi + Outlets</p>
+            </div>
+            <a
+              href="render:///tandem.space?utm_medium=referral&utm_source=customerIO&utm_campaign=7151b4e1-d8ea-495a-9554-df7a2deccb24"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-500 text-white text-xs font-semibold transition-colors"
+            >
+              <span>🎁</span> Get $500 credit
+            </a>
+          </div>
+        </div>
+
         {/* Search + filters */}
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <input
@@ -562,7 +620,7 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-border p-5 hover:shadow-sm transition-shadow">
+    <div className={`bg-white rounded-2xl border p-5 hover:shadow-sm transition-shadow ${workspace.favorite ? "border-amber-300" : "border-border"}`}>
       <div className="flex flex-col sm:flex-row sm:items-start gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
@@ -586,6 +644,11 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
             >
               {typeLabels[workspace.type]}
             </span>
+            {workspace.favorite && (
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-700">
+                ⭐ My Favorite
+              </span>
+            )}
           </div>
 
           <p className="text-xs text-muted mb-2.5">{workspace.description}</p>
@@ -615,10 +678,20 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
           )}
         </div>
 
-        <div className="shrink-0 text-right">
+        <div className="shrink-0 text-right flex flex-col items-end gap-2">
           <span className="text-xs font-medium text-muted italic">
             {workspace.vibe}
           </span>
+          {workspace.referralBonus && workspace.url && (
+            <a
+              href={workspace.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-500 text-white text-[11px] font-semibold transition-colors"
+            >
+              🎁 {workspace.referralBonus}
+            </a>
+          )}
         </div>
       </div>
     </div>

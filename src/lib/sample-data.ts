@@ -2633,6 +2633,25 @@ export const SAMPLE_PLACES: Place[] = [
     created_at: "2024-04-01T00:00:00Z",
     updated_at: "2024-04-01T00:00:00Z",
   },
+  {
+    id: "corgi-cafe",
+    name: "CorgiCafe",
+    category: "workspace",
+    subcategory: "Cafe",
+    address: "9 Claude Ln",
+    neighborhood: "Financial District",
+    description: "24/7 cafe tucked into Claude Lane. Great spot for late-night work sessions and early-morning grinds.",
+    price_tier: 1,
+    tags: ["24-7", "cafe", "late-night", "claude-lane"],
+    lat: 37.7899,
+    lng: -122.4043,
+    status: "approved",
+    vote_count: 1,
+    votes_needed: 5,
+    submitted_by: "community",
+    created_at: "2026-05-07T00:00:00Z",
+    updated_at: "2026-05-07T00:00:00Z",
+  },
 
   // === HOUSING ===
   {

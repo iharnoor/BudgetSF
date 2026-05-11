@@ -15,12 +15,6 @@ type NavItem = {
 const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Map" },
   { href: "/trip", label: "Plan a Trip" },
-  {
-    href: "https://sf.offpeak.workers.dev/",
-    label: "Offpeak",
-    external: true,
-    icon: "✈️",
-  },
   { href: "/spots", label: "Spots" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },

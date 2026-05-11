@@ -77,6 +77,8 @@ const venues = [
   { name: "YMCA - Embarcadero", slug: "ymca-embarcadero", category: "fitness", subcategory: "full gym", neighborhood: "SoMa", address: "169 Steuart St", price_tier: 2, avg_price: "~$45/mo", tags: ["pool", "sliding_scale", "classes"], is_chain: false, description: "Full gym with pool, sliding-scale pricing available", lat: 37.7921, lng: -122.3923 },
   { name: "SF Rec & Park Centers", slug: "sf-rec-gyms", category: "fitness", subcategory: "public gym", neighborhood: "SF-wide", address: "Multiple city rec centers", price_tier: 1, avg_price: "Free-$5", tags: ["public", "free", "low_cost"], is_chain: false, description: "City-run rec centers with fitness rooms, free or very low-cost", lat: 37.7694, lng: -122.4262 },
   { name: "Marina Green Fitness Court", slug: "marina-fitness", category: "fitness", subcategory: "outdoor", neighborhood: "Marina", address: "Marina Blvd & Scott St", price_tier: 1, avg_price: "Free", tags: ["outdoor", "free", "bay_views", "bodyweight"], is_chain: false, description: "Free outdoor fitness court with pull-up bars, stations, and bay views", lat: 37.8065, lng: -122.4382 },
+  // === SERVICES ===
+  { name: "Jenny's Hair Salon", slug: "jennys-hair-salon-chinatown", category: "services", subcategory: "barber", neighborhood: "Chinatown", address: "878 Sacramento St", price_tier: 1, avg_price: "$13", tags: ["haircut", "cheap", "cash_friendly", "local_icon"], is_chain: false, description: "$13 haircuts in Chinatown — no-frills, fast, walk-ins", lat: 37.7927, lng: -122.4086 },
 ];
 
 /**

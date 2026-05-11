@@ -962,6 +962,28 @@ export const SAMPLE_PLACES: Place[] = [
     updated_at: "2024-02-06T00:00:00Z",
   },
 
+  // === SERVICES ===
+  {
+    id: "jennys-hair-salon-chinatown",
+    name: "Jenny's Hair Salon",
+    category: "services",
+    subcategory: "Barber",
+    address: "878 Sacramento St",
+    neighborhood: "Chinatown",
+    description: "$13 haircuts in Chinatown — no-frills, fast, walk-ins welcome. One of the cheapest cuts in SF.",
+    price_tier: 1,
+    avg_price: 13,
+    tags: ["haircut", "cheap", "cash-friendly", "local-icon", "walk-ins"],
+    lat: 37.7927,
+    lng: -122.4086,
+    status: "approved",
+    vote_count: 1,
+    votes_needed: 5,
+    submitted_by: "harnoor",
+    created_at: "2026-05-11T00:00:00Z",
+    updated_at: "2026-05-11T00:00:00Z",
+  },
+
   // === COFFEE ===
   {
     id: "philz-coffee",

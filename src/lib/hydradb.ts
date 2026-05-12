@@ -16,7 +16,11 @@ const CATEGORY_KEYWORDS: Record<string, string[]> = {
 function detectCategory(query: string): string | null {
   const q = query.toLowerCase();
   for (const [category, keywords] of Object.entries(CATEGORY_KEYWORDS)) {
-    if (keywords.some((kw) => q.includes(kw))) return category;
+    for (const kw of keywords) {
+      // Match whole word/phrase, not a substring — otherwise "barber" → "bar".
+      const re = new RegExp(`\\b${kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i");
+      if (re.test(q)) return category;
+    }
   }
   return null;
 }

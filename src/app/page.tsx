@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Category, Place } from "@/lib/types";
 import { SAMPLE_PLACES } from "@/lib/sample-data";
 import CategoryFilter from "@/components/CategoryFilter";
+import PriceFilterPills, { PriceFilter } from "@/components/PriceFilter";
 import PlaceCard from "@/components/PlaceCard";
 import PlaceDetail from "@/components/PlaceDetail";
 import Header from "@/components/Header";
@@ -37,11 +38,27 @@ function formatDistance(km: number): string {
   return `${miles.toFixed(1)} mi`;
 }
 
+function matchesPrice(place: Place, filter: PriceFilter): boolean {
+  if (filter === "all") return true;
+  if (filter === "free") return place.tags.includes("free");
+  if (filter === "under_10") {
+    if (typeof place.avg_price === "number") return place.avg_price <= 10;
+    return place.price_tier === 1;
+  }
+  if (filter === "under_20") {
+    if (typeof place.avg_price === "number") return place.avg_price <= 20;
+    return place.price_tier <= 2;
+  }
+  return true;
+}
+
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     "all"
   );
+  const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
   const [search, setSearch] = useState("");
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -65,7 +82,8 @@ export default function HomePage() {
     const filtered = source.filter((place) => {
       const matchesCategory =
         selectedCategory === "all" || place.category === selectedCategory;
-      if (hydraResults) return matchesCategory;
+      const matchesPriceFilter = matchesPrice(place, priceFilter);
+      if (hydraResults) return matchesCategory && matchesPriceFilter;
       const matchesSearch =
         search === "" ||
         place.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -73,7 +91,7 @@ export default function HomePage() {
         place.tags.some((t) =>
           t.toLowerCase().includes(search.toLowerCase())
         );
-      return matchesCategory && matchesSearch;
+      return matchesCategory && matchesPriceFilter && matchesSearch;
     });
     if (userLocation) {
       filtered.sort(
@@ -83,7 +101,14 @@ export default function HomePage() {
       );
     }
     return filtered;
-  }, [approvedPlaces, hydraResults, selectedCategory, search, userLocation]);
+  }, [
+    approvedPlaces,
+    hydraResults,
+    selectedCategory,
+    priceFilter,
+    search,
+    userLocation,
+  ]);
 
   const distanceMap = useMemo(() => {
     if (!userLocation) return null;
@@ -95,17 +120,23 @@ export default function HomePage() {
     return map;
   }, [filteredPlaces, userLocation]);
 
+  const totalCount = approvedPlaces.length;
+  const isSemanticSearchActive = search.trim().length >= 3;
+
   const handleSearch = useCallback(async (query: string) => {
     setSearch(query);
     if (query.trim().length < 3) {
       setHydraResults(null);
+      setSearchError(null);
       return;
     }
     setSearchLoading(true);
+    setSearchError(null);
     try {
       const res = await fetch(
         `/api/search?q=${encodeURIComponent(query.trim())}`
       );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       if (data.results && data.results.length > 0) {
         const places: Place[] = data.results.map(
@@ -139,6 +170,7 @@ export default function HomePage() {
       }
     } catch {
       setHydraResults(null);
+      setSearchError("Search hiccupped — showing local results.");
     } finally {
       setSearchLoading(false);
     }
@@ -167,6 +199,47 @@ export default function HomePage() {
     );
   }, [userLocation]);
 
+  const clearAllFilters = useCallback(() => {
+    setSelectedCategory("all");
+    setPriceFilter("all");
+    setSearch("");
+    setHydraResults(null);
+    setSearchError(null);
+  }, []);
+
+  const hasActiveFilters =
+    selectedCategory !== "all" ||
+    priceFilter !== "all" ||
+    search.trim().length > 0;
+
+  const emptyState = (
+    <div className="px-5 py-10 text-center">
+      <div className="text-4xl mb-3">🌁</div>
+      <p className="text-[14px] font-semibold text-foreground mb-1">
+        No cheap spots match — yet
+      </p>
+      <p className="text-[12px] text-muted mb-5 max-w-[260px] mx-auto">
+        Try clearing filters, or be the first to put one on the map.
+      </p>
+      <div className="flex flex-col gap-2 items-center">
+        {hasActiveFilters && (
+          <button
+            onClick={clearAllFilters}
+            className="text-[12px] font-semibold text-accent hover:underline"
+          >
+            Clear filters
+          </button>
+        )}
+        <Link
+          href="/community"
+          className="text-[12px] font-semibold text-foreground bg-accent-light/60 hover:bg-accent-light border border-accent/20 px-4 py-2 rounded-lg transition-colors"
+        >
+          + Submit a spot
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
     <div className="map-page h-full relative overflow-hidden">
       {/* Top nav bar */}
@@ -185,14 +258,8 @@ export default function HomePage() {
 
       {/* === MAP OVERLAYS === */}
 
-      {/* Top-left: spots count + search */}
+      {/* Top-left: search + filters (count is inlined in search placeholder) */}
       <div className="absolute top-[68px] left-4 z-30 flex flex-col gap-2.5">
-        <div className="glass rounded-xl shadow-lg shadow-black/[0.04] border border-border/60 px-3.5 py-2">
-          <span className="text-[12px] font-semibold text-foreground tracking-wide">
-            {filteredPlaces.length} spots
-          </span>
-        </div>
-
         {/* Search */}
         <div className="relative">
           <svg
@@ -216,7 +283,7 @@ export default function HomePage() {
               setPanelOpen(true);
               setMobileSheet("full");
             }}
-            placeholder="Search spots..."
+            placeholder={`Search ${totalCount} spots…`}
             className="w-[240px] sm:w-[300px] pl-9 pr-9 py-2.5 glass border border-border/60 rounded-xl text-[12px] font-medium placeholder:text-muted/40 shadow-lg shadow-black/[0.04] transition-all"
           />
           {searchLoading && (
@@ -229,7 +296,9 @@ export default function HomePage() {
               onClick={() => {
                 setSearch("");
                 setHydraResults(null);
+                setSearchError(null);
               }}
+              aria-label="Clear search"
               className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground transition-colors"
             >
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,11 +308,27 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* Near Me + Category filter pills */}
+        {/* Semantic search indicator + error notice */}
+        {isSemanticSearchActive && !searchError && (
+          <div className="flex items-center gap-1.5 px-2 text-[10px] font-medium text-accent-dark/70 tracking-wide">
+            <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 2l2.39 7.36H22l-6.19 4.5L18.18 22 12 17.27 5.82 22l2.37-8.14L2 9.36h7.61z" />
+            </svg>
+            <span>Semantic search</span>
+          </div>
+        )}
+        {searchError && (
+          <div className="px-3 py-2 glass border border-pending/40 bg-pending/[0.06] rounded-lg text-[11px] text-pending-dark max-w-[300px]">
+            {searchError}
+          </div>
+        )}
+
+        {/* Near Me pill */}
         <div className="flex items-center gap-2">
           <button
             onClick={handleNearMe}
             disabled={locatingUser}
+            aria-pressed={!!userLocation}
             className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[12px] font-semibold shadow-lg shadow-black/[0.04] border transition-all press ${
               userLocation
                 ? "bg-[#4285f4] text-white border-[#4285f4]"
@@ -252,6 +337,10 @@ export default function HomePage() {
           >
             {locatingUser ? (
               <div className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+            ) : userLocation ? (
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
             ) : (
               <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 2a10 10 0 110 20 10 10 0 010-20z" />
@@ -259,14 +348,21 @@ export default function HomePage() {
                 <path strokeLinecap="round" d="M12 2v3M12 19v3M2 12h3M19 12h3" />
               </svg>
             )}
-            {userLocation ? "Near Me" : "Near Me"}
+            {userLocation ? "Clear location" : "Near Me"}
           </button>
         </div>
+
+        {/* Category filter */}
         <div className="max-w-[340px]">
           <CategoryFilter
             selected={selectedCategory}
             onChange={setSelectedCategory}
           />
+        </div>
+
+        {/* Price filter */}
+        <div className="max-w-[340px]">
+          <PriceFilterPills selected={priceFilter} onChange={setPriceFilter} />
         </div>
       </div>
 
@@ -278,16 +374,7 @@ export default function HomePage() {
       {/* Bottom-left: chat bubble */}
       <ChatBubble onPlaceClick={handlePlaceClick} />
 
-      {/* Bottom-right: Add a spot + list toggle */}
-      <Link
-        href="/community"
-        className="absolute bottom-6 right-[128px] sm:right-[140px] z-30 glass px-4 py-3 rounded-2xl shadow-lg shadow-black/[0.06] border border-border/60 hover:shadow-xl transition-all flex items-center gap-2 text-[13px] font-semibold text-foreground press"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
-        </svg>
-        <span className="hidden sm:inline">Add / Vote</span>
-      </Link>
+      {/* Bottom-right: single primary FAB — sidebar toggle */}
       <button
         onClick={() => {
           setPanelOpen(!panelOpen);
@@ -332,21 +419,34 @@ export default function HomePage() {
         }`}
       >
         <div className="h-full flex flex-col">
-          <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between">
-            <h2
-              className="text-[15px] text-foreground"
-              style={{ fontFamily: "var(--font-dm-serif)" }}
-            >
-              {filteredPlaces.length} Spots
+          <div className="px-5 py-4 border-b border-border/60 flex items-center justify-between gap-2">
+            <h2 className="text-[14px] font-semibold text-foreground tracking-tight">
+              {filteredPlaces.length}{" "}
+              <span className="text-muted font-medium">
+                of {totalCount} spots
+              </span>
             </h2>
-            <button
-              onClick={() => setPanelOpen(false)}
-              className="text-muted hover:text-foreground p-1.5 rounded-lg hover:bg-warm transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+            <div className="flex items-center gap-1">
+              <Link
+                href="/community"
+                aria-label="Add a spot"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-foreground bg-accent-light/60 hover:bg-accent-light border border-accent/20 transition-colors press"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                </svg>
+                Add
+              </Link>
+              <button
+                onClick={() => setPanelOpen(false)}
+                aria-label="Close panel"
+                className="text-muted hover:text-foreground p-1.5 rounded-lg hover:bg-warm transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
           </div>
 
           {/* Selected detail */}
@@ -360,18 +460,22 @@ export default function HomePage() {
           )}
 
           <div className="flex-1 px-5 pb-5 sidebar-scroll">
-            <div className="space-y-2.5 pt-2">
-              {filteredPlaces.map((place) => (
-                <PlaceCard
-                  key={place.id}
-                  place={place}
-                  isSelected={selectedPlace?.id === place.id}
-                  onClick={() => handlePlaceClick(place)}
-                  distance={distanceMap?.get(place.id)}
-                  compact
-                />
-              ))}
-            </div>
+            {filteredPlaces.length === 0 ? (
+              emptyState
+            ) : (
+              <div className="space-y-2.5 pt-2">
+                {filteredPlaces.map((place) => (
+                  <PlaceCard
+                    key={place.id}
+                    place={place}
+                    isSelected={selectedPlace?.id === place.id}
+                    onClick={() => handlePlaceClick(place)}
+                    distance={distanceMap?.get(place.id)}
+                    compact
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -393,20 +497,30 @@ export default function HomePage() {
               s === "peek" ? "half" : s === "half" ? "full" : "peek"
             )
           }
+          aria-label="Toggle sheet"
         >
           <div className="w-10 h-1 bg-warm-dark/60 rounded-full" />
         </button>
 
         <div className="flex flex-col h-full">
           {mobileSheet === "peek" && (
-            <div className="px-5 pb-4 text-center">
-              <span
-                className="text-[13px] font-medium text-foreground"
-                style={{ fontFamily: "var(--font-dm-serif)" }}
+            <div className="px-5 pb-4 flex items-center justify-between gap-3">
+              <div>
+                <span className="text-[13px] font-semibold text-foreground">
+                  {filteredPlaces.length} spots
+                </span>
+                <p className="text-[11px] text-muted mt-0.5">Swipe up to explore</p>
+              </div>
+              <Link
+                href="/community"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold text-foreground bg-accent-light/60 border border-accent/20"
               >
-                {filteredPlaces.length} spots found
-              </span>
-              <p className="text-[11px] text-muted mt-0.5">Swipe up to explore</p>
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                </svg>
+                Add
+              </Link>
             </div>
           )}
 
@@ -421,18 +535,22 @@ export default function HomePage() {
 
           {mobileSheet !== "peek" && (
             <div className="flex-1 px-5 pb-24 sidebar-scroll overflow-y-auto">
-              <div className="space-y-2.5">
-                {filteredPlaces.map((place) => (
-                  <PlaceCard
-                    key={place.id}
-                    place={place}
-                    isSelected={selectedPlace?.id === place.id}
-                    onClick={() => handlePlaceClick(place)}
-                    distance={distanceMap?.get(place.id)}
-                    compact
-                  />
-                ))}
-              </div>
+              {filteredPlaces.length === 0 ? (
+                emptyState
+              ) : (
+                <div className="space-y-2.5">
+                  {filteredPlaces.map((place) => (
+                    <PlaceCard
+                      key={place.id}
+                      place={place}
+                      isSelected={selectedPlace?.id === place.id}
+                      onClick={() => handlePlaceClick(place)}
+                      distance={distanceMap?.get(place.id)}
+                      compact
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

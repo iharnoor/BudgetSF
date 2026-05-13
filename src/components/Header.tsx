@@ -23,8 +23,9 @@ const GUIDES: NavItem[] = [
   { href: "/free", label: "Free Things" },
   { href: "/diet", label: "Budget Diet" },
   { href: "/student", label: "Student" },
-  { href: "/picks", label: "My Picks", special: true },
 ];
+
+const PICKS: NavItem = { href: "/picks", label: "My Picks", special: true };
 
 const RIGHT_NAV: NavItem[] = [{ href: "/about", label: "About" }];
 
@@ -162,6 +163,25 @@ export default function Header() {
             )}
           </div>
 
+          {(() => {
+            const active = isItemActive(pathname, PICKS.href);
+            return (
+              <Link
+                href={PICKS.href}
+                className={`relative px-3.5 py-1.5 text-[13px] font-medium tracking-wide transition-colors ${
+                  active
+                    ? "text-amber-500"
+                    : "text-amber-500/90 hover:text-amber-400"
+                }`}
+              >
+                <span aria-hidden="true">⭐</span> {PICKS.label}
+                {active && (
+                  <span className="absolute bottom-0 left-3.5 right-3.5 h-[2px] rounded-full bg-amber-500" />
+                )}
+              </Link>
+            );
+          })()}
+
           {RIGHT_NAV.map((item) => {
             const active = isItemActive(pathname, item.href);
             return (
@@ -241,6 +261,13 @@ export default function Header() {
                 </Link>
               );
             })}
+            <Link
+              href={PICKS.href}
+              onClick={() => setMobileMenuOpen(false)}
+              className="block px-5 py-2.5 text-[14px] font-medium text-amber-500 hover:text-amber-400 hover:bg-warm transition-colors"
+            >
+              ⭐ {PICKS.label}
+            </Link>
             <div className="px-5 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted/60">
               Guides
             </div>

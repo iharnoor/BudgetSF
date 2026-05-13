@@ -217,8 +217,8 @@ export default function HomePage() {
               setPanelOpen(true);
               setMobileSheet("full");
             }}
-            placeholder="Search spots..."
-            className="w-[240px] sm:w-[300px] pl-9 pr-9 py-2.5 glass border border-border/60 rounded-xl text-[12px] font-medium placeholder:text-muted/40 shadow-lg shadow-black/[0.04] transition-all"
+            placeholder="Ask: cheap tacos, free coworking, gym under $40..."
+            className="w-[260px] sm:w-[340px] pl-9 pr-9 py-2.5 glass border border-border/60 rounded-xl text-[12px] font-medium placeholder:text-muted/40 shadow-lg shadow-black/[0.04] transition-all"
           />
           {searchLoading && (
             <div className="absolute right-3 top-1/2 -translate-y-1/2">

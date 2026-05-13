@@ -237,10 +237,10 @@ export default function ChatBubble({
       {/* Floating bubble */}
       <button
         onClick={() => setOpen(!open)}
-        className={`absolute bottom-6 left-4 z-40 w-12 h-12 rounded-full shadow-lg transition-all press flex items-center justify-center ${
+        className={`absolute bottom-6 left-4 z-40 rounded-full shadow-lg transition-all press flex items-center gap-2 ${
           open
-            ? "bg-foreground text-white"
-            : "bg-accent text-white hover:shadow-xl hover:scale-105"
+            ? "bg-foreground text-white w-12 h-12 justify-center"
+            : "bg-accent text-white hover:shadow-xl hover:scale-105 pl-3 pr-4 h-12"
         }`}
       >
         {open ? (
@@ -258,19 +258,24 @@ export default function ChatBubble({
             />
           </svg>
         ) : (
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-            />
-          </svg>
+          <>
+            <svg
+              className="w-5 h-5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+              />
+            </svg>
+            <span className="text-[12px] font-semibold tracking-wide whitespace-nowrap">
+              Ask AI
+            </span>
+          </>
         )}
       </button>
     </>

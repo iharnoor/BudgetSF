@@ -24,6 +24,11 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/student", label: "Student" },
   { href: "/picks", label: "My Picks", special: true },
   { href: "/about", label: "About Me" },
+  {
+    href: "https://singhinusa.substack.com/subscribe",
+    label: "Newsletter",
+    external: true,
+  },
 ];
 
 export default function Header() {

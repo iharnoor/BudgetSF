@@ -10,6 +10,7 @@ import PlaceDetail from "@/components/PlaceDetail";
 import Header from "@/components/Header";
 import MapLegend from "@/components/MapLegend";
 import ChatBubble from "@/components/ChatBubble";
+import NewsletterSignup from "@/components/NewsletterSignup";
 import Link from "next/link";
 
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
@@ -371,6 +372,7 @@ export default function HomePage() {
                   compact
                 />
               ))}
+              <NewsletterSignup className="mt-4" />
             </div>
           </div>
         </div>
@@ -432,6 +434,7 @@ export default function HomePage() {
                     compact
                   />
                 ))}
+                <NewsletterSignup className="mt-4" />
               </div>
             </div>
           )}

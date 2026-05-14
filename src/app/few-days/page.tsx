@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 type Pick = {
   name: string;
@@ -16,6 +17,13 @@ type DayPlan = {
   route: string;
   stops: string[];
   note: string;
+};
+
+type VisualPick = {
+  title: string;
+  caption: string;
+  src: string;
+  alt: string;
 };
 
 const ALREADY_DONE = [
@@ -199,6 +207,27 @@ const DAY_PLANS: DayPlan[] = [
   },
 ];
 
+const VISUAL_PICKS: VisualPick[] = [
+  {
+    title: "Transit day",
+    caption: "Use BART or Caltrain when the Bay plan stretches past SF.",
+    src: "/TrainShot.jpg",
+    alt: "Working from a train on a Silicon Valley day trip",
+  },
+  {
+    title: "Founder scene",
+    caption: "Leave one night open for a Luma event, hackathon, or meetup.",
+    src: "/hackathon.jpg",
+    alt: "Founder and developer meetup in San Francisco",
+  },
+  {
+    title: "Weather call",
+    caption: "Do the ferry and Marin ideas when the sky is actually clear.",
+    src: "/goldengate.jpg",
+    alt: "Clear day by the Golden Gate Bridge",
+  },
+];
+
 export default function FewDaysPage() {
   return (
     <div className="min-h-screen bg-background">
@@ -223,32 +252,78 @@ export default function FewDaysPage() {
 
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-accent/[0.04] via-transparent to-warm/40" />
-        <div className="relative max-w-4xl mx-auto px-4 pt-10 pb-8 text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4 slide-up">
-            <span>🗓️</span> For a second SF visit
+        <div className="relative max-w-4xl mx-auto px-4 pt-10 pb-8">
+          <div className="grid grid-cols-1 md:grid-cols-[1.05fr,0.95fr] gap-6 items-center">
+            <div className="text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4 slide-up">
+                <span>🗓️</span> For a second SF visit
+              </div>
+              <h1
+                className="text-3xl sm:text-4xl text-foreground mb-3 slide-up"
+                style={{
+                  fontFamily: "var(--font-dm-serif)",
+                  animationDelay: "0.05s",
+                  animationFillMode: "both",
+                }}
+              >
+                What to Do in SF for a Few Days
+              </h1>
+              <p
+                className="text-sm sm:text-base text-muted max-w-2xl mx-auto md:mx-0 leading-relaxed slide-up"
+                style={{ animationDelay: "0.1s", animationFillMode: "both" }}
+              >
+                A repeat-visitor guide for when you have already done the bridge,
+                Alcatraz, Pier 39, Chinatown, Japantown, the Presidio, Stanford,
+                Apple Park, and the obvious mall/campus loop.
+              </p>
+            </div>
+            <div
+              className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-border bg-white shadow-lg shadow-black/[0.04] slide-up"
+              style={{ animationDelay: "0.12s", animationFillMode: "both" }}
+            >
+              <Image
+                src="/TrainShot.jpg"
+                alt="Working from a train on a Silicon Valley day trip"
+                fill
+                priority
+                sizes="(min-width: 768px) 380px, 100vw"
+                className="object-cover"
+              />
+            </div>
           </div>
-          <h1
-            className="text-3xl sm:text-4xl text-foreground mb-3 slide-up"
-            style={{
-              fontFamily: "var(--font-dm-serif)",
-              animationDelay: "0.05s",
-              animationFillMode: "both",
-            }}
-          >
-            What to Do in SF for a Few Days
-          </h1>
-          <p
-            className="text-sm sm:text-base text-muted max-w-2xl mx-auto leading-relaxed slide-up"
-            style={{ animationDelay: "0.1s", animationFillMode: "both" }}
-          >
-            A repeat-visitor guide for when you have already done the bridge,
-            Alcatraz, Pier 39, Chinatown, Japantown, the Presidio, Stanford,
-            Apple Park, and the obvious mall/campus loop.
-          </p>
         </div>
       </div>
 
       <main className="max-w-4xl mx-auto px-4 pb-16">
+        <section className="mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {VISUAL_PICKS.map((item) => (
+              <div
+                key={item.title}
+                className="overflow-hidden rounded-2xl border border-border bg-white"
+              >
+                <div className="relative aspect-[16/10]">
+                  <Image
+                    src={item.src}
+                    alt={item.alt}
+                    fill
+                    sizes="(min-width: 640px) 270px, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-4">
+                  <p className="text-xs font-semibold text-foreground mb-1">
+                    {item.title}
+                  </p>
+                  <p className="text-[11px] text-muted leading-relaxed">
+                    {item.caption}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="mb-12">
           <SectionHeader
             emoji="✅"

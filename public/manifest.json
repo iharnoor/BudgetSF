@@ -1,0 +1,26 @@
+{
+  "name": "BudgetSF — Cheap Spots in SF",
+  "short_name": "BudgetSF",
+  "description": "Community-curated budget spots in San Francisco. Cheap food, gyms, work spots, housing, and more.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fdfbf7",
+  "theme_color": "#e63946",
+  "categories": ["lifestyle", "travel", "food"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

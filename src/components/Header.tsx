@@ -85,6 +85,17 @@ export default function Header() {
           >
             by HydraDB
           </a>
+          <a
+            href="https://singhinusa.substack.com/subscribe"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden sm:inline-flex items-center gap-1 text-[12px] font-semibold text-[#ff6719] hover:opacity-80 tracking-wide transition-opacity"
+          >
+            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+            </svg>
+            Newsletter
+          </a>
         </div>
 
         {/* Desktop nav */}
@@ -316,6 +327,18 @@ export default function Header() {
               >
                 + Add a spot
               </Link>
+              <a
+                href="https://singhinusa.substack.com/subscribe"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2 px-5 py-2.5 text-[14px] font-semibold text-[#ff6719] hover:bg-warm transition-colors"
+              >
+                <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z" />
+                </svg>
+                Newsletter
+              </a>
             </div>
           </nav>
         </>

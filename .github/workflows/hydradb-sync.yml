@@ -1,0 +1,25 @@
+name: Sync map data to HydraDB
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/lib/sample-data.ts"
+      - "src/lib/hydradb.ts"
+      - "scripts/ingest-venues-hydradb.ts"
+  workflow_dispatch:
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - run: npm run ingest:hydradb
+        env:
+          HYDRADB_API_KEY: ${{ secrets.HYDRADB_API_KEY }}
+          HYDRADB_TENANT_ID: ${{ secrets.HYDRADB_TENANT_ID }}

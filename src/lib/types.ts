@@ -48,12 +48,12 @@ export const CATEGORIES: { value: Category; label: string; icon: string }[] = [
   { value: "workspace", label: "Work Spots", icon: "💻" },
   { value: "coffee", label: "Coffee", icon: "☕" },
   { value: "startup", label: "Accelerators", icon: "🚀" },
+  { value: "services", label: "Services", icon: "✂️" },
   { value: "vc", label: "VCs", icon: "💰" },
   { value: "gym", label: "Gym & Fitness", icon: "💪" },
   { value: "bars", label: "Bars & Drinks", icon: "🍺" },
   { value: "grocery", label: "Grocery", icon: "🛒" },
   { value: "entertainment", label: "Entertainment", icon: "🎭" },
-  { value: "services", label: "Services", icon: "✂️" },
   { value: "other", label: "Other", icon: "📍" },
 ];
 

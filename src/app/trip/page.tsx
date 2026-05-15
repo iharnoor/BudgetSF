@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 type Airport = {
   code: string;
@@ -167,6 +168,29 @@ type TripTip = {
   badge?: string;
 };
 
+type RepeatDay = {
+  title: string;
+  route: string;
+  stops: string[];
+  note: string;
+};
+
+type RepeatPick = {
+  name: string;
+  area: string;
+  cost: string;
+  why: string;
+  move: string;
+  url?: string;
+};
+
+type VisualPick = {
+  title: string;
+  caption: string;
+  src: string;
+  alt: string;
+};
+
 const BEFORE_YOU_LAND: TripTip[] = [
   {
     icon: "📱",
@@ -293,6 +317,108 @@ const STAY_CHEAP = [
     price: "$80-150/night",
     why: "Quiet residential neighborhoods west of the city. Cheaper per night, requires more Muni time but feels local.",
     url: "https://www.airbnb.com",
+  },
+];
+
+const REPEAT_DAYS: RepeatDay[] = [
+  {
+    title: "Day 1 - Local SF",
+    route: "Mission -> Castro -> Twin Peaks",
+    stops: [
+      "24th St BART, Balmy Alley, and a Mission burrito",
+      "Dolores Park if the weather is good",
+      "Castro walk, then Twin Peaks near sunset or after dark",
+    ],
+    note: "Best if you have already done the waterfront, bridge, Presidio, and Painted Ladies.",
+  },
+  {
+    title: "Day 2 - East Bay",
+    route: "Berkeley -> Oakland Temescal",
+    stops: [
+      "UC Berkeley campus and Telegraph",
+      "Cheese Board or Berkeley Bowl",
+      "Temescal food crawl around Telegraph Ave",
+    ],
+    note: "Use BART all day. It feels like a different metro area without needing a car.",
+  },
+  {
+    title: "Day 3 - Water or South Bay",
+    route: "Pick based on weather",
+    stops: [
+      "Sunny: Ferry Building market, Sausalito ferry, or Angel Island",
+      "Foggy: Computer History Museum, Mountain View Castro Street, San Jose Japantown",
+      "Night: Exploratorium After Dark if it is Thursday",
+    ],
+    note: "Do not force a Marin view day through fog. Swap with the museum plan when the weather is bad.",
+  },
+];
+
+const REPEAT_PICKS: RepeatPick[] = [
+  {
+    name: "Mission burrito + murals loop",
+    area: "Mission",
+    cost: "$12-18",
+    why: "La Taqueria, El Farolito, Balmy Alley, Clarion Alley, and Dolores Park make this the highest-density SF afternoon.",
+    move: "Start at 24th St BART, eat, walk north through murals, finish at Dolores Park.",
+  },
+  {
+    name: "Crosstown Trail segment",
+    area: "Glen Park to Golden Gate Park",
+    cost: "Free",
+    why: "A local-feeling hike through stairways, hills, neighborhoods, and parks. Do one 4-7 mile segment instead of the full 17 miles.",
+    move: "Best easy segment: Glen Park BART to Inner Sunset, then N Judah back.",
+    url: "https://crosstowntrail.org",
+  },
+  {
+    name: "Berkeley + Oakland food day",
+    area: "East Bay",
+    cost: "$15-35",
+    why: "Berkeley campus, Telegraph, Berkeley Bowl, and Temescal food give you a very different Bay Area day from SF.",
+    move: "BART to Downtown Berkeley, walk south, then BART/rideshare to Temescal.",
+  },
+  {
+    name: "Sausalito or Angel Island",
+    area: "Marin / Bay",
+    cost: "Ferry + food",
+    why: "The ferry ride is the point: skyline, Alcatraz, Angel Island, bridge views, then a small waterfront town or a real hike.",
+    move: "Check ferry schedules first; bring layers and water.",
+    url: "https://www.parks.ca.gov/angelisland/",
+  },
+  {
+    name: "Computer History Museum + Castro Street",
+    area: "Mountain View",
+    cost: "Paid museum + food",
+    why: "Best South Bay tech-history stop after you have already done Stanford and Apple Park.",
+    move: "Caltrain to Mountain View, museum first, dinner on Castro Street.",
+    url: "https://computerhistory.org/",
+  },
+  {
+    name: "San Jose Japantown + San Pedro Square",
+    area: "San Jose",
+    cost: "$10-35",
+    why: "If you want a South Bay day that is not mall/campus-coded, this is more interesting than repeating Valley Fair or Santana Row.",
+    move: "Caltrain to San Jose Diridon, light rail or rideshare to Japantown, finish downtown.",
+  },
+];
+
+const TRIP_VISUALS: VisualPick[] = [
+  {
+    title: "Transit day",
+    caption: "Use BART or Caltrain when the Bay plan stretches past SF.",
+    src: "/TrainShot.jpg",
+    alt: "Working from a train on a Silicon Valley day trip",
+  },
+  {
+    title: "Founder scene",
+    caption: "Leave one night open for a Luma event, hackathon, or meetup.",
+    src: "/hackathon.jpg",
+    alt: "Founder and developer meetup in San Francisco",
+  },
+  {
+    title: "Weather call",
+    caption: "Do the ferry and Marin ideas when the sky is actually clear.",
+    src: "/goldengate.jpg",
+    alt: "Clear day by the Golden Gate Bridge",
   },
 ];
 
@@ -716,6 +842,8 @@ export default function TripPage() {
           </div>
         </section>
 
+        <RepeatVisitorSection />
+
         {/* Deeper dives */}
         <section className="mb-12">
           <SectionHeader
@@ -821,6 +949,238 @@ export default function TripPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function RepeatVisitorSection() {
+  return (
+    <section className="mb-12">
+      <SectionHeader
+        emoji="🗓️"
+        title="Already Done the Obvious Stuff?"
+        subtitle="For a second SF visit after Alcatraz, the bridge, Pier 39, Chinatown, Japantown, Stanford, Apple Park, and the mall/campus loop"
+      />
+
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        {TRIP_VISUALS.map((item) => (
+          <div
+            key={item.title}
+            className="overflow-hidden rounded-2xl border border-border bg-white"
+          >
+            <div className="relative aspect-[16/10]">
+              <Image
+                src={item.src}
+                alt={item.alt}
+                fill
+                sizes="(min-width: 640px) 270px, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="p-4">
+              <p className="text-xs font-semibold text-foreground mb-1">
+                {item.title}
+              </p>
+              <p className="text-[11px] text-muted leading-relaxed">
+                {item.caption}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <RouteSketch />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        {REPEAT_DAYS.map((day) => (
+          <div
+            key={day.title}
+            className="bg-white rounded-2xl border border-border p-5"
+          >
+            <p
+              className="text-lg text-foreground mb-1"
+              style={{ fontFamily: "var(--font-dm-serif)" }}
+            >
+              {day.title}
+            </p>
+            <p className="text-[11px] font-semibold text-accent-dark mb-4">
+              {day.route}
+            </p>
+            <ul className="space-y-2 mb-4">
+              {day.stops.map((stop) => (
+                <li
+                  key={stop}
+                  className="text-xs text-muted leading-relaxed pl-4 relative"
+                >
+                  <span className="absolute left-0 top-1.5 w-1.5 h-1.5 rounded-full bg-accent" />
+                  {stop}
+                </li>
+              ))}
+            </ul>
+            <p className="text-[11px] text-muted/80 leading-relaxed border-t border-border pt-3">
+              {day.note}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {REPEAT_PICKS.map((pick) => (
+          <article
+            key={pick.name}
+            className="bg-white rounded-2xl border border-border p-5 card-hover"
+          >
+            <div className="flex items-start justify-between gap-3 mb-3">
+              <div>
+                <h3
+                  className="text-lg text-foreground leading-tight"
+                  style={{ fontFamily: "var(--font-dm-serif)" }}
+                >
+                  {pick.name}
+                </h3>
+                <p className="text-[11px] text-muted mt-1">{pick.area}</p>
+              </div>
+              <span className="shrink-0 px-2.5 py-1 rounded-full bg-accent-light text-accent-dark text-[10px] font-semibold">
+                {pick.cost}
+              </span>
+            </div>
+            <p className="text-sm text-foreground leading-relaxed mb-3">
+              {pick.why}
+            </p>
+            <p className="text-xs text-muted leading-relaxed">{pick.move}</p>
+            {pick.url && (
+              <a
+                href={pick.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center text-xs font-medium text-accent hover:underline mt-3"
+              >
+                Check details
+                <span className="ml-1">&rarr;</span>
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RouteSketch() {
+  return (
+    <div className="mb-6 overflow-hidden rounded-2xl border border-border bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-[0.95fr,1.05fr]">
+        <div className="p-5 sm:p-6 flex flex-col justify-center">
+          <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4">
+            <span>🗺️</span> Route shape
+          </div>
+          <p
+            className="text-2xl text-foreground mb-2"
+            style={{ fontFamily: "var(--font-dm-serif)" }}
+          >
+            Don&apos;t stack every day in SF
+          </p>
+          <p className="text-sm text-muted leading-relaxed">
+            Treat the trip like three zones: one dense SF neighborhood day, one
+            East Bay food/campus day, and one weather-dependent water or South
+            Bay tech-history day.
+          </p>
+        </div>
+        <div className="relative min-h-[260px] bg-background border-t md:border-t-0 md:border-l border-border">
+          <svg
+            viewBox="0 0 520 320"
+            role="img"
+            aria-label="Three-day Bay Area route map"
+            className="w-full h-full min-h-[260px]"
+          >
+            <rect width="520" height="320" fill="#fdfbf7" />
+            <path
+              d="M70 92 C145 32 228 48 292 98 C350 143 404 142 462 94"
+              fill="none"
+              stroke="#d5c4a1"
+              strokeWidth="10"
+              strokeLinecap="round"
+            />
+            <path
+              d="M74 226 C148 174 216 178 278 220 C346 266 405 254 456 214"
+              fill="none"
+              stroke="#d5c4a1"
+              strokeWidth="10"
+              strokeLinecap="round"
+            />
+            <path
+              d="M122 162 C190 126 260 132 326 164 C380 190 424 184 462 160"
+              fill="none"
+              stroke="#2d6a4f"
+              strokeWidth="4"
+              strokeDasharray="8 8"
+              strokeLinecap="round"
+            />
+            <RouteNode x={92} y={158} label="SF" detail="Mission + Twin Peaks" />
+            <RouteNode x={258} y={132} label="East Bay" detail="Berkeley + Oakland" />
+            <RouteNode x={432} y={104} label="Marin" detail="Ferry day" />
+            <RouteNode x={414} y={224} label="South Bay" detail="Museum + food" />
+            <path
+              d="M376 182 L398 202"
+              stroke="#2d6a4f"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path
+              d="M380 190 L410 160"
+              stroke="#2d6a4f"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <text
+              x="260"
+              y="292"
+              textAnchor="middle"
+              className="fill-muted"
+              style={{ fontSize: 13, fontWeight: 600 }}
+            >
+              Pick Marin on a clear day. Pick South Bay when the fog wins.
+            </text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RouteNode({
+  x,
+  y,
+  label,
+  detail,
+}: {
+  x: number;
+  y: number;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <g>
+      <circle cx={x} cy={y} r="28" fill="#2d6a4f" />
+      <circle cx={x} cy={y} r="22" fill="#d8f3dc" />
+      <text
+        x={x}
+        y={y - 2}
+        textAnchor="middle"
+        className="fill-accent-dark"
+        style={{ fontSize: 12, fontWeight: 800 }}
+      >
+        {label}
+      </text>
+      <text
+        x={x}
+        y={y + 47}
+        textAnchor="middle"
+        className="fill-muted"
+        style={{ fontSize: 10, fontWeight: 700 }}
+      >
+        {detail}
+      </text>
+    </g>
   );
 }
 

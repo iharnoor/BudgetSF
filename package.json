@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "ingest:hydradb": "tsx scripts/ingest-venues-hydradb.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
@@ -32,6 +33,7 @@
     "eslint-config-next": "16.2.2",
     "happy-dom": "^20.9.0",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5",
     "vitest": "^4.1.6"
   }

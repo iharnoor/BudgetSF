@@ -22,6 +22,7 @@ export default function PlaceCard({
   const priceLabel = formatPrice(place.avg_price);
   const isFree = place.tags.includes("free");
   const priceDisplay = isFree ? "Free" : "$".repeat(place.price_tier);
+  const showSocialProof = place.status === "approved" && place.vote_count > 0;
 
   if (compact) {
     return (
@@ -49,6 +50,7 @@ export default function PlaceCard({
               {place.neighborhood}
               {priceLabel && ` · ${priceLabel}`}
               {distance && ` · ${distance}`}
+              {showSocialProof && ` · ${place.vote_count} locals`}
             </p>
           </div>
           <span className="text-accent font-bold text-[13px] shrink-0 tracking-tight">
@@ -129,6 +131,16 @@ export default function PlaceCard({
             <span className="text-[10px] text-muted whitespace-nowrap font-medium">
               {place.vote_count}/{place.votes_needed}
             </span>
+          </div>
+        )}
+
+        {/* Social proof for approved */}
+        {showSocialProof && (
+          <div className="mt-2.5 flex items-center gap-1.5 text-[10px] text-muted">
+            <svg className="w-3 h-3 text-accent" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+            </svg>
+            <span>Approved by {place.vote_count} locals</span>
           </div>
         )}
       </div>

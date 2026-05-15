@@ -1,29 +1,74 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { SAMPLE_PLACES } from "@/lib/sample-data";
-import { Category, CATEGORIES } from "@/lib/types";
+import { Category, CATEGORIES, Place } from "@/lib/types";
 import PlaceCard from "@/components/PlaceCard";
+
+type SearchHit = { venue: { slug: string }; score: number };
 
 export default function SpotsPage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     "all"
   );
   const [search, setSearch] = useState("");
+  const [semanticHits, setSemanticHits] = useState<SearchHit[] | null>(null);
+  const [searching, setSearching] = useState(false);
+
+  const placesBySlug = useMemo(() => {
+    const map = new Map<string, Place>();
+    for (const p of SAMPLE_PLACES) map.set(p.id, p);
+    return map;
+  }, []);
+
+  // Semantic search via HydraDB (debounced) when query is non-empty.
+  useEffect(() => {
+    const q = search.trim();
+    if (q.length < 2) {
+      setSemanticHits(null);
+      setSearching(false);
+      return;
+    }
+    setSearching(true);
+    const ctrl = new AbortController();
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`, {
+          signal: ctrl.signal,
+        });
+        const data = await res.json();
+        setSemanticHits(Array.isArray(data.results) ? data.results : []);
+      } catch (e) {
+        if ((e as Error).name !== "AbortError") setSemanticHits([]);
+      } finally {
+        setSearching(false);
+      }
+    }, 250);
+    return () => {
+      ctrl.abort();
+      clearTimeout(t);
+    };
+  }, [search]);
 
   const approvedPlaces = useMemo(() => {
+    const hasQuery = search.trim().length >= 2;
+
+    if (hasQuery && semanticHits) {
+      // HydraDB-driven semantic results, hydrated from local data for full Place shape.
+      return semanticHits
+        .map((h) => placesBySlug.get(h.venue.slug))
+        .filter((p): p is Place => !!p && p.status === "approved")
+        .filter(
+          (p) => selectedCategory === "all" || p.category === selectedCategory
+        );
+    }
+
     return SAMPLE_PLACES.filter((p) => {
       if (p.status !== "approved") return false;
-      const matchesCategory =
-        selectedCategory === "all" || p.category === selectedCategory;
-      const matchesSearch =
-        search === "" ||
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        p.neighborhood.toLowerCase().includes(search.toLowerCase());
-      return matchesCategory && matchesSearch;
+      return selectedCategory === "all" || p.category === selectedCategory;
     }).sort((a, b) => b.vote_count - a.vote_count);
-  }, [selectedCategory, search]);
+  }, [selectedCategory, search, semanticHits, placesBySlug]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -109,7 +154,9 @@ export default function SpotsPage() {
         {approvedPlaces.length === 0 && (
           <div className="text-center py-16">
             <p className="text-3xl mb-2">🔍</p>
-            <p className="text-sm text-muted">No spots found</p>
+            <p className="text-sm text-muted">
+              {searching ? "Searching..." : "No spots found"}
+            </p>
           </div>
         )}
       </div>

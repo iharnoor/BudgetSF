@@ -324,6 +324,8 @@ export default function FewDaysPage() {
           </div>
         </section>
 
+        <RouteSketch />
+
         <section className="mb-12">
           <SectionHeader
             emoji="✅"
@@ -476,6 +478,125 @@ function PickSection({
         ))}
       </div>
     </section>
+  );
+}
+
+function RouteSketch() {
+  return (
+    <section className="mb-12 overflow-hidden rounded-2xl border border-border bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-[0.95fr,1.05fr]">
+        <div className="p-5 sm:p-6 flex flex-col justify-center">
+          <div className="inline-flex w-fit items-center gap-2 px-3 py-1.5 rounded-full bg-accent-light text-accent-dark text-xs font-medium mb-4">
+            <span>🗺️</span> Route shape
+          </div>
+          <p
+            className="text-2xl text-foreground mb-2"
+            style={{ fontFamily: "var(--font-dm-serif)" }}
+          >
+            Don&apos;t stack every day in SF
+          </p>
+          <p className="text-sm text-muted leading-relaxed">
+            Treat the trip like three zones: one dense SF neighborhood day, one
+            East Bay food/campus day, and one weather-dependent water or South
+            Bay tech-history day.
+          </p>
+        </div>
+        <div className="relative min-h-[260px] bg-background border-t md:border-t-0 md:border-l border-border">
+          <svg
+            viewBox="0 0 520 320"
+            role="img"
+            aria-label="Three-day Bay Area route map"
+            className="w-full h-full min-h-[260px]"
+          >
+            <rect width="520" height="320" fill="#fdfbf7" />
+            <path
+              d="M70 92 C145 32 228 48 292 98 C350 143 404 142 462 94"
+              fill="none"
+              stroke="#d5c4a1"
+              strokeWidth="10"
+              strokeLinecap="round"
+            />
+            <path
+              d="M74 226 C148 174 216 178 278 220 C346 266 405 254 456 214"
+              fill="none"
+              stroke="#d5c4a1"
+              strokeWidth="10"
+              strokeLinecap="round"
+            />
+            <path
+              d="M122 162 C190 126 260 132 326 164 C380 190 424 184 462 160"
+              fill="none"
+              stroke="#2d6a4f"
+              strokeWidth="4"
+              strokeDasharray="8 8"
+              strokeLinecap="round"
+            />
+            <RouteNode x={92} y={158} label="SF" detail="Mission + Twin Peaks" />
+            <RouteNode x={258} y={132} label="East Bay" detail="Berkeley + Oakland" />
+            <RouteNode x={432} y={104} label="Marin" detail="Ferry day" />
+            <RouteNode x={414} y={224} label="South Bay" detail="Museum + food" />
+            <path
+              d="M376 182 L398 202"
+              stroke="#2d6a4f"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <path
+              d="M380 190 L410 160"
+              stroke="#2d6a4f"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            <text
+              x="260"
+              y="292"
+              textAnchor="middle"
+              className="fill-muted"
+              style={{ fontSize: 13, fontWeight: 600 }}
+            >
+              Pick Marin on a clear day. Pick South Bay when the fog wins.
+            </text>
+          </svg>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function RouteNode({
+  x,
+  y,
+  label,
+  detail,
+}: {
+  x: number;
+  y: number;
+  label: string;
+  detail: string;
+}) {
+  return (
+    <g>
+      <circle cx={x} cy={y} r="28" fill="#2d6a4f" />
+      <circle cx={x} cy={y} r="22" fill="#d8f3dc" />
+      <text
+        x={x}
+        y={y - 2}
+        textAnchor="middle"
+        className="fill-accent-dark"
+        style={{ fontSize: 12, fontWeight: 800 }}
+      >
+        {label}
+      </text>
+      <text
+        x={x}
+        y={y + 47}
+        textAnchor="middle"
+        className="fill-muted"
+        style={{ fontSize: 10, fontWeight: 700 }}
+      >
+        {detail}
+      </text>
+    </g>
   );
 }
 

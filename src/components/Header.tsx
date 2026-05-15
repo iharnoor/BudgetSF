@@ -13,10 +13,10 @@ type NavItem = {
 const PRIMARY_NAV: NavItem[] = [
   { href: "/", label: "Map" },
   { href: "/spots", label: "Spots" },
-  { href: "/trip", label: "Plan a Trip" },
 ];
 
 const GUIDES: NavItem[] = [
+  { href: "/trip", label: "Plan a Trip" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
   { href: "/events", label: "Events" },

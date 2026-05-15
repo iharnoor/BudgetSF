@@ -29,7 +29,7 @@ So I built the guide myself.
 - **Interactive Map** — Every spot pinned, color-coded by category, searchable. "Near Me" finds what's closest.
 - **Budget Diet** — My actual meal plan. $7.25/day, ~$250/month. Costco runs, protein breakdowns, the whole thing.
 - **Free Things** — 60+ free activities. Museum free days, parks, trails. SF gives away a lot if you know where to look.
-- **Trip Planning** — Airports, cheap stays, first-timer routes, and repeat-visitor itineraries for SF and the Bay after you've already done the obvious checklist.
+- **Plan a Trip** — Airports, cheap stays, first-timer routes, and repeat-visitor itineraries for SF and the Bay after you've already done the obvious checklist.
 - **Getting Around** — Robotaxis, Bay Wheels ($20/mo unlimited e-bikes), BART to SFO for $10 instead of a $45 Uber.
 - **Work Spots** — Free and cheap places to work from. Libraries, cafe-offices, hotel lobbies nobody kicks you out of.
 - **Events & Community** — Who to follow, where to find events, 15+ recurring communities for founders/engineers.

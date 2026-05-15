@@ -17,7 +17,6 @@ const PRIMARY_NAV: NavItem[] = [
 ];
 
 const GUIDES: NavItem[] = [
-  { href: "/few-days", label: "Few Days" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
   { href: "/events", label: "Events" },

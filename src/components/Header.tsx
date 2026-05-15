@@ -227,7 +227,10 @@ export default function Header() {
 
           {/* Mobile hamburger */}
           <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            onClick={() => {
+              setMobileMenuOpen((open) => !open);
+              setGuidesOpen(false);
+            }}
             className="sm:hidden p-1.5 text-muted hover:text-foreground transition-colors"
             aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           >
@@ -274,34 +277,66 @@ export default function Header() {
             })}
             <Link
               href={PICKS.href}
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setGuidesOpen(false);
+              }}
               className="block px-5 py-2.5 text-[14px] font-medium text-amber-500 hover:text-amber-400 hover:bg-warm transition-colors"
             >
               ⭐ {PICKS.label}
             </Link>
-            <div className="px-5 pt-3 pb-1 text-[10px] font-semibold uppercase tracking-wider text-muted/60">
-              Guides
-            </div>
-            {GUIDES.map((g) => {
-              const active = isItemActive(pathname, g.href);
-              return (
-                <Link
-                  key={g.href}
-                  href={g.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-5 py-2.5 text-[14px] font-medium transition-colors ${
-                    g.special
-                      ? "text-amber-500 hover:text-amber-400 hover:bg-warm"
-                      : active
-                        ? "text-foreground bg-accent-light/30"
-                        : "text-muted hover:text-foreground hover:bg-warm"
-                  }`}
-                >
-                  {g.special && "⭐ "}
-                  {g.label}
-                </Link>
-              );
-            })}
+            <button
+              type="button"
+              onClick={() => setGuidesOpen((open) => !open)}
+              aria-expanded={guidesOpen}
+              className={`flex w-full items-center justify-between px-5 py-2.5 text-[14px] font-medium transition-colors ${
+                guidesActive
+                  ? "text-foreground bg-accent-light/30"
+                  : "text-muted hover:text-foreground hover:bg-warm"
+              }`}
+            >
+              <span>Guides</span>
+              <svg
+                className={`w-4 h-4 transition-transform ${guidesOpen ? "rotate-180" : ""}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {guidesOpen && (
+              <div className="border-y border-border/50 bg-white/30 py-1">
+                {GUIDES.map((g) => {
+                  const active = isItemActive(pathname, g.href);
+                  return (
+                    <Link
+                      key={g.href}
+                      href={g.href}
+                      onClick={() => {
+                        setMobileMenuOpen(false);
+                        setGuidesOpen(false);
+                      }}
+                      className={`block px-8 py-2.5 text-[14px] font-medium transition-colors ${
+                        g.special
+                          ? "text-amber-500 hover:text-amber-400 hover:bg-warm"
+                          : active
+                            ? "text-foreground bg-accent-light/40"
+                            : "text-muted hover:text-foreground hover:bg-warm"
+                      }`}
+                    >
+                      {g.special && "⭐ "}
+                      {g.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
             <div className="border-t border-border/60 mt-1 pt-1">
               {RIGHT_NAV.map((item) => {
                 const active = isItemActive(pathname, item.href);

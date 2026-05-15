@@ -39,14 +39,16 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [guidesOpen, setGuidesOpen] = useState(false);
   const guidesRef = useRef<HTMLDivElement>(null);
+  const mobileNavRef = useRef<HTMLElement>(null);
 
   // Close Guides on outside click / Escape
   useEffect(() => {
     if (!guidesOpen) return;
     const handleClick = (e: MouseEvent) => {
-      if (guidesRef.current && !guidesRef.current.contains(e.target as Node)) {
-        setGuidesOpen(false);
-      }
+      const target = e.target as Node;
+      const insideDesktopGuides = guidesRef.current?.contains(target);
+      const insideMobileNav = mobileNavRef.current?.contains(target);
+      if (!insideDesktopGuides && !insideMobileNav) setGuidesOpen(false);
     };
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setGuidesOpen(false);
@@ -255,16 +257,25 @@ export default function Header() {
         <>
           <div
             className="fixed inset-0 z-30"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={() => {
+              setMobileMenuOpen(false);
+              setGuidesOpen(false);
+            }}
           />
-          <nav className="sm:hidden relative z-40 glass border-t border-border/60 py-2 animate-in max-h-[calc(100vh-52px)] overflow-y-auto">
+          <nav
+            ref={mobileNavRef}
+            className="sm:hidden relative z-40 glass border-t border-border/60 py-2 animate-in max-h-[calc(100vh-52px)] overflow-y-auto"
+          >
             {PRIMARY_NAV.map((item) => {
               const active = isItemActive(pathname, item.href);
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setGuidesOpen(false);
+                  }}
                   className={`block px-5 py-2.5 text-[14px] font-medium transition-colors ${
                     active
                       ? "text-foreground bg-accent-light/30"

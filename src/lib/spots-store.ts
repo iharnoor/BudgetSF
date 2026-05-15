@@ -21,6 +21,23 @@ export interface PendingSpot {
 
 const BLOB_PREFIX = "spots/";
 
+const REMOVED_TEST_SPOTS = new Set([
+  "testing your app from bangalore",
+  "test",
+]);
+
+function isRemovedTestSpot(spot: PendingSpot): boolean {
+  const name = spot.name.trim().toLowerCase();
+  const description = spot.description.trim().toLowerCase();
+  const address = spot.address.trim().toLowerCase();
+
+  return (
+    REMOVED_TEST_SPOTS.has(name) &&
+    (description === "testing" || description === "sdsd") &&
+    (address === "testing" || address === "sdsd")
+  );
+}
+
 async function getBlob(name: string): Promise<PendingSpot | null> {
   try {
     const { blobs } = await list({ prefix: `${BLOB_PREFIX}${name}` });
@@ -63,7 +80,7 @@ export async function getPendingSpots(): Promise<PendingSpot[]> {
     try {
       const res = await fetch(blob.url);
       const spot = (await res.json()) as PendingSpot;
-      if (spot.status === "pending") {
+      if (spot.status === "pending" && !isRemovedTestSpot(spot)) {
         spots.push(spot);
       }
     } catch {

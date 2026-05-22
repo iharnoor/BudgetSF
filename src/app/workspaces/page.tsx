@@ -13,7 +13,7 @@ type WorkspaceType =
 
 type Workspace = {
   name: string;
-  type: WorkspaceType;
+  type: WorkspaceType | WorkspaceType[];
   neighborhood: string;
   description: string;
   price: string;
@@ -237,6 +237,21 @@ const WORKSPACES: Workspace[] = [
 
   // Cafes great for working
   {
+    name: "Capital One Cafe",
+    type: ["free", "cafe"],
+    neighborhood: "Union Square",
+    description:
+      "Free workspace, free wifi, and 50% off handcrafted drinks for Capital One cardholders (anyone can come in and work). Plenty of outlets and a community feel.",
+    price: "Free",
+    wifi: true,
+    outlets: true,
+    hours: "Mon-Fri 8am-7pm, Sat-Sun 9am-6pm",
+    vibe: "Bright, modern, laptop-friendly",
+    address: "101 Post St",
+    url: "https://www.capitalone.com/local/san-francisco/",
+    tip: "One of the best free work spots downtown — feels more like a coworking space than a bank.",
+  },
+  {
     name: "Blue Bottle - South Park",
     type: "cafe",
     neighborhood: "SoMa",
@@ -398,7 +413,9 @@ export default function WorkspacesPage() {
 
   const filtered = useMemo(() => {
     return WORKSPACES.filter((w) => {
-      const matchesType = filter === "all" || w.type === filter;
+      const matchesType =
+        filter === "all" ||
+        (Array.isArray(w.type) ? w.type.includes(filter) : w.type === filter);
       const matchesSearch =
         search === "" ||
         w.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -485,7 +502,15 @@ export default function WorkspacesPage() {
                   </span>
                 ) : (
                   <span className="ml-0.5 opacity-60">
-                    ({WORKSPACES.filter((w) => w.type === f.value).length})
+                    (
+                    {
+                      WORKSPACES.filter((w) =>
+                        Array.isArray(w.type)
+                          ? w.type.includes(f.value)
+                          : w.type === f.value,
+                      ).length
+                    }
+                    )
                   </span>
                 )}
               </button>
@@ -556,7 +581,10 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
     cafe: "Cafe",
   };
 
-  const colors = typeColors[workspace.type] ?? {
+  const primaryType = Array.isArray(workspace.type)
+    ? workspace.type[0]
+    : workspace.type;
+  const colors = typeColors[primaryType] ?? {
     bg: "bg-gray-50",
     text: "text-gray-700",
   };
@@ -584,7 +612,7 @@ function WorkspaceCard({ workspace }: { workspace: Workspace }) {
             <span
               className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${colors.bg} ${colors.text}`}
             >
-              {typeLabels[workspace.type]}
+              {typeLabels[primaryType]}
             </span>
           </div>
 

@@ -142,6 +142,15 @@ const PUBLIC_SPACES: FreeActivity[] = [
     tip: "Saturday morning is the best time. Grab free samples from the food vendors.",
   },
   {
+    name: "Capital One Cafe",
+    description:
+      "Free workspace and wifi in Union Square. Plenty of outlets, comfy seating, and 50% off handcrafted drinks if you have a Capital One card — but anyone can walk in and work.",
+    location: "Union Square (101 Post St)",
+    when: "Mon-Fri 8am-7pm, Sat-Sun 9am-6pm",
+    tip: "One of the best free downtown work spots. Feels like a coworking space, not a bank.",
+    url: "https://www.capitalone.com/local/san-francisco/",
+  },
+  {
     name: "SF Public Libraries (31 locations)",
     description: "Free wifi, free events, free workspace. The Main Library on Larkin has study rooms and city views from the top floor.",
     location: "Citywide",

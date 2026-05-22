@@ -53,11 +53,38 @@ function matchesPrice(place: Place, filter: PriceFilter): boolean {
   return true;
 }
 
+const TECH_TAGS = new Set([
+  "founders",
+  "founder-friendly",
+  "young-founders",
+  "technical-founders",
+  "co-founders",
+  "startup",
+  "startups",
+  "accelerator",
+  "vc",
+  "vcs",
+  "ai-crowd",
+  "ai",
+  "tech",
+  "tech-scene",
+  "hackers",
+  "hackathon",
+  "engineers",
+  "high-caliber",
+]);
+
+function isTechSpot(place: Place): boolean {
+  if (place.category === "startup" || place.category === "vc") return true;
+  return place.tags.some((t) => TECH_TAGS.has(t.toLowerCase()));
+}
+
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<Category | "all">(
     "all"
   );
   const [priceFilter, setPriceFilter] = useState<PriceFilter>("all");
+  const [techOnly, setTechOnly] = useState(false);
   const [search, setSearch] = useState("");
   const [searchError, setSearchError] = useState<string | null>(null);
   const [selectedPlace, setSelectedPlace] = useState<Place | null>(null);
@@ -84,7 +111,8 @@ export default function HomePage() {
       const matchesCategory =
         selectedCategory === "all" || place.category === selectedCategory;
       const matchesPriceFilter = matchesPrice(place, priceFilter);
-      if (hydraResults) return matchesCategory && matchesPriceFilter;
+      const matchesTech = !techOnly || isTechSpot(place);
+      if (hydraResults) return matchesCategory && matchesPriceFilter && matchesTech;
       const matchesSearch =
         search === "" ||
         place.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -92,7 +120,7 @@ export default function HomePage() {
         place.tags.some((t) =>
           t.toLowerCase().includes(search.toLowerCase())
         );
-      return matchesCategory && matchesPriceFilter && matchesSearch;
+      return matchesCategory && matchesPriceFilter && matchesTech && matchesSearch;
     });
     if (userLocation) {
       filtered.sort(
@@ -107,6 +135,7 @@ export default function HomePage() {
     hydraResults,
     selectedCategory,
     priceFilter,
+    techOnly,
     search,
     userLocation,
   ]);
@@ -364,6 +393,22 @@ export default function HomePage() {
         {/* Price filter */}
         <div className="max-w-[340px]">
           <PriceFilterPills selected={priceFilter} onChange={setPriceFilter} />
+        </div>
+
+        {/* Tech spots toggle */}
+        <div className="max-w-[340px]">
+          <button
+            onClick={() => setTechOnly((v) => !v)}
+            aria-pressed={techOnly}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all duration-200 press border ${
+              techOnly
+                ? "bg-accent text-white border-accent shadow-sm"
+                : "glass text-muted border-border/60 hover:border-border hover:text-foreground"
+            }`}
+            title="Filter to places where founders & tech people congregate"
+          >
+            <span>🚀</span> Tech Spots
+          </button>
         </div>
       </div>
 

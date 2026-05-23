@@ -787,15 +787,21 @@ const FILTERS: { value: WorkspaceType; label: string; icon: string }[] = [
   { value: "cafe", label: "Cafes", icon: "☕" },
 ];
 
+function workspaceMatchesFilter(w: Workspace, filter: WorkspaceType): boolean {
+  if (filter === "all") return true;
+  if (filter === "free") {
+    return w.price.toLowerCase().startsWith("free");
+  }
+  return Array.isArray(w.type) ? w.type.includes(filter) : w.type === filter;
+}
+
 export default function WorkspacesPage() {
   const [filter, setFilter] = useState<WorkspaceType>("all");
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
     return WORKSPACES.filter((w) => {
-      const matchesType =
-        filter === "all" ||
-        (Array.isArray(w.type) ? w.type.includes(filter) : w.type === filter);
+      const matchesType = workspaceMatchesFilter(w, filter);
       const matchesSearch =
         search === "" ||
         w.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -885,9 +891,7 @@ export default function WorkspacesPage() {
                     (
                     {
                       WORKSPACES.filter((w) =>
-                        Array.isArray(w.type)
-                          ? w.type.includes(f.value)
-                          : w.type === f.value,
+                        workspaceMatchesFilter(w, f.value),
                       ).length
                     }
                     )

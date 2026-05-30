@@ -2724,7 +2724,7 @@ export const SAMPLE_PLACES: Place[] = [
     neighborhood: "Financial District",
     description: "Downtown Equinox with lounge seating where members can open a laptop between workouts. A useful work stop if you already have club access or a guest pass.",
     price_tier: 1,
-    tags: ["free-for-members", "gym", "workspace", "wifi", "outlets", "union-square"],
+    tags: ["free", "free-for-members", "gym", "workspace", "wifi", "outlets", "union-square"],
     lat: 37.7866,
     lng: -122.4042,
     website: "https://www.equinox.com/clubs/northern-california/sportsclubsanfrancisco",

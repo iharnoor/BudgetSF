@@ -476,6 +476,21 @@ const WORKSPACES: Workspace[] = [
     tip: "One of the best free work spots downtown — feels more like a coworking space than a bank.",
   },
   {
+    name: "Equinox Sports Club San Francisco",
+    type: "free",
+    neighborhood: "Union Square",
+    description:
+      "Downtown Equinox with lounge seating where members can open a laptop between workouts. Useful as a quiet reset spot if you already have club access.",
+    price: "Free for members / guest-pass visitors",
+    wifi: true,
+    outlets: true,
+    hours: "Check current club hours",
+    vibe: "Premium gym lounge, focused, clean",
+    address: "747 Market St",
+    url: "https://www.equinox.com/clubs/northern-california/sportsclubsanfrancisco",
+    tip: "Not a public coworking space — best used as a member perk downtown.",
+  },
+  {
     name: "Blue Bottle - South Park",
     type: "cafe",
     neighborhood: "SoMa",

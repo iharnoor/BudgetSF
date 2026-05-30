@@ -158,6 +158,15 @@ const PUBLIC_SPACES: FreeActivity[] = [
     tip: "Main Library top floor is one of the best free work spots in the city.",
     url: "https://sfpl.org",
   },
+  {
+    name: "Equinox Sports Club San Francisco",
+    description:
+      "If you already have Equinox access, the downtown Sports Club has lounge seating where you can post up with a laptop between workouts.",
+    location: "Union Square / FiDi (747 Market St)",
+    when: "Check current club hours",
+    tip: "Best as a member perk or guest-pass work stop, not a public coworking space.",
+    url: "https://www.equinox.com/clubs/northern-california/sportsclubsanfrancisco",
+  },
 ];
 
 const FREE_ACTIVITIES: FreeActivity[] = [

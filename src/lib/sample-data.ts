@@ -2715,6 +2715,26 @@ export const SAMPLE_PLACES: Place[] = [
     created_at: "2026-05-22T00:00:00Z",
     updated_at: "2026-05-22T00:00:00Z",
   },
+  {
+    id: "equinox-sports-club-sf-workspace",
+    name: "Equinox Sports Club San Francisco",
+    category: "workspace",
+    subcategory: "Member Gym Lounge",
+    address: "747 Market St",
+    neighborhood: "Financial District",
+    description: "Downtown Equinox with lounge seating where members can open a laptop between workouts. A useful work stop if you already have club access or a guest pass.",
+    price_tier: 1,
+    tags: ["free-for-members", "gym", "workspace", "wifi", "outlets", "union-square"],
+    lat: 37.7866,
+    lng: -122.4042,
+    website: "https://www.equinox.com/clubs/northern-california/sportsclubsanfrancisco",
+    status: "approved",
+    vote_count: 1,
+    votes_needed: 5,
+    submitted_by: "community",
+    created_at: "2026-05-30T00:00:00Z",
+    updated_at: "2026-05-30T00:00:00Z",
+  },
 
   // === HOUSING ===
   {

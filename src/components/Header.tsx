@@ -12,6 +12,7 @@ type NavItem = {
 
 const PRIMARY_NAV: NavItem[] = [
   { href: "/", label: "Map" },
+  { href: "/events", label: "Events" },
   { href: "/spots", label: "Spots" },
 ];
 
@@ -19,7 +20,6 @@ const GUIDES: NavItem[] = [
   { href: "/trip", label: "Plan a Trip" },
   { href: "/workspaces", label: "Work Spots" },
   { href: "/transport", label: "Getting Around" },
-  { href: "/events", label: "Events" },
   { href: "/free", label: "Free Things" },
   { href: "/diet", label: "Budget Diet" },
   { href: "/student", label: "Student" },

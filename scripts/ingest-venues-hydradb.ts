@@ -42,12 +42,15 @@ function loadEnvLocal() {
 }
 loadEnvLocal();
 
-const API_KEY = process.env.HYDRADB_API_KEY;
+// Trim: a stray trailing newline in the env var (common when the value is
+// pasted into a CI secret or pulled from Vercel) corrupts the Authorization
+// header, and HydraDB rejects it as "Malformed API Key".
+const API_KEY = process.env.HYDRADB_API_KEY?.trim();
 if (!API_KEY) {
   console.error("Missing HYDRADB_API_KEY. Set it in .env.local or the shell.");
   process.exit(1);
 }
-const TENANT_ID = process.env.HYDRADB_TENANT_ID || "WealthWise";
+const TENANT_ID = (process.env.HYDRADB_TENANT_ID || "WealthWise").trim();
 const SUB_TENANT_ID = "sf_venues";
 const BASE_URL = "https://api.hydradb.com";
 
@@ -174,6 +177,16 @@ async function main() {
   }
 
   console.log(`\nDone. success=${total} failed=${failed}\n`);
+
+  // Fail the process (and the CI job) if nothing landed or any batch errored,
+  // so a dead/rotated API key shows up as a red run instead of a silent pass.
+  if (total === 0 || failed > 0) {
+    console.error(
+      `Ingest incomplete: ${failed} failed, ${total} succeeded. ` +
+        `If batches returned 401/403, the HYDRADB_API_KEY is invalid, expired, or malformed.`,
+    );
+    process.exit(1);
+  }
 
   console.log("Waiting 5s for indexing...");
   await new Promise((r) => setTimeout(r, 5000));

@@ -26,8 +26,10 @@ function detectCategory(query: string): string | null {
 }
 
 const HYDRA_API = "https://api.hydradb.com";
-const TENANT_ID = process.env.HYDRADB_TENANT_ID || "WealthWise";
-const API_KEY = process.env.HYDRADB_API_KEY || "";
+// Trim: a stray trailing newline in the env var corrupts the Authorization
+// header and HydraDB rejects it as "Malformed API Key".
+const TENANT_ID = (process.env.HYDRADB_TENANT_ID || "WealthWise").trim();
+const API_KEY = (process.env.HYDRADB_API_KEY || "").trim();
 const SUB_TENANT = "sf_venues";
 
 export interface VenueData {

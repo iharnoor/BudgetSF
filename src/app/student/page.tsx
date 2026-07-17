@@ -102,6 +102,20 @@ const BANKING = {
   emoji: "🏦",
 };
 
+const CHASE_CHECKING = {
+  name: "Chase Checking",
+  tagline: "Open a qualifying Chase checking account — your friends can get $400",
+  bonus: "$400",
+  bonusNote: "for qualifying activities",
+  highlight: "$400 Bonus",
+  note: "Your friends can get $400 when they open a qualifying Chase checking account and complete qualifying activities. Solid option once you want a big-bank branch network across SF.",
+  url: "https://accounts.chase.com/raf/share/2955046396",
+  cta: "Open Chase Checking",
+  color: "#117aca",
+  colorLight: "#e8f3fb",
+  emoji: "🏦",
+};
+
 const STUDENT_LOAN = {
   name: "SoFi Student Loan Refinance",
   tagline: "Refinance your Leap/Prodigy loan and drop under 7% — even on F-1",
@@ -141,6 +155,20 @@ const CREDIT_CARD = {
   color: "#1a1a2e",
   colorLight: "#f0eff5",
   emoji: "💳",
+};
+
+const CHASE_SAPPHIRE = {
+  name: "Chase Sapphire Reserve® / Preferred®",
+  tagline: "Earn 100,000 bonus points when approved for either card",
+  bonus: "100,000",
+  bonusNote: "bonus points",
+  highlight: "100K Bonus Points",
+  note: "Earn 100,000 bonus points with Sapphire Reserve® or 100,000 bonus points with Sapphire Preferred®. I can be rewarded if you apply here and are approved for either card. Build credit history first — these are premium cards.",
+  url: "https://www.referyourchasecard.com/19x/MXR7DN7X28",
+  cta: "Apply via My Referral",
+  color: "#0a2e5c",
+  colorLight: "#e8eef5",
+  emoji: "💎",
 };
 
 const GROCERIES = {
@@ -381,7 +409,14 @@ export default function StudentPage() {
             title="Banking"
             subtitle="First real US bank account — no fees, early paycheck, bonus cash"
           />
-          <PickCard section="student-banking" item={BANKING} fullBonus />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <PickCard section="student-banking" item={BANKING} fullBonus />
+            <PickCard
+              section="student-banking"
+              item={CHASE_CHECKING}
+              fullBonus
+            />
+          </div>
         </section>
 
         {/* Credit Card */}
@@ -389,9 +424,16 @@ export default function StudentPage() {
           <SectionHeader
             emoji="💳"
             title="Credit Card (Once You Have Credit)"
-            subtitle="Start with a secured card, then graduate to this one"
+            subtitle="Start with a secured card, then graduate to one of these"
           />
-          <PickCard section="student-credit-card" item={CREDIT_CARD} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <PickCard section="student-credit-card" item={CREDIT_CARD} />
+            <PickCard
+              section="student-credit-card"
+              item={CHASE_SAPPHIRE}
+              fullBonus
+            />
+          </div>
         </section>
 
         {/* Business / LLC */}

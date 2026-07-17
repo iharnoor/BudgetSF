@@ -392,16 +392,6 @@ export default function StudentPage() {
           </div>
         </section>
 
-        {/* Student Loan Refi */}
-        <section className="mb-12">
-          <SectionHeader
-            emoji="🎓"
-            title="Student Loan Refinance"
-            subtitle="Escape those 11-13% Leap/Prodigy rates once you're working in the US"
-          />
-          <PickCard section="student-loan-refi" item={STUDENT_LOAN} fullBonus />
-        </section>
-
         {/* Banking */}
         <section className="mb-12">
           <SectionHeader
@@ -410,13 +400,23 @@ export default function StudentPage() {
             subtitle="First real US bank account — no fees, early paycheck, bonus cash"
           />
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <PickCard section="student-banking" item={BANKING} fullBonus />
             <PickCard
               section="student-banking"
               item={CHASE_CHECKING}
               fullBonus
             />
+            <PickCard section="student-banking" item={BANKING} fullBonus />
           </div>
+        </section>
+
+        {/* Student Loan Refi */}
+        <section className="mb-12">
+          <SectionHeader
+            emoji="🎓"
+            title="Student Loan Refinance"
+            subtitle="Escape those 11-13% Leap/Prodigy rates once you're working in the US"
+          />
+          <PickCard section="student-loan-refi" item={STUDENT_LOAN} fullBonus />
         </section>
 
         {/* Credit Card */}
